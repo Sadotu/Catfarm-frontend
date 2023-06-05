@@ -1,1 +1,77 @@
 /* Button.css */
+/* imports */
+@import url('../../global-variables.css');
+
+/* button class */
+button {
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    border-radius: 10px;
+    border: none;
+    padding: 5px 10px;
+    color: #FFF;
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 700;
+    cursor: pointer;
+}
+button:active {
+    transform: translateY(-2px);
+}
+
+/* general buttons */
+.general-button {
+    background-color: var(--main-button-color);
+}
+.general-button:hover {
+    background-color: var(--main-button-color-on-hover);
+}
+
+/* the 'done' or 'completed' buttons */
+.event-task-done-button {
+    background-color: var(--done-button-color);
+}
+.event-task-done-button:hover {
+    background-color: var(--done-button-color-on-hover);
+}
+
+.event-task-completion-button {
+    background-color: var(--completed-button-color);
+}
+.event-task-completion-button:hover {
+    background-color: var(--completed-button-color-on-hover);
+}
+
+/* general buttons when creating or updating events or tasks */
+.event-task-general-button {
+    background-color: var(--event-task-general-button);
+    color: var(--main-text-color-black);
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 1px solid var(--button-border-black);
+}
+.event-task-general-button:hover {
+    background-color: var(--event-task-general-button-on-hover);
+}
+
+/* right pane menu buttons when creating or updating events or tasks */
+.event-task-menu-button {
+    background-color: var(--event-task-menu-button);
+    color: var(--main-text-color-black);
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bolder;
+    letter-spacing: 1px;
+    border-radius: 0;
+}
+.event-task-menu-button:hover {
+    background-color: var(--event-task-menu-button-on-hover);
+}
+.button-icon {
+    opacity: 60%;
+    padding: 0px 10px 0px 20px;
+}
+.button-text {
+    font-size: 18px;
+    padding-right: 100px;
+}

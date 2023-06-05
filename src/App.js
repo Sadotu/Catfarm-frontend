@@ -1,5 +1,6 @@
 import {Navigate, Route, Routes, useParams} from "react-router-dom";
 import './App.css';
+import './global-variables.css'
 
 //pages
 import Calendar from "./pages/Calendar/Calendar";

@@ -1,0 +1,17 @@
+:root {
+    /* Button styling */
+    --main-button-color: #FA7788;
+    --main-button-color-on-hover: #008D86;
+    --done-button-color: #00A2ED;
+    --done-button-color-on-hover: hsl(198, 100%, 40%);
+    --completed-button-color: #78919C;
+    --completed-button-color-on-hover: hsl(197, 18%, 50%);
+    --event-task-general-button: #E3E6EA;
+    --event-task-general-button-on-hover: hsl(0, 0%, 80%);
+    --event-task-menu-button: #D9D9D9;
+    --event-task-menu-button-on-hover: hsla(0, 0%, 85%, 0.5);
+    --button-border-black: hsl(0, 0%, 80%);
+
+    /* global text */
+    --main-text-color-black: hsl(0, 0%, 30%);
+}
