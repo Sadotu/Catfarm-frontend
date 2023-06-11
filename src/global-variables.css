@@ -14,4 +14,5 @@
 
     /* global text */
     --main-text-color-black: hsl(0, 0%, 30%);
+    --main-text-color-black-on-hover: hsl(0, 0%, 50%);
 }

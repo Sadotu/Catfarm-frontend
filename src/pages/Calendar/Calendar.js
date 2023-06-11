@@ -10,10 +10,8 @@ function Calendar() {
 
     return (
         <Button
-            buttonText="Volunteers"
-            className="event-task-menu-button"
+            className="back-arrow"
             clickHandler={clickHandler}
-            icon={<img src={user} alt="Icon" />}
         >
         </Button>
 

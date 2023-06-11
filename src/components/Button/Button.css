@@ -27,6 +27,19 @@ button:active {
     background-color: var(--main-button-color-on-hover);
 }
 
+/* filter and sort */
+.filter-sort-button {
+    color: var(--main-text-color-black);
+    text-decoration: underline;
+    transition: color 0.3s ease;
+    background-color: #FFF;
+    font-weight: 500;
+}
+
+.filter-sort-button:hover {
+    color: var(--main-text-color-black-on-hover);
+}
+
 /* the 'done' or 'completed' buttons */
 .event-task-done-button {
     background-color: var(--done-button-color);
@@ -74,4 +87,14 @@ button:active {
 .button-text {
     font-size: 18px;
     padding-right: 100px;
+}
+
+/* back arrow */
+.back-arrow {
+    background-color: #FFF;
+    background-image: url("arrow-bend-up-left.png"); /* Vraag aan sme waarom ik niet naar icons map kan linken */
+    height: 40px;
+    width: 40px;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 }
