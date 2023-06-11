@@ -1,21 +1,19 @@
 import React from 'react';
-import Button from "../../components/Button/Button";
-import user from '../../assets/icons/user.png'
+import DropDown from "../../components/DropDown/DropDown";
 
 function Calendar() {
-
-    function clickHandler() {
-        console.log("Dit werkt")
-    }
+    const options = [
+        { label: 'Decade', value: 'decade' },
+        { label: 'Year', value: 'year' },
+        { label: 'Month', value: 'month' },
+        { label: 'Week', value: 'week' },
+        { label: 'Day', value: 'day' }
+    ];
 
     return (
-        <Button
-            className="back-arrow"
-            clickHandler={clickHandler}
-        >
-        </Button>
-
-
+        <div style={{ padding: '20px' }}>
+            <DropDown options={options} defaultOption={options.find(option => option.label === 'Month')} />
+        </div>
     );
 }
 
