@@ -9,7 +9,7 @@ function Button({ buttonText, buttonType = "button", className, clickHandler, di
             onClick={clickHandler}
             disabled={disabled}
         >
-            {icon && <span className="button-icon">{icon}</span>}
+            {icon && <img src={icon} alt="icon" className="icon-space" />}
             {buttonText && <span className="button-text">{buttonText}</span>}
         </button>
     );
