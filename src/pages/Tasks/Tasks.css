@@ -1,9 +1,26 @@
-.header-main {
+.outer-contain-forrealzies {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.header-container{
+.outer-content-container {
     display: flex;
-    justify-content: flex-end;
+    flex-direction: row;
+    flex: 1 1 auto;
+}
+
+.inner-content-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: row;
+    /*Dit gaat nu over height, want de parent is een flex-column. Dus we zeggen nu dat de hoogte "auto" moet zijn*/
+    flex: 1 1 auto;
+    background-color: var(--main-tasks-background-color);
+    border-top: 1px solid var(--main-top-border-black);
 }

@@ -2,6 +2,13 @@
     /* Navigation */
     --main-navigation-color: hsl(168, 41%, 79%);
 
+    /* Task Page */
+    --main-tasks-background-color: hsl(0, 100%, 95%);
+    --main-top-border-black: hsla(0, 0%, 0%, 0.5);
+
+    /* Footer */
+    --main-footer-color: hsl(179, 66%, 39%);
+
     /* Button styling */
     --main-button-color: #FA7788;
     --main-button-color-on-hover: #008D86;

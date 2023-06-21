@@ -55,35 +55,35 @@ const Header = ({ pageTitle, backButton = false, buttons, search = false, dropdo
                     </div>
                 )}
 
-                {dropdown && (
-                    <DropdownMenu
-                        options={dropdown.options}
-                        defaultOption={dropdown.defaultOption}
-                    />
-                )}
+                {/*{dropdown && (*/}
+                {/*    <DropdownMenu*/}
+                {/*        options={dropdown.options}*/}
+                {/*        defaultOption={dropdown.defaultOption}*/}
+                {/*    />*/}
+                {/*)}*/}
 
-                {calendarPeriod && (
-                    <div className="calendar-nav">
-                        <Button
-                            icon="<"
-                            clickHandler={() => {/* Navigate to previous time period */}}
-                        />
-                        <span>{calendarPeriod}</span>
-                        <Button
-                            icon=">"
-                            clickHandler={() => {/* Navigate to next time period */}}
-                        />
-                    </div>
-                )}
+                {/*{calendarPeriod && (*/}
+                {/*    <div className="calendar-nav">*/}
+                {/*        <Button*/}
+                {/*            icon="<"*/}
+                {/*            clickHandler={() => /!* Navigate to previous time period *!/}*/}
+                {/*        />*/}
+                {/*        <span>{calendarPeriod}</span>*/}
+                {/*        <Button*/}
+                {/*            icon=">"*/}
+                {/*            clickHandler={() => /!* Navigate to next time period *!/}*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*)}*/}
             </div>
 
-            {profileInfo && (
-                <div className="profile-info">
-                    <h2>{profileInfo.name} {profileInfo.isActive ? '(Active)' : '(Inactive)'}</h2>
-                    <p className="profile-subtitle">{profileInfo.pronouns} - {profileInfo.role}</p>
-                    <p className="profile-subtitle-smaller">Account Created: {profileInfo.created}</p>
-                </div>
-            )}
+            {/*{profileInfo && (*/}
+            {/*    <div className="profile-info">*/}
+            {/*        <h2>{profileInfo.name} {profileInfo.isActive ? '(Active)' : '(Inactive)'}</h2>*/}
+            {/*        <p className="profile-subtitle">{profileInfo.pronouns} - {profileInfo.role}</p>*/}
+            {/*        <p className="profile-subtitle-smaller">Account Created: {profileInfo.created}</p>*/}
+            {/*    </div>*/}
+            {/*)}*/}
         </header>
     );
 };

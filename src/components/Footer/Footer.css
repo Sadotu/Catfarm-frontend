@@ -1,0 +1,33 @@
+footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    background-color: var(--main-footer-color);
+    font-family: Inter, sans-serif;
+    padding: 20px 0;
+}
+
+.copyright {
+    opacity: 50%;
+    padding-left: 80px;
+ }
+
+.developer-container {
+    display: flex;
+    flex-direction: row;
+    padding-right: 50px;
+}
+
+.developer {
+    padding-right: 8px;
+    color: #FFF;
+    font-weight: 500;
+}
+
+.Nick {
+    color: red;
+}
+.Nick:hover {
+    text-decoration: underline;
+ }
