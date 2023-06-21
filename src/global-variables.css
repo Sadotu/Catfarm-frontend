@@ -1,4 +1,7 @@
 :root {
+    /* Navigation */
+    --main-navigation-color: hsl(168, 41%, 79%);
+
     /* Button styling */
     --main-button-color: #FA7788;
     --main-button-color-on-hover: #008D86;

@@ -1,0 +1,9 @@
+.header-main {
+    display: flex;
+    flex-direction: row;
+}
+
+.header-container{
+    display: flex;
+    justify-content: flex-end;
+}
