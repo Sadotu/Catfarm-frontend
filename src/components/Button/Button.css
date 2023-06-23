@@ -33,7 +33,7 @@ button:active {
     color: var(--main-text-color-black);
     text-decoration: underline;
     transition: color 0.3s ease;
-    background-color: #FFF;
+    background-color: transparent;
     font-weight: 500;
     margin-right: -30px;
 }
@@ -131,11 +131,6 @@ button:active {
 .icon-space {
     padding: 0 20px;
 }
-
-/*.button-icon {*/
-/*    opacity: 60%;*/
-/*    padding: 0px 10px 0px 20px;*/
-/*}*/
 
 /* back arrow */
 .back-arrow {

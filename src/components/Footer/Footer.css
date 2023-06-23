@@ -3,7 +3,7 @@ footer {
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
-    background-color: var(--main-footer-color);
+    background-color: var(--main-theme-dark-green);
     font-family: Inter, sans-serif;
     padding: 20px 0;
 }

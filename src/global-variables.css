@@ -1,13 +1,12 @@
 :root {
-    /* Navigation */
-    --main-navigation-color: hsl(168, 41%, 79%);
-
-    /* Task Page */
+/* Task Page */
     --main-tasks-background-color: hsl(0, 100%, 95%);
     --main-top-border-black: hsla(0, 0%, 0%, 0.5);
+    --main-task-card-completed: hsl(0, 0%, 94%);
 
-    /* Footer */
-    --main-footer-color: hsl(179, 66%, 39%);
+    /* Main theme green*/
+    --main-theme-dark-green: hsl(179, 66%, 39%);
+    --main-theme-light-green: hsl(168, 41%, 79%);
 
     /* Button styling */
     --main-button-color: #FA7788;

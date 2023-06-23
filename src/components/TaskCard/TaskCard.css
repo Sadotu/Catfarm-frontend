@@ -1,0 +1,76 @@
+.task-card-container,
+.task-card-container-completed {
+    height: 180px;
+    width: 480px;
+    border: 1px solid #e0e0e0;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 30px;
+    background-color: #ffffff;
+}
+
+.task-card-container-completed {
+    background-color: var(--main-task-card-completed);
+}
+
+.card-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.card-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.task-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-card-title {
+    margin: 0;
+    font-size: 1.2em;
+    text-decoration: underline;
+    font-family: Roboto, sans-serif;
+    opacity: 60%;
+}
+
+.task-card-deadline {
+    margin: 10px 0;
+    font-size: 0.9em;
+    color: #888;
+}
+.task-card-deadline-red {
+    margin: 10px 0;
+    color: red;
+    font-size: 0.8em;
+}
+
+.sub-tasks-container {
+    background-color: hsl(168, 41%, 79%);
+    border-radius: 15px;
+    padding: 16px;
+    width: 100%;
+    margin-right: 20px;
+}
+
+.sub-tasks-completed-bar {
+    display: block;
+    background-color: var(--main-theme-dark-green);
+}
+
+.sub-tasks-text {
+    color: white;
+    font-weight: bold;
+}
+
+.card-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}

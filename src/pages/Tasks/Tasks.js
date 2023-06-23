@@ -10,9 +10,16 @@ import TaskCard from "../../components/TaskCard/TaskCard";
 function Tasks() {
     const navigate = useNavigate();
 
+    // Tijdelijk
+    const tasks = [
+        { id: 1, title: 'Task 1', completed: false },
+        { id: 2, title: 'Task 2', completed: true },
+        { id: 3, title: 'Task 3', completed: false },
+    ];
+
     return (
         <>
-            <div className="outer-contain-forrealzies">
+            <div className="outer-container-forrealzies">
                 <div className="outer-content-container">
                     <Navigation/>
 
@@ -44,8 +51,26 @@ function Tasks() {
                             ]}
                             search={true}
                         ></Header>
-                        <main className="main-container banaan">
-                            <TaskCard></TaskCard>
+                        <main className="main-container-tasks">
+                            <TaskCard
+                                cardTitle="Project Deadline"
+                                deadline="2023-06-20"
+                                tasks={tasks}
+                                completed={false}
+                                clickHandler={() => {
+                                    // Handle click event
+                                }}
+                            />
+
+                            <TaskCard
+                                cardTitle="Completed Project"
+                                deadline="2023-06-15"
+                                tasks={tasks}
+                                completed={true}
+                                clickHandler={() => {
+                                    // Handle click event
+                                }}
+                            />
                         </main>
                     </div>
                 </div>

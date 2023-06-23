@@ -1,4 +1,4 @@
-.outer-contain-forrealzies {
+.outer-container-forrealzies {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -16,11 +16,12 @@
     flex: 1 1 auto;
 }
 
-.main-container {
+.main-container-tasks {
     display: flex;
     flex-direction: row;
     /*Dit gaat nu over height, want de parent is een flex-column. Dus we zeggen nu dat de hoogte "auto" moet zijn*/
     flex: 1 1 auto;
+    justify-content: space-evenly;
     background-color: var(--main-tasks-background-color);
     border-top: 1px solid var(--main-top-border-black);
 }
