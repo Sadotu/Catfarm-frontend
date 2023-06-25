@@ -7,7 +7,7 @@ function Footer() {
             <p className="copyright">@ Catfarm 2023</p>
             <span className="developer-container">
                 <p className="developer">Webdevelopment by </p>
-                <p><a href="https://www.linkedin.com/in/nickdekok/" className="Nick">Nick de Kok</a></p>
+                <p><a href="https://www.linkedin.com/in/nickdekok/" className="Nick" target="_blank" rel="noopener noreferrer">Nick de Kok</a></p>
             </span>
         </footer>
     );

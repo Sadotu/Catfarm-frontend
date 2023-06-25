@@ -1,4 +1,4 @@
-export const calculateDaysLeft = (deadline, completed) => {
+export const calculateDaysLeftHelper = (deadline, completed) => {
     const today = new Date().setHours(0, 0, 0, 0);
     const deadlineDate = new Date(deadline).setHours(0, 0, 0, 0);
 

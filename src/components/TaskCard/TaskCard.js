@@ -3,7 +3,7 @@ import "./TaskCard.css"
 // Components
 import Button from "../Button/Button";
 // Helpers
-import { calculateDaysLeft } from "../../helpers/calculateDaysLeft";
+import { calculateDaysLeftHelper } from "../../helpers/calculateDaysLeftHelper";
 
 function TaskCard( { cardTitle, deadline, tasks, completed = false, clickHandler } ) {
     const tasksCompleted = tasks ? tasks.filter(task => task.completed).length : 0;
@@ -13,7 +13,7 @@ function TaskCard( { cardTitle, deadline, tasks, completed = false, clickHandler
     const [daysLeft, setDaysLeft] = useState(null);
 
     useEffect(() => {
-        setDaysLeft(calculateDaysLeft(deadline, completed));
+        setDaysLeft(calculateDaysLeftHelper(deadline, completed));
     }, [deadline, completed]);
 
     return (
@@ -43,7 +43,7 @@ function TaskCard( { cardTitle, deadline, tasks, completed = false, clickHandler
                     <Button
                         buttonText={completed ? "Completed" : "Done"}
                         className={completed ? "event-task-completion-button" : "event-task-done-button"}
-                        // You can add clickHandler here if needed
+                        clickHandler={clickHandler}
                     />
                 </div>
             </div>
