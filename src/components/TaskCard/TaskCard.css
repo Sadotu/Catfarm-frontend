@@ -52,21 +52,32 @@
 }
 
 .sub-tasks-container {
+    position: relative;
     background-color: hsl(168, 41%, 79%);
     border-radius: 15px;
-    padding: 16px;
+    height: 50px;
     width: 100%;
     margin-right: 20px;
 }
 
 .sub-tasks-completed-bar {
-    display: block;
+    position: absolute;
+    left: 1px;
+    top: 0;
+    width: 0;
+    height: 50px;
+    border-radius: 15px;
+    margin-right: 20px;
     background-color: var(--main-theme-dark-green);
 }
 
 .sub-tasks-text {
+    position: absolute;
     color: white;
     font-weight: bold;
+    z-index: 100;
+    top: 26%;
+    left: 25%;
 }
 
 .card-buttons {

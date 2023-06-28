@@ -1,13 +1,15 @@
 import React from 'react';
-import Button from "../../components/Button/Button";
-import user from "../../assets/icons/user.png"
+import SmallCard from "../../components/SmallCard/SmallCard";
 
 function Database(props) {
     return (
         <div style={{ padding: '50px' }}>
-            <Button
-                className="back-arrow"
-            ></Button>
+            <SmallCard
+                options={["All Tasks", "Your Tasks", "Volunteers"]}
+                subOptions={["Completed", "In Progress", "Overdue"]}
+                isVisible={true}
+
+            ></SmallCard>
         </div>
     );
 }

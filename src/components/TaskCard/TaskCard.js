@@ -27,11 +27,11 @@ function TaskCard( { cardTitle, deadline, tasks, completed = false, clickHandler
 
             <div className="card-bottom">
                 <div className="sub-tasks-container">
-                    <span
+                    <div
                         className="sub-tasks-completed-bar"
                         style={{ width: `${completedPercentage}%` }}
                     >
-                    </span>
+                    </div>
                     <span className="sub-tasks-text">{`${tasksCompleted}/${totalTasks} tasks completed`}</span>
                 </div>
                 <div className="card-buttons">
