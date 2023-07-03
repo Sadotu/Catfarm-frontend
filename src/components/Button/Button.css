@@ -30,12 +30,14 @@ button:active {
 
 /* filter and sort */
 .filter-sort-button {
+    position: relative;
     color: var(--main-text-color-black);
     text-decoration: underline;
     transition: color 0.3s ease;
     background-color: transparent;
     font-weight: 500;
     margin-right: -30px;
+    outline: transparent;
 }
 
 .filter-sort-button:hover {

@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import "./Header.css"
+import {useNavigate} from "react-router-dom";
+
 // Components
 import Button from '../Button/Button';
-import DropdownMenu from '../DropDown/DropDown';
+import DropDown from "../DropDown/DropDown";
 
-const Header = ({ pageTitle, backButton = false, buttons, search = false, dropdown, calendarPeriod, profileInfo }) => {
+
+const Header = ({ pageTitle, backButton = false, task = false, search = false, filter = false, activeUsers }) => {
+    const navigate = useNavigate();
 
     function handleSearch() {
         console.log("Search function")
@@ -27,19 +31,18 @@ const Header = ({ pageTitle, backButton = false, buttons, search = false, dropdo
                     />
                 )}
 
-                {buttons && (
-                    <div className="header-buttons">
-                        {buttons.map((button, index) => (
-                            <Button
-                                key={index}
-                                buttonText={button.text}
-                                className={button.className}
-                                clickHandler={button.clickHandler}
-                                disabled={button.disabled}
-                                icon={button.icon}
-                            />
-                        ))}
-                    </div>
+                {task && (
+                    <Button
+                        buttonText="New Task"
+                        className="general-button"
+                        clickHandler={() => {
+                            navigate("/new_task")
+                        }}
+                    ></Button>
+                )}
+
+                {filter && (
+                    <DropDown volunteers={activeUsers}></DropDown>
                 )}
 
                 {search && (

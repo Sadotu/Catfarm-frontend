@@ -1,11 +1,12 @@
 import React from 'react';
 import './Button.css'
 
-function Button({ buttonText, buttonType = "button", className, clickHandler, disabled = false, icon }) {
+function Button({ buttonText, buttonType = "button", className, id, clickHandler, disabled = false, icon }) {
     return (
         <button
             type={buttonType}
             className={className}
+            id={id}
             onClick={clickHandler}
             disabled={disabled}
         >

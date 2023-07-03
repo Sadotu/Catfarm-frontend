@@ -75,7 +75,7 @@
     position: absolute;
     color: white;
     font-weight: bold;
-    z-index: 100;
+    z-index: 1;
     top: 26%;
     left: 25%;
 }

@@ -1,9 +1,11 @@
 header {
+    position: relative;
     text-align: center;
     padding: 0 50px 0 50px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    /*z-index: 10;*/
 }
 
 .header-title {
@@ -26,6 +28,12 @@ header {
 .header-buttons {
     display: flex;
     flex-direction: row;
+}
+
+.filter-sort-drop-card {
+    top: 140px;
+    position: absolute;
+    left: 238px;
 }
 
 /* Search */

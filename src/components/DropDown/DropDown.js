@@ -1,35 +1,128 @@
-import React, { useState } from 'react';
-import "./DropDown.css"
+import React, {useState} from 'react';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import {
+    HamburgerMenuIcon,
+    DotFilledIcon,
+    CheckIcon,
+    ChevronRightIcon,
+} from '@radix-ui/react-icons';
+import './DropDown.css';
+import Button from "../Button/Button";
+import login from "../../pages/Login/Login";
 
-function DropdownMenu({ options, defaultOption }) {
-    const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(defaultOption);
-
-    const handleOptionClick = (option) => {
-        setSelectedOption(option);
-        setIsOpen(false);
-    };
+const DropdownMenuDemo = ({volunteers}) => {
+    const [from, setFrom] = useState('All Tasks');
+    const [show, setShow] = useState('All');
+    const [volunteersChecked, setVolunteersChecked] = useState('');
 
     return (
-        <div className="dropdown-menu">
-            <button className="dropdown-toggle" onClick={() => setIsOpen(!isOpen)}>
-                {selectedOption.label}
-            </button>
-            {isOpen && (
-                <ul className="dropdown-options">
-                    {options.map((option) => (
-                        <li
-                            key={option.value}
-                            className="dropdown-option"
-                            onClick={() => handleOptionClick(option)}
-                        >
-                            {option.label}
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
-    );
-}
+        <DropdownMenu.Root>
+            <DropdownMenu.Trigger asChild>
+                {/*Normal button element used as Radix dropdown library does not work well with components*/}
+                <button className="filter-sort-button IconButton" aria-label="Customise options">
+                    Filter
+                </button>
+            </DropdownMenu.Trigger>
 
-export default DropdownMenu;
+            <DropdownMenu.Portal>
+                <DropdownMenu.Content className="DropdownMenuContent" sideOffset={5} style={{ zIndex: 10}}>
+                    <DropdownMenu.Label className="DropdownMenuLabel">Show</DropdownMenu.Label>
+                    <DropdownMenu.RadioGroup value={show} onValueChange={setShow}>
+                        <DropdownMenu.RadioItem className="DropdownMenuRadioItem" value="All">
+                            <DropdownMenu.ItemIndicator className="DropdownMenuItemIndicator">
+                                <DotFilledIcon />
+                            </DropdownMenu.ItemIndicator>
+                            All
+                        </DropdownMenu.RadioItem>
+                        <DropdownMenu.RadioItem className="DropdownMenuRadioItem" value="In Progress">
+                            <DropdownMenu.ItemIndicator className="DropdownMenuItemIndicator">
+                                <DotFilledIcon />
+                            </DropdownMenu.ItemIndicator>
+                            In Progress
+                        </DropdownMenu.RadioItem>
+                        <DropdownMenu.RadioItem className="DropdownMenuRadioItem" value="Overdue">
+                            <DropdownMenu.ItemIndicator className="DropdownMenuItemIndicator">
+                                <DotFilledIcon />
+                            </DropdownMenu.ItemIndicator>
+                            Overdue
+                        </DropdownMenu.RadioItem>
+                    </DropdownMenu.RadioGroup>
+
+                    <DropdownMenu.Separator className="DropdownMenuSeparator" />
+
+                    <DropdownMenu.RadioGroup value={from} onValueChange={setFrom}>
+                        <DropdownMenu.Label className="DropdownMenuLabel">From</DropdownMenu.Label>
+                        <DropdownMenu.RadioItem className="DropdownMenuRadioItem" value="All Tasks">
+                            <DropdownMenu.ItemIndicator className="DropdownMenuItemIndicator">
+                                <DotFilledIcon />
+                            </DropdownMenu.ItemIndicator>
+                            All Tasks
+                        </DropdownMenu.RadioItem>
+                        <DropdownMenu.RadioItem className="DropdownMenuRadioItem" value="Your Tasks">
+                            <DropdownMenu.ItemIndicator className="DropdownMenuItemIndicator">
+                                <DotFilledIcon />
+                            </DropdownMenu.ItemIndicator>
+                            Your Tasks
+                        </DropdownMenu.RadioItem>
+                    </DropdownMenu.RadioGroup>
+
+                    <DropdownMenu.Sub>
+                        <DropdownMenu.SubTrigger className="DropdownMenuSubTrigger">
+                            Volunteers
+                            <div className="RightSlot">
+                                <ChevronRightIcon />
+                            </div>
+                        </DropdownMenu.SubTrigger>
+                        <DropdownMenu.Portal>
+                            <DropdownMenu.SubContent
+                                className="DropdownMenuSubContent"
+                                sideOffset={2}
+                                alignOffset={-5}
+                            >
+                                <DropdownMenu.CheckboxItem
+                                    className="DropdownMenuCheckboxItem"
+                                    checked={volunteersChecked.length === 0}
+                                    onCheckedChange={(checked) => {
+                                        if (checked) {
+                                            setVolunteersChecked([]);
+                                        }
+                                    }}
+                                >
+                                    Clear Selection
+                                </DropdownMenu.CheckboxItem>
+                                <DropdownMenu.Separator className="DropdownMenuSeparator" />
+                                {volunteers.map((volunteer) => (
+                                    <DropdownMenu.CheckboxItem
+                                        key={volunteer.id}
+                                        className="DropdownMenuCheckboxItem"
+                                        checked={volunteersChecked.includes(volunteer.email)}
+                                        onCheckedChange={(checked) => {
+                                            if (checked) {
+                                                setVolunteersChecked([...volunteersChecked, volunteer.email]);
+                                                setFrom('')
+                                            } else {
+                                                setVolunteersChecked(
+                                                    volunteersChecked.filter((email) => email !== volunteer.email)
+                                                );
+                                            }
+                                        }}
+                                    >
+                                        <DropdownMenu.ItemIndicator className="DropdownMenuItemIndicator">
+                                            <CheckIcon />
+                                        </DropdownMenu.ItemIndicator>
+                                        {volunteer.fullName}
+                                    </DropdownMenu.CheckboxItem>
+                                ))}
+                            </DropdownMenu.SubContent>
+                        </DropdownMenu.Portal>
+                    </DropdownMenu.Sub>
+
+
+                    <DropdownMenu.Arrow className="DropdownMenuArrow" />
+                </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+        </DropdownMenu.Root>
+    );
+};
+
+export default DropdownMenuDemo;
