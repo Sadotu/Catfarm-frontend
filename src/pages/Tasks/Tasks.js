@@ -8,48 +8,53 @@ import Navigation from "../../components/Navigation/Navigation";
 import Footer from "../../components/Footer/Footer";
 import TaskCard from "../../components/TaskCard/TaskCard";
 import Button from "../../components/Button/Button";
+// Helpers
+import {filterData} from "../../helpers/filterDataHelper"
+import volunteers from "../Volunteers/Volunteers";
 
 function Tasks() {
     const navigate = useNavigate();
-    const [tasks, setTasks] = useState([]);
+    const [filteredTasks, setFilteredTasks] = useState([])
     const [activeUsers, setActiveUsers] = useState([])
     const [visibleTasks, setVisibleTasks] = useState(4); // Initially show 4 tasks
 
-    const areMoreTasks = visibleTasks < tasks.length;
+    function handleFilter(newFilters) {
+        // console.log(newFilters)
+        const result = filterData(activeUsers, newFilters);
+        if (Array.isArray(result)) {
+            setFilteredTasks(result);
+        } else {
+            console.error("filterData did not return an array:", result);
+        }
+    }
 
     const handleShowMore = () => {
         setVisibleTasks(visibleTasks + 4); // Show 4 more tasks
     };
 
-
-    // { activeUsers.map((volunteer)=>(
-    //     <span key={ volunteer.email }>{ volunteer.fullName}</span>
-    // )}
-
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiZXBwaWVAZXhhbXBsZS5jb20iLCJpYXQiOjE2ODc2ODY3NTIsImV4cCI6MTY4ODU1MDc1Mn0.AH8lOn3525mJ4BBBRWqMThRhQsJqAk7TYQVSd0N6yS0'; // Replace with your actual JWT token
+                const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlckB1c2VyLmNvbSIsImlhdCI6MTY4ODQ3MzU0NCwiZXhwIjoxNjg5MzM3NTQ0fQ.MfFNHBwpgVC32JrLdX983zSbP83jvqnMxCPE9BQgJPk';
                 const headers = {
                     Authorization: `Bearer ${token}`,
                 };
 
                 const response = await axios.get('http://localhost:8080/users/enabled', { headers });
-                setActiveUsers(response.data)
+                const users = response.data;
+                setActiveUsers(users);
 
-                for (let i = 0; i < activeUsers.length; i++)
-                    if (activeUsers.length > 0 && activeUsers[i].tasks.length > 0) {
-                        setTasks(activeUsers[i].tasks);
-                    } else {
-                        setTasks([]);
-                    }
             } catch (error) {
                 console.log('Error retrieving task data:', error);
             }
         };
-
         fetchData();
-    }, [activeUsers]);
+    }, []);
+
+    useEffect(() => {
+        const currentUser = 'emily.davis@example.com'
+        handleFilter({ currentUser: currentUser, show: 'In Progress', from: 'Your Tasks', volunteersChecked: [] });
+    }, [activeUsers])
 
     return (
         <>
@@ -62,19 +67,20 @@ function Tasks() {
                             pageTitle="Tasks"
                             task={true}
                             filter={true}
+                            handleFilter={handleFilter}
                             activeUsers={activeUsers}
                             search={true}
                         ></Header>
 
                         <main className="main-container">
-                            {tasks.length > 0 ? (
+                            {filteredTasks.length > 0 ? (
                                 <div className="main-container-tasks">
-                                    {tasks.slice(0, visibleTasks).map(task => (
+                                    {filteredTasks.slice(0, visibleTasks).map(task => (
                                         <TaskCard
                                             key={task.id}
                                             cardTitle={task.nameTask}
                                             deadline={task.deadline}
-                                            tasks={tasks}
+                                            tasks={filteredTasks}
                                             completed={task.completed}
                                             clickHandler={() => {
                                                 // Handle click event
@@ -86,7 +92,7 @@ function Tasks() {
                                 <h3>No tasks to show</h3>
                             )}
                             <div className="show-more-container">
-                                {areMoreTasks && (
+                                {visibleTasks < filteredTasks.length && (
                                     <Button
                                         className="event-task-done-button"
                                         buttonText="Show More"
@@ -95,6 +101,7 @@ function Tasks() {
                                 )}
                             </div>
                         </main>
+
                     </div>
                 </div>
                 <Footer/>

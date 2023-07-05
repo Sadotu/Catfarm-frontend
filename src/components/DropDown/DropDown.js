@@ -1,19 +1,21 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import {
-    HamburgerMenuIcon,
     DotFilledIcon,
     CheckIcon,
     ChevronRightIcon,
 } from '@radix-ui/react-icons';
 import './DropDown.css';
-import Button from "../Button/Button";
-import login from "../../pages/Login/Login";
 
-const DropdownMenuDemo = ({volunteers}) => {
-    const [from, setFrom] = useState('All Tasks');
-    const [show, setShow] = useState('All');
-    const [volunteersChecked, setVolunteersChecked] = useState('');
+const DropdownMenuDemo = ({ volunteers, handleFilter }) => {
+    const [from, setFrom] = useState('Your Tasks');
+    const [show, setShow] = useState('In Progress');
+    const [volunteersChecked, setVolunteersChecked] = useState([]);
+
+    useEffect(() => {
+        const currentUser = 'emily.davis@example.com'
+        handleFilter({ currentUser: currentUser, show, from, volunteersChecked });
+    }, [ show, from, volunteersChecked]);
 
     return (
         <DropdownMenu.Root>
@@ -45,6 +47,12 @@ const DropdownMenuDemo = ({volunteers}) => {
                                 <DotFilledIcon />
                             </DropdownMenu.ItemIndicator>
                             Overdue
+                        </DropdownMenu.RadioItem>
+                        <DropdownMenu.RadioItem className="DropdownMenuRadioItem" value="Completed">
+                            <DropdownMenu.ItemIndicator className="DropdownMenuItemIndicator">
+                                <DotFilledIcon />
+                            </DropdownMenu.ItemIndicator>
+                            Completed
                         </DropdownMenu.RadioItem>
                     </DropdownMenu.RadioGroup>
 

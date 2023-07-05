@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import "./Header.css"
 import {useNavigate} from "react-router-dom";
 
@@ -7,7 +7,7 @@ import Button from '../Button/Button';
 import DropDown from "../DropDown/DropDown";
 
 
-const Header = ({ pageTitle, backButton = false, task = false, search = false, filter = false, activeUsers }) => {
+const Header = ({ pageTitle, backButton = false, task = false, search = false, filter = false, handleFilter, activeUsers }) => {
     const navigate = useNavigate();
 
     function handleSearch() {
@@ -42,7 +42,10 @@ const Header = ({ pageTitle, backButton = false, task = false, search = false, f
                 )}
 
                 {filter && (
-                    <DropDown volunteers={activeUsers}></DropDown>
+                    <DropDown
+                        volunteers={activeUsers}
+                        handleFilter={handleFilter}
+                    ></DropDown>
                 )}
 
                 {search && (
