@@ -4,10 +4,11 @@ import {useNavigate} from "react-router-dom";
 
 // Components
 import Button from '../Button/Button';
-import DropDown from "../DropDown/DropDown";
+import Filter from "../Filter/Filter";
+import Sort from "../Sort/Sort"
 
 
-const Header = ({ pageTitle, backButton = false, task = false, search = false, filter = false, handleFilter, activeUsers }) => {
+const Header = ({ pageTitle, backButton = false, task = false, search = false, filter = false, handleFilter, sort = false, handleSort, activeUsers }) => {
     const navigate = useNavigate();
 
     function handleSearch() {
@@ -24,34 +25,40 @@ const Header = ({ pageTitle, backButton = false, task = false, search = false, f
             )}
 
             <div className="button-bar">
-                {backButton && (
-                    <Button
-                        className="back-arrow"
-                        clickHandler={() => window.history.back()}
-                    />
-                )}
+                <div className="task-filter-sort">
+                    {backButton && (
+                        <Button
+                            className="back-arrow"
+                            clickHandler={() => window.history.back()}
+                        />
+                    )}
 
-                {task && (
-                    <Button
-                        buttonText="New Task"
-                        className="general-button"
-                        clickHandler={() => {
-                            navigate("/new_task")
-                        }}
-                    ></Button>
-                )}
+                    {task && (
+                        <Button
+                            buttonText="New Task"
+                            className="general-button"
+                            clickHandler={() => {
+                                navigate("/new_task")
+                            }}
+                        ></Button>
+                    )}
 
-                {filter && (
-                    <DropDown
-                        volunteers={activeUsers}
-                        handleFilter={handleFilter}
-                    ></DropDown>
-                )}
+                    {filter && (
+                        <Filter
+                            volunteers={activeUsers}
+                            handleFilter={handleFilter}
+                        ></Filter>
+                    )}
+
+                    {sort && (
+                        <Sort></Sort>
+                    )}
+                </div>
 
                 {search && (
                     <div className="search-container">
                         <input
-                            className="search-input"
+                            className="search-input not-allowed"
                             placeholder="Search"
                         ></input>
                         <Button

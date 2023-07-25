@@ -1,8 +1,12 @@
 :root {
-/* Task Page */
-    --main-tasks-background-color: hsl(0, 100%, 95%);
+    /* Task Page */
+    --main-tasks-background-color: hsl(0, 100%, 98%);
     --main-top-border-black: hsla(0, 0%, 0%, 0.5);
     --main-task-card-completed: hsl(0, 0%, 94%);
+
+    /*Task*/
+    --main-task-content-background: hsla(0, 0%, 95%, 0.8);
+    --main-task-content-border: rgba(0, 0, 0, 0.2);
 
     /* Main theme green*/
     --main-theme-dark-green: hsl(179, 66%, 39%);
@@ -17,8 +21,8 @@
     --completed-button-color-on-hover: hsl(197, 18%, 50%);
     --event-task-general-button: #E3E6EA;
     --event-task-general-button-on-hover: hsl(0, 0%, 80%);
-    --event-task-menu-button: #D9D9D9;
-    --event-task-menu-button-on-hover: hsla(0, 0%, 85%, 0.5);
+    --event-task-menu-button-on-hover: #D9D9D9;
+    --event-task-menu-button: hsla(0, 0%, 85%, 0.5);
     --button-border-black: hsl(0, 0%, 80%);
 
     /* global text */

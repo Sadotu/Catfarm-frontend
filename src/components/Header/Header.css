@@ -24,6 +24,10 @@ header {
     justify-content: space-between;
     margin-bottom: 20px;
 }
+.task-filter-sort {
+    display: flex;
+    flex-direction: row;
+}
 
 .header-buttons {
     display: flex;

@@ -15,8 +15,8 @@ function Navigation( { activeLink } ) {
             </div>
             <ul className="nav-links">
                 <li><NavLink to="/profile" activeClassName="active" className="nav-link">Your Profile</NavLink></li>
-                <li><NavLink to="/database" activeClassName="active" className="nav-link" disabled>Database</NavLink></li>
-                <li><NavLink to="/calendar" activeClassName="active" className="nav-link" disabled>Calendar</NavLink></li>
+                <li><NavLink to="/database" activeClassName="active" className="nav-link not-allowed" onClick={(e) => e.preventDefault()}>Database</NavLink></li>
+                <li><NavLink to="/calendar" activeClassName="active" className="nav-link not-allowed" onClick={(e) => e.preventDefault()}>Calendar</NavLink></li>
                 <li><NavLink to="/tasks" activeClassName="active" className="nav-link">Tasks</NavLink></li>
                 <li><NavLink to="/volunteers" activeClassName="active" className="nav-link">Volunteers</NavLink></li>
                 <li><NavLink to="/logout" activeClassName="active" className="nav-link">Logout</NavLink></li>

@@ -10,7 +10,6 @@ import TaskCard from "../../components/TaskCard/TaskCard";
 import Button from "../../components/Button/Button";
 // Helpers
 import {filterData} from "../../helpers/filterDataHelper"
-import volunteers from "../Volunteers/Volunteers";
 
 function Tasks() {
     const navigate = useNavigate();
@@ -19,7 +18,6 @@ function Tasks() {
     const [visibleTasks, setVisibleTasks] = useState(4); // Initially show 4 tasks
 
     function handleFilter(newFilters) {
-        // console.log(newFilters)
         const result = filterData(activeUsers, newFilters);
         if (Array.isArray(result)) {
             setFilteredTasks(result);
@@ -35,7 +33,7 @@ function Tasks() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlckB1c2VyLmNvbSIsImlhdCI6MTY4ODQ3MzU0NCwiZXhwIjoxNjg5MzM3NTQ0fQ.MfFNHBwpgVC32JrLdX983zSbP83jvqnMxCPE9BQgJPk';
+                const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWlseS5kYXZpc0BleGFtcGxlLmNvbSIsImlhdCI6MTY5MDMwMTgwMiwiZXhwIjoxNjkxMTY1ODAyfQ.tN7_JDE14DY2rQ5IQlMXo2drBEVji6ydQnXaTxHOxqY';
                 const headers = {
                     Authorization: `Bearer ${token}`,
                 };
@@ -54,7 +52,7 @@ function Tasks() {
     useEffect(() => {
         const currentUser = 'emily.davis@example.com'
         handleFilter({ currentUser: currentUser, show: 'In Progress', from: 'Your Tasks', volunteersChecked: [] });
-    }, [activeUsers])
+    },[activeUsers])
 
     return (
         <>
@@ -68,6 +66,7 @@ function Tasks() {
                             task={true}
                             filter={true}
                             handleFilter={handleFilter}
+                            sort={true}
                             activeUsers={activeUsers}
                             search={true}
                         ></Header>

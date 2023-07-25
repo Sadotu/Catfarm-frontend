@@ -9,7 +9,7 @@ import Event from "./pages/Event/Event";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import Login from "./pages/Login/Login";
 import NewEvent from "./pages/NewEvent/NewEvent";
-import NewTask from "./pages/NewTask/NewTask";
+import NewTask from "./pages/Tasks/NewTask";
 import Profile from "./pages/Profile/Profile";
 import SignUp from "./pages/SignUp/SignUp";
 import Task from "./pages/Task/Task";

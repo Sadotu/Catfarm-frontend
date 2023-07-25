@@ -124,7 +124,7 @@ button:active {
     font-weight: bolder;
     letter-spacing: 1px;
     border-radius: 0;
-    padding-right: 100px;
+    padding: 5px 120px 5px 10px;
     font-size: 18px;
 }
 .event-task-menu-button:hover {
@@ -137,7 +137,7 @@ button:active {
 /* back arrow */
 .back-arrow {
     background-color: #FFF;
-    background-image: url("../../assets/icons/arrow-bend-up-left.png");
+    background-image: url("../../assets/icons/arrow-bend-up-left.svg");
     height: 40px;
     width: 40px;
     background-repeat: no-repeat;
@@ -147,7 +147,7 @@ button:active {
 /* search icon */
 .search-button {
     background-color: #FFF;
-    background-image: url("../../assets/icons/magnifying-glass.png");
+    background-image: url("../../assets/icons/magnifying-glass.svg");
     height: 20px;
     width: 20px;
     background-repeat: no-repeat;

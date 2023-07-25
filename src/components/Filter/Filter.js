@@ -5,9 +5,9 @@ import {
     CheckIcon,
     ChevronRightIcon,
 } from '@radix-ui/react-icons';
-import './DropDown.css';
+import './Filter.css';
 
-const DropdownMenuDemo = ({ volunteers, handleFilter }) => {
+const Filter = ({ volunteers, handleFilter }) => {
     const [from, setFrom] = useState('Your Tasks');
     const [show, setShow] = useState('In Progress');
     const [volunteersChecked, setVolunteersChecked] = useState([]);
@@ -133,4 +133,4 @@ const DropdownMenuDemo = ({ volunteers, handleFilter }) => {
     );
 };
 
-export default DropdownMenuDemo;
+export default Filter;
