@@ -1,7 +1,7 @@
 import React from 'react';
 import './Button.css'
 
-function Button({ buttonText, buttonType = "button", className, id, clickHandler, disabled = false, icon }) {
+function Button({ buttonText, buttonType = "button", className, id, clickHandler, disabled = false, icon, buttonClass, iconClass }) {
     return (
         <button
             type={buttonType}
@@ -10,8 +10,8 @@ function Button({ buttonText, buttonType = "button", className, id, clickHandler
             onClick={clickHandler}
             disabled={disabled}
         >
-            {icon && <img src={icon} alt="icon" className="icon-space" />}
-            {buttonText && <span className="button-text">{buttonText}</span>}
+            {icon && <img src={icon} alt="icon" className={iconClass} />}
+            {buttonText && <span className={buttonClass ? "menu-pane-buttons" : "button-text"}>{buttonText}</span>}
         </button>
     );
 }

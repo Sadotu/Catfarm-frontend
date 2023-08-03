@@ -1,5 +1,13 @@
 :root {
-    /* Task Page */
+    /* Font Families */
+    --main-font-roboto: 'Roboto', sans-serif;
+    --main-font-roboto-mono: 'Roboto Mono', monospace;
+
+    /* Text */
+    --task-title: rgba(0, 0, 0, 0.8);
+    --task-option-headers: rgba(0, 0, 0, 0.6);
+
+    /* Tasks Page */
     --main-tasks-background-color: hsl(0, 100%, 98%);
     --main-top-border-black: hsla(0, 0%, 0%, 0.5);
     --main-task-card-completed: hsl(0, 0%, 94%);

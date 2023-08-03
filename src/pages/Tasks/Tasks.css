@@ -23,7 +23,7 @@
     flex-grow: 1;
 }
 
-/*Task page specific*/
+/*Tasks page specific*/
 .main-container-tasks {
     display: flex;
     flex-direction: row;
@@ -37,48 +37,4 @@
     display: flex;
     justify-content: center;
     margin-bottom: 27px;
-}
-/*Individual task specific*/
-.main-container-task {
-    background-color: var(--main-tasks-background-color);
-    border-top: 1px solid var(--main-top-border-black);
-    flex-grow: 1;
-    padding: 50px;
-    display: flex;
-    gap: 30px;
-}
-
-.task-content {
-    background-color: var(--main-task-content-background);
-    border-color: #FA7788;
-    padding: 50px;
-}
-.task-menu{
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
-.task-menu-header {
-    font-family: 'Roboto Mono', monospace;
-    font-weight: bolder;
-    font-size: 18px;
-    opacity: 75%;
-}
-.top-task-menu {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--main-task-content-background);
-    padding: 10px;
-    border: 1px solid var(--main-task-content-border);
-    border-radius: 10px;
-    gap: 10px;
-}
-.bottom-task-menu {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--main-task-content-background);
-    padding: 10px;
-    border: 1px solid var(--main-task-content-border);
-    border-radius: 10px;
-    gap: 10px;
 }

@@ -40,6 +40,7 @@ button:active {
     outline: transparent;
 }
 
+
 .filter-sort-button:hover {
     color: var(--main-text-color-black-on-hover);
 }
@@ -63,7 +64,7 @@ button:active {
 .event-task-general-button {
     background-color: var(--event-task-general-button);
     color: var(--main-text-color-black);
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--main-font-roboto);
     font-weight: 500;
     border-radius: 5px;
     border: 1px solid var(--button-border-black);
@@ -72,24 +73,46 @@ button:active {
     background-color: var(--event-task-general-button-on-hover);
 }
 
+/* general buttons WITH ICON when creating or updating events or tasks */
+.event-task-general-button-icon {
+    background-color: var(--event-task-general-button);
+    color: var(--main-text-color-black);
+    font-family: var(--main-font-roboto);
+    font-weight: 500;
+    border-radius: 5px;
+    border: 1px solid var(--button-border-black);
+    padding: 0 12px 0 0;
+}
+.event-task-general-button-icon:hover {
+    background-color: var(--event-task-general-button-on-hover);
+}
+.watch-icon {
+    padding: 10px;
+}
+
 /* shaped buttons when creating or updating events or tasks */
 .event-task-menu-button-circle {
     background-color: var(--event-task-menu-button);
     border: 1px solid var(--button-border-black);
     color: var(--main-text-color-black);
-    border-radius: 25px;
-    width: 38px;
-    height: 38px;
+    border-radius: 50%;
     font-size: 32px;
     font-weight: 100;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 60px;
+    height: 60px;
 }
 .event-task-menu-button-circle::before {
     margin-top: -2px;
     margin-right: -1px;
     content: "+";
+}
+.event-task-menu-button-circle-is-active::before {
+    margin-top: -2px;
+    margin-right: -1px;
+    content: "-";
 }
 .event-task-menu-button-circle:hover {
     background-color: var(--event-task-general-button-on-hover);
@@ -120,12 +143,11 @@ button:active {
 .event-task-menu-button {
     background-color: var(--event-task-menu-button);
     color: var(--main-text-color-black);
-    font-family: 'Roboto Mono', monospace;
+    font-family: var(--main-font-roboto-mono);
     font-weight: bolder;
     letter-spacing: 1px;
     border-radius: 0;
     padding: 5px 120px 5px 10px;
-    font-size: 18px;
 }
 .event-task-menu-button:hover {
     background-color: var(--event-task-menu-button-on-hover);
@@ -142,6 +164,11 @@ button:active {
     width: 40px;
     background-repeat: no-repeat;
     background-size: 100% 100%;
+}
+
+.menu-pane-buttons{
+    width: 130px;
+    text-align: left;
 }
 
 /* search icon */

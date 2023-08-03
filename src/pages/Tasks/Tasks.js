@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "./Tasks.css"
 import axios from 'axios';
-import {useNavigate} from "react-router-dom";
 // Components
 import Header from "../../components/Header/Header";
 import Navigation from "../../components/Navigation/Navigation";
@@ -12,7 +11,6 @@ import Button from "../../components/Button/Button";
 import {filterData} from "../../helpers/filterDataHelper"
 
 function Tasks() {
-    const navigate = useNavigate();
     const [filteredTasks, setFilteredTasks] = useState([])
     const [activeUsers, setActiveUsers] = useState([])
     const [visibleTasks, setVisibleTasks] = useState(4); // Initially show 4 tasks
