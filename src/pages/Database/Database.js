@@ -1,5 +1,4 @@
 import React from 'react';
-import SmallCard from "../../components/SmallCard/SmallCard";
 
 function Database(props) {
     return (

@@ -68,6 +68,7 @@ button:active {
     font-weight: 500;
     border-radius: 5px;
     border: 1px solid var(--button-border-black);
+    padding: 15px 15px;
 }
 .event-task-general-button:hover {
     background-color: var(--event-task-general-button-on-hover);
@@ -81,13 +82,13 @@ button:active {
     font-weight: 500;
     border-radius: 5px;
     border: 1px solid var(--button-border-black);
-    padding: 0 12px 0 0;
+    padding: 0 15px 0 0;
 }
 .event-task-general-button-icon:hover {
     background-color: var(--event-task-general-button-on-hover);
 }
 .watch-icon {
-    padding: 10px;
+    padding: 8px 9px 9px 15px;
 }
 
 /* shaped buttons when creating or updating events or tasks */

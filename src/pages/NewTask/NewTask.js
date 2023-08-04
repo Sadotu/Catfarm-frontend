@@ -19,7 +19,7 @@ import Check from "../../assets/icons/check-fat.svg"
 import Archive from "../../assets/icons/archive-box.svg"
 import Eye from "../../assets/icons/eye.svg"
 // Helpers
-import "../../helpers/editableHelper"
+import { editableTitle, editableDescription } from  "../../helpers/editableHelper"
 // Libraries
 import axios from "axios";
 
@@ -30,6 +30,11 @@ function NewTask() {
     const [selectedVolunteers, setSelectedVolunteers] = useState([]);
     const [volunteerCardVisible, setVolunteerCardVisible] = useState(false);
     const [activeUsers, setActiveUsers] = useState([])
+
+    window.onload = function() {
+        editableTitle();
+        editableDescription();
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -51,6 +56,9 @@ function NewTask() {
     }, []);
 
     const currentUserData = activeUsers.find(user => user.email === currentUser);
+    const date = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = date.toLocaleDateString('en-US', options);
 
     function volunteerHandler() {
         // If selectedVolunteers is empty, add currentUserData
@@ -117,7 +125,10 @@ function NewTask() {
                         <main className="main-container-task">
                             <div className="task-content">
                                     <div id="editable">
-                                        <h3 id="editable-text" className="icon">Task title</h3>
+                                        <div id="task-header">
+                                            <img className="icon" />
+                                            <h3 id="editable-text" className="task-title">Double click here to edit the task title...</h3>
+                                        </div>
 
                                         <div className="extra-task-options">
                                             <div className={`volunteer-card ${volunteerCardVisible ? '' : 'hidden'}`}>
@@ -147,7 +158,7 @@ function NewTask() {
                                                     ))}
                                                 </div>
                                             </div>
-                                            <div className={`${volunteerCardVisible ? 'notification-card' : ''}`}>
+                                            <div className="notification-card">
                                                 <h3 className="volunteer-card-header">Notifications</h3>
                                                 <Button
                                                     buttonText="Watch"
@@ -157,7 +168,34 @@ function NewTask() {
                                                 ></Button>
                                             </div>
                                             <div className="deadline-card">
+                                                <h3 className="volunteer-card-header">Due date</h3>
+                                                <div className="deadline-flex">
+                                                    <Button
+                                                        buttonText={formattedDate}
+                                                        className="event-task-general-button"
+                                                    ></Button>
+                                                    <Button
+                                                        buttonText="Edit"
+                                                        className="filter-sort-button edit-margin-left"
+                                                    ></Button>
+                                                </div>
+                                            </div>
+                                            <div className="completion-card">
+                                                <h3 className="volunteer-card-header">Close task</h3>
+                                                <Button
+                                                    buttonText="Done"
+                                                    className="event-task-done-button"
+                                                ></Button>
+                                            </div>
+                                        </div>
 
+                                        <div className="description-outer-container">
+                                            <div className="description-header">
+                                                <img className="description-icon" />
+                                                <h3>Description</h3>
+                                            </div>
+                                            <div id="editable-description" className="description-content">
+                                                <h5 id="editable-text-description">Double click here to edit the description...</h5>
                                             </div>
                                         </div>
                                     </div>
