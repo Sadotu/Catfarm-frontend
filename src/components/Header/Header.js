@@ -8,7 +8,7 @@ import Filter from "../Filter/Filter";
 import Sort from "../Sort/Sort"
 
 
-const Header = ({ pageTitle, backButton = false, task = false, search = false, filter = false, handleFilter, sort = false, handleSort, activeUsers }) => {
+const Header = ({ pageTitle, backButton = false, task = false, search = false, filter = false, handleFilter, sort = false, handleSort, activeUsers, profileInfo }) => {
     const navigate = useNavigate();
 
     function handleSearch() {
@@ -90,13 +90,13 @@ const Header = ({ pageTitle, backButton = false, task = false, search = false, f
                 {/*)}*/}
             </div>
 
-            {/*{profileInfo && (*/}
-            {/*    <div className="profile-info">*/}
-            {/*        <h2>{profileInfo.name} {profileInfo.isActive ? '(Active)' : '(Inactive)'}</h2>*/}
-            {/*        <p className="profile-subtitle">{profileInfo.pronouns} - {profileInfo.role}</p>*/}
-            {/*        <p className="profile-subtitle-smaller">Account Created: {profileInfo.created}</p>*/}
-            {/*    </div>*/}
-            {/*)}*/}
+            {profileInfo && (
+                <div className="profile-info">
+                    <h2>{profileInfo.name} {profileInfo.isActive ? '(Active)' : '(Inactive)'}</h2>
+                    <p className="profile-subtitle">{profileInfo.pronouns} - {profileInfo.role}</p>
+                    <p className="profile-subtitle-smaller">Account Created: {profileInfo.created}</p>
+                </div>
+            )}
         </header>
     );
 };

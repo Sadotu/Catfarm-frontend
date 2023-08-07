@@ -10,9 +10,12 @@
 
 .task-content {
     width: 100%;
+    max-height: 700px;
+    overflow-y: auto;
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background-color: var(--main-task-content-background);
-    border-color: #FA7788;
     border-radius: 10px;
     border: 1px solid var(--main-task-content-border);
     padding: 20px;
@@ -28,7 +31,7 @@
 #editable h3 {
     font-family: var(--main-font-roboto-mono);
     font-size: 15px;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -117,7 +120,7 @@
 .deadline-card {
     margin-right: 25px;
 }
-.deadline-flex {
+.deadline-content {
     display: flex;
     flex-direction: row;
 }
@@ -125,13 +128,13 @@
     margin-left: -10px;
 }
 
-/* Description */
+/* Description card */
 .description-icon {
     content: url('../../assets/icons/list.svg');
     margin-right: 15px;
     color: var(--task-option-headers);
 }
-.description-outer-container {
+.description-card {
     margin-top: 25px;
     display: flex;
     flex-direction: column;
@@ -146,4 +149,37 @@
     font-size: 15px;
     font-family: var(--main-font-roboto-mono);
     color: var(--task-option-headers);
+}
+
+/* Attachment card */
+.attachment-icon {
+    content: url('../../assets/icons/paperclip.svg');
+    margin-right: 15px;
+    color: var(--task-option-headers);
+}
+.attachment-card {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.attachment-header {
+    display: flex;
+    flex-direction: row;
+}
+.attachment-button {
+    margin-left: 47px;
+}
+
+/* save button */
+.task-save-line {
+    width: 600px;
+    margin: 10px;
+    color: var(--task-option-headers);
+}
+.task-save-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
 }

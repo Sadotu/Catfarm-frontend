@@ -31,7 +31,7 @@ function Tasks() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWlseS5kYXZpc0BleGFtcGxlLmNvbSIsImlhdCI6MTY5MDMwMTgwMiwiZXhwIjoxNjkxMTY1ODAyfQ.tN7_JDE14DY2rQ5IQlMXo2drBEVji6ydQnXaTxHOxqY';
+                const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlckB1c2VyLmNvbSIsImlhdCI6MTY5MTE3MTcxNiwiZXhwIjoxNjkyMDM1NzE2fQ.dGiyjnFcrykuZ1t34Jx_n-zWx25z366juNzg09Qxixg';
                 const headers = {
                     Authorization: `Bearer ${token}`,
                 };

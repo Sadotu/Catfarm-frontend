@@ -39,7 +39,7 @@ function NewTask() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWlseS5kYXZpc0BleGFtcGxlLmNvbSIsImlhdCI6MTY5MDMwMTgwMiwiZXhwIjoxNjkxMTY1ODAyfQ.tN7_JDE14DY2rQ5IQlMXo2drBEVji6ydQnXaTxHOxqY';
+                const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlckB1c2VyLmNvbSIsImlhdCI6MTY5MTE3MTcxNiwiZXhwIjoxNjkyMDM1NzE2fQ.dGiyjnFcrykuZ1t34Jx_n-zWx25z366juNzg09Qxixg';
                 const headers = {
                     Authorization: `Bearer ${token}`,
                 };
@@ -124,81 +124,99 @@ function NewTask() {
 
                         <main className="main-container-task">
                             <div className="task-content">
-                                    <div id="editable">
-                                        <div id="task-header">
-                                            <img className="icon" />
-                                            <h3 id="editable-text" className="task-title">Double click here to edit the task title...</h3>
-                                        </div>
+                                <div id="editable">
+                                    <div id="task-header">
+                                        <img className="icon" />
+                                        <h3 id="editable-text" className="task-title">Double click here to edit the task title...</h3>
+                                    </div>
 
-                                        <div className="extra-task-options">
-                                            <div className={`volunteer-card ${volunteerCardVisible ? '' : 'hidden'}`}>
-                                                <h3 className="volunteer-card-header">Volunteers</h3>
-                                                <div className="task-profile-flex">
-                                                    {selectedVolunteers.map((v) => (
-                                                        <div key={v.email} onClick={showUnselected ? moveToUnselected(v) : null}>
-                                                            {v.profilePicture && v.profilePicture.docFile ? (
-                                                                <img className="profile-volunteer" src={`data:image/jpeg;base64,${v.profilePicture.docFile}`} alt={v.name} />
-                                                            ) : (
-                                                                <img src={User}></img>
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                    <Button
-                                                        className={`event-task-menu-button-circle ${showUnselected ? 'event-task-menu-button-circle-is-active' : ''}`}
-                                                        clickHandler={showUnselectedVolunteers}
-                                                    ></Button>
-                                                    {showUnselected && unselectedVolunteers.map((v) => (
-                                                        <div key={v.email} onClick={moveToSelected(v)}>
-                                                            {v.profilePicture && v.profilePicture.docFile ? (
-                                                                <img className="profile-volunteer" src={`data:image/jpeg;base64,${v.profilePicture.docFile}`} alt={v.name} />
-                                                            ) : (
-                                                                <img src={User}></img>
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <div className="notification-card">
-                                                <h3 className="volunteer-card-header">Notifications</h3>
+                                    <div className="extra-task-options">
+                                        <div className={`volunteer-card ${volunteerCardVisible ? '' : 'hidden'}`}>
+                                            <h3 className="volunteer-card-header">Volunteers</h3>
+                                            <div className="task-profile-flex">
+                                                {selectedVolunteers.map((v) => (
+                                                    <div key={v.email} onClick={showUnselected ? moveToUnselected(v) : null}>
+                                                        {v.profilePicture && v.profilePicture.docFile ? (
+                                                            <img className="profile-volunteer" src={`data:image/jpeg;base64,${v.profilePicture.docFile}`} alt={v.name} />
+                                                        ) : (
+                                                            <img src={User}></img>
+                                                        )}
+                                                    </div>
+                                                ))}
                                                 <Button
-                                                    buttonText="Watch"
-                                                    className="event-task-general-button-icon not-allowed"
-                                                    icon={Eye}
-                                                    iconClass="watch-icon"
+                                                    className={`event-task-menu-button-circle ${showUnselected ? 'event-task-menu-button-circle-is-active' : ''}`}
+                                                    clickHandler={showUnselectedVolunteers}
                                                 ></Button>
+                                                {showUnselected && unselectedVolunteers.map((v) => (
+                                                    <div key={v.email} onClick={moveToSelected(v)}>
+                                                        {v.profilePicture && v.profilePicture.docFile ? (
+                                                            <img className="profile-volunteer" src={`data:image/jpeg;base64,${v.profilePicture.docFile}`} alt={v.name} />
+                                                        ) : (
+                                                            <img src={User}></img>
+                                                        )}
+                                                    </div>
+                                                ))}
                                             </div>
-                                            <div className="deadline-card">
-                                                <h3 className="volunteer-card-header">Due date</h3>
-                                                <div className="deadline-flex">
-                                                    <Button
-                                                        buttonText={formattedDate}
-                                                        className="event-task-general-button"
-                                                    ></Button>
-                                                    <Button
-                                                        buttonText="Edit"
-                                                        className="filter-sort-button edit-margin-left"
-                                                    ></Button>
-                                                </div>
-                                            </div>
-                                            <div className="completion-card">
-                                                <h3 className="volunteer-card-header">Close task</h3>
+                                        </div>
+                                        <div className="notification-card">
+                                            <h3 className="volunteer-card-header">Notifications</h3>
+                                            <Button
+                                                buttonText="Watch"
+                                                className="event-task-general-button-icon not-allowed"
+                                                icon={Eye}
+                                                iconClass="watch-icon"
+                                            ></Button>
+                                        </div>
+                                        <div className="deadline-card">
+                                            <h3 className="volunteer-card-header">Due date</h3>
+                                            <div className="deadline-content">
                                                 <Button
-                                                    buttonText="Done"
-                                                    className="event-task-done-button"
+                                                    buttonText={formattedDate}
+                                                    className="event-task-general-button"
+                                                ></Button>
+                                                <Button
+                                                    buttonText="Edit"
+                                                    className="filter-sort-button edit-margin-left"
                                                 ></Button>
                                             </div>
                                         </div>
-
-                                        <div className="description-outer-container">
-                                            <div className="description-header">
-                                                <img className="description-icon" />
-                                                <h3>Description</h3>
-                                            </div>
-                                            <div id="editable-description" className="description-content">
-                                                <h5 id="editable-text-description">Double click here to edit the description...</h5>
-                                            </div>
+                                        <div className="completion-card">
+                                            <h3 className="volunteer-card-header">Close task</h3>
+                                            <Button
+                                                buttonText="Done"
+                                                className="event-task-done-button"
+                                            ></Button>
                                         </div>
                                     </div>
+
+                                    <div className="description-card">
+                                        <div className="description-header">
+                                            <img className="description-icon" />
+                                            <h3>Description</h3>
+                                        </div>
+                                        <div id="editable-description" className="description-content">
+                                            <h5 id="editable-text-description">Double click here to edit the description...</h5>
+                                        </div>
+                                    </div>
+
+                                    <div className="attachment-card">
+                                        <div className="attachment-header">
+                                            <img className="attachment-icon" />
+                                            <h3>Attachments</h3>
+                                        </div>
+                                        <Button
+                                            className="event-task-general-button attachment-button"
+                                            buttonText="Add an attachment"
+                                        ></Button>
+                                    </div>
+                                </div>
+                                <div className="task-save-bar">
+                                    <hr className="task-save-line" />
+                                    <Button
+                                        className="event-task-done-button"
+                                        buttonText="Save"
+                                    ></Button>
+                                </div>
                             </div>
 
                             <div className="task-menu">
@@ -221,17 +239,17 @@ function NewTask() {
                                         iconClass="icon-space"
                                     ></Button>
                                     <Button
-                                        className="event-task-menu-button not-allowed"
-                                        buttonText="Checklist"
-                                        buttonClass="menu-pane-buttons"
-                                        icon={Checklist}
-                                        iconClass="icon-space"
-                                    ></Button>
-                                    <Button
                                         className="event-task-menu-button"
                                         buttonText="Attachments"
                                         buttonClass="menu-pane-buttons"
                                         icon={Attachment}
+                                        iconClass="icon-space"
+                                    ></Button>
+                                    <Button
+                                        className="event-task-menu-button not-allowed"
+                                        buttonText="Checklist"
+                                        buttonClass="menu-pane-buttons"
+                                        icon={Checklist}
                                         iconClass="icon-space"
                                     ></Button>
                                     <Button

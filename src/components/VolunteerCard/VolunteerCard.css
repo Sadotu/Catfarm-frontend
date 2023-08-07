@@ -1,0 +1,30 @@
+.user-card-outer-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 50px;
+}
+
+.user-card-inner-container {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.volunteer-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50px;
+    color: var(--task-title);
+}
+
+.volunteer-name {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    color: var(--task-title);
+}
