@@ -1,5 +1,6 @@
 import {Navigate, Route, Routes, useParams} from "react-router-dom";
 import './App.css';
+import './global-variables.css'
 
 //pages
 import Calendar from "./pages/Calendar/Calendar";
@@ -33,7 +34,6 @@ function App() {
 
   return (
     <>
-        <main>
             <Routes>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/signup" element={<SignUp/>}/>
@@ -51,7 +51,6 @@ function App() {
                 <Route path="/volunteers" element={isAuth ? <Volunteers/> : <Navigate to="login"/>}/>
                 <Route path="/volunteer/:user_id" element={isAuth ? <Volunteer/> : <Navigate to="login"/>}/>
             </Routes>
-        </main>
     </>
   );
 }
