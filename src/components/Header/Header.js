@@ -15,6 +15,8 @@ const Header = ({ pageTitle, backButton = false, task = false, search = false, f
         console.log("Search function")
     }
 
+    console.log(profileInfo)
+
     return (
         <header>
 
@@ -92,9 +94,16 @@ const Header = ({ pageTitle, backButton = false, task = false, search = false, f
 
             {profileInfo && (
                 <div className="profile-info">
-                    <h2>{profileInfo.name} {profileInfo.isActive ? '(Active)' : '(Inactive)'}</h2>
-                    <p className="profile-subtitle">{profileInfo.pronouns} - {profileInfo.role}</p>
-                    <p className="profile-subtitle-smaller">Account Created: {profileInfo.created}</p>
+                    <div className="profile-head">
+                        <h2 className="profile-fullname">{profileInfo.fullName}</h2>
+                        <h2 className="profile-active">{profileInfo.enabled ? '(active)' : '(Inactive)'}</h2>
+                    </div>
+                    <div className="profile-extra">
+                        <p className="profile-subtitle">Pronouns: {profileInfo.pronouns} - Role: {profileInfo.authorities.length > 0 ? profileInfo.authorities[0].authority.split('_')[1] : 'N/A'}</p>
+                        <p className="profile-subtitle-smaller">Account Created: {new Date(profileInfo.creationDate).toLocaleDateString('en-GB')}</p>
+
+                    </div>
+                    <hr className="hr-profile" />
                 </div>
             )}
         </header>

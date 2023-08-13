@@ -1,14 +1,19 @@
 import React from 'react';
 import "./Navigation.css"
 import {NavLink} from "react-router-dom";
-import logo from "../../assets/images/cropped-catfarm-150x150.png"
+import Logo from "../../assets/images/cropped-catfarm-150x150.png"
 
-function Navigation( { activeLink } ) {
+function Navigation( { activeLink, profileInfo } ) {
+
     return (
         <div className="navigation">
             <div className="navigation-header">
                 <a href="https://catfarm.net/" target="_blank" rel="noopener noreferrer">
-                    <img src={logo} alt="Logo" className="logo" />
+                    {profileInfo && profileInfo.profilePicture && profileInfo.profilePicture.docFile ? (
+                        <img className="profile-picture" src={`data:image/jpeg;base64,${profileInfo.profilePicture.docFile}`} alt={profileInfo.fullName} />
+                    ) : (
+                        <img src={Logo}></img>
+                    )}
                 </a>
 
                 <hr className="separator" />

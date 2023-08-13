@@ -41,3 +41,9 @@
 .nav-link:hover {
     background-color: hsl(174, 42%, 63%);
 }
+
+.profile-picture {
+    border-radius: 100px;
+    width: 200px;
+    height: 200px;
+}

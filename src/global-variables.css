@@ -4,6 +4,8 @@
     --main-font-roboto-mono: 'Roboto Mono', monospace;
 
     /* Text */
+    --main-text-color-black: hsl(0, 0%, 30%);
+    --main-text-color-black-on-hover: hsl(0, 0%, 50%);
     --task-title: rgba(0, 0, 0, 0.8);
     --task-option-headers: rgba(0, 0, 0, 0.6);
 
@@ -15,6 +17,9 @@
     /*Task*/
     --main-task-content-background: hsla(0, 0%, 95%, 0.8);
     --main-task-content-border: rgba(0, 0, 0, 0.2);
+
+    /*Profile Page*/
+    --profile-background-light-green: hsl(170, 40%, 96%);
 
     /* Main theme green*/
     --main-theme-dark-green: hsl(179, 66%, 39%);
@@ -32,10 +37,6 @@
     --event-task-menu-button-on-hover: #D9D9D9;
     --event-task-menu-button: hsla(0, 0%, 85%, 0.5);
     --button-border-black: hsl(0, 0%, 80%);
-
-    /* global text */
-    --main-text-color-black: hsl(0, 0%, 30%);
-    --main-text-color-black-on-hover: hsl(0, 0%, 50%);
 
     /* dropdown menu */
     --dropdown-border: hsl(0, 0%, 50%);

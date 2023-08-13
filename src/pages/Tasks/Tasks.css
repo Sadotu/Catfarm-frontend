@@ -1,29 +1,4 @@
-/*General*/
-.outer-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.outer-content-container {
-    display: flex;
-    flex-direction: row;
-    flex: 1 1 auto;
-}
-
-.inner-content-container {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-}
-
-.main-container {
-    background-color: var(--main-tasks-background-color);
-    border-top: 1px solid var(--main-top-border-black);
-    flex-grow: 1;
-}
-
-/*Tasks page specific*/
+/*Tasks page */
 .main-container-tasks {
     display: flex;
     flex-direction: row;

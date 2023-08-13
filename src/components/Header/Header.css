@@ -8,15 +8,60 @@ header {
     /*z-index: 10;*/
 }
 
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+}
+
 .header-title {
     font-size: 24px;
     padding: 20px 0;
 }
 
-/*.button-search-container {*/
-/*    display: flex;*/
-/*    flex-direction: row;*/
-/*}*/
+.profile-head {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.profile-fullname {
+    font-size: 32px;
+}
+
+.profile-active {
+    color: var(--main-theme-dark-green);
+    text-decoration: underline;
+    margin-left: 20px;
+}
+
+.profile-subtitle {
+    font-weight: bolder;
+}
+
+.profile-subtitle-smaller {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    font-size: 12px;
+    font-weight: bolder;
+    color: var(--task-option-headers);
+}
+
+.profile-extra {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 20%;
+}
+
+.hr-profile {
+    color: var(--task-option-headers);
+    margin-top: 60px;
+    width: 100%;
+}
 
 .button-bar {
     display: flex;

@@ -1,0 +1,104 @@
+.profile-page {
+    background-color: var(--profile-background-light-green);
+}
+
+/* Form */
+.form-outer-container {
+    position: relative;
+}
+.form-top-options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+    height: 100px;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+}
+.main-label-newsletter {
+    font-family: var(--main-font-roboto);
+    color: var(--task-option-headers);
+    font-weight: bolder;
+}
+.radio-group-newsletter {
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+.radio-options-newsletter {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 50px;
+}
+.newsletter-choice {
+    display: flex;
+    gap: 5px;
+}
+
+.profile-picture-drag-and-drop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    border: 2px dashed lightgrey;
+    margin-right: 200px;
+    background-color: #ECF0EF;
+    font-family: var(--main-font-roboto);
+    color: var(--task-option-headers);
+}
+.profile-picture-drag-and-drop:hover {
+    transform: translateY(-2px);
+}
+
+.form-inner-container {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.form-labels, .form-inputs {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-top: 155px;
+}
+.form-labels {
+    margin-left: 50px;
+}
+
+.form-labels label {
+    width: 150px;
+    text-align: right;
+    font-weight: bolder;
+    font-size: 17px;
+    color: var(--task-option-headers);
+    margin-right: 10px;
+    margin-bottom: 25px;
+}
+
+.form-divider {
+    height: 440px;
+    border-left: 1px solid;
+    color: lightgrey;
+    margin-top: 57px;
+    margin-right: 15px;
+}
+
+.form-inputs > .input-field {
+    margin-bottom: 20px;
+    width: 300px;
+    height: 25px;
+    border-radius: 10px;
+    border: 1px solid var(--main-theme-dark-green);
+}
+
+.full-width-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid var(--main-theme-dark-green);
+}
