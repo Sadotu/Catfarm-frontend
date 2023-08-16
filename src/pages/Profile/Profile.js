@@ -1,17 +1,61 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import "./Profile.css"
 import { useForm } from 'react-hook-form';
+import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 // Components
 import Navigation from "../../components/Navigation/Navigation";
 import Header from "../../components/Header/Header";
 import Input from "../../components/Input/Input";
 import Footer from "../../components/Footer/Footer";
+import Button from "../../components/Button/Button";
 
 function Profile() {
     const { user } = useContext(AuthContext)
-    const { register, formState: { errors } } = useForm();
-    const { isEditable, setEditable } = useState(false)
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm();
+    const [isEditable, setEditable] = useState(false);
+
+    useEffect(() => {
+        if (user) {
+            setValue("enabled", user.enabled);
+            setValue("phoneNumber", user.phoneNumber);
+            setValue("fullName", user.fullName);
+            setValue("age", user.age);
+            setValue("pronouns", user.pronouns);
+            setValue("email", user.email);
+            setValue("bio", user.bio);
+        }
+    }, [user, setValue]);
+
+    const disabledStyle = isEditable ? {} : { backgroundColor: "#e0e0e0" };
+
+    const toggleAndSave = async (data) => {
+        const token = localStorage.getItem('token');
+        //console.log(data)
+
+        if (isEditable) {
+            try {
+                const response = await axios.put(
+                    `http://localhost:8080/users/update/${user.email}`,
+                    data,
+                    {
+                        headers: {
+                            'Content-type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }
+                );
+
+                // Handle response or set other states if needed
+                console.log(response.data);
+
+            } catch (error) {
+                console.error("Failed to update user:", error);
+            }
+        }
+
+        setEditable(!isEditable);
+    };
 
     return (
         <>
@@ -28,19 +72,26 @@ function Profile() {
                         <main>
                             <form className="form-outer-container">
                                 <div className="form-top-options">
-                                    <div className="radio-group-newsletter">
-                                        <label className="main-label-newsletter">Monthly newsletter</label>
-                                        <div className="radio-options-newsletter">
-                                            <div className="newsletter-choice">
-                                                <label htmlFor="yes">Yes</label>
-                                                <input type="radio" id="yes" name="newsletterChoice" value="yes" className="not-allowed"/>
-                                            </div>
+                                    <div className="form-top-options-left">
+                                        <div className="radio-group-newsletter">
+                                            <label className="main-label-newsletter">Monthly newsletter</label>
+                                            <div className="radio-options-newsletter">
+                                                <div className="newsletter-choice">
+                                                    <label htmlFor="yes">Yes</label>
+                                                    <input type="radio" id="yes" name="newsletterChoice" value="yes" className="not-allowed"/>
+                                                </div>
 
-                                            <div className="newsletter-choice">
-                                                <label htmlFor="no">No</label>
-                                                <input type="radio" id="no" name="newsletterChoice" value="no" className="not-allowed"/>
+                                                <div className="newsletter-choice">
+                                                    <label htmlFor="no">No</label>
+                                                    <input type="radio" id="no" name="newsletterChoice" value="no" className="not-allowed"/>
+                                                </div>
                                             </div>
                                         </div>
+                                        <Button
+                                            buttonText={isEditable ? "Save" : "Edit Profile"}
+                                            className={isEditable ? "event-task-done-button-editable" : "event-task-done-button"}
+                                            clickHandler={isEditable ? handleSubmit(toggleAndSave) : toggleAndSave}
+                                        ></Button>
                                     </div>
                                     <div className="profile-picture-drag-and-drop">
                                         <p>Drop your profile picture here or click in <b>this</b> area</p>
@@ -49,16 +100,16 @@ function Profile() {
                                 <div className="form-inner-container">
                                     <div className="form-labels">
                                         <label htmlFor="fullName">Full Name:</label>
-                                        <label htmlFor="dob">Date of Birth:</label>
+                                        <label htmlFor="age">Age:</label>
                                         <label htmlFor="pronouns">Pronouns:</label>
                                         <label htmlFor="email">Email:</label>
-                                        <label htmlFor="phone">Phone:</label>
+                                        <label htmlFor="phoneNumber">Phone:</label>
                                         <label htmlFor="bio">Bio:</label>
                                     </div>
                                     <div className="form-divider"></div>
                                     <div className="form-inputs">
                                         <Input
-                                            inputLabel={user.fullName}
+                                            defaultValue={user.fullName}
                                             inputType="text"
                                             inputName="fullName"
                                             className="input-field"
@@ -66,19 +117,23 @@ function Profile() {
                                             validationRules={{ required: "This field is required" }}
                                             register={register}
                                             error={errors}
+                                            disabled={!isEditable}
+                                            style={disabledStyle}
                                         />
                                         <Input
-                                            inputLabel={user.age}
+                                            defaultValue={user.age}
                                             inputType="text"
-                                            inputName="dob"
+                                            inputName="age"
                                             className="input-field"
-                                            inputId="dob"
+                                            inputId="age"
                                             validationRules={{ required: "This field is required" }}
                                             register={register}
                                             error={errors}
+                                            disabled={!isEditable}
+                                            style={disabledStyle}
                                         />
                                         <Input
-                                            inputLabel={user.pronouns}
+                                            defaultValue={user.pronouns}
                                             inputType="text"
                                             inputName="pronouns"
                                             className="input-field"
@@ -86,9 +141,11 @@ function Profile() {
                                             validationRules={{ required: "This field is required" }}
                                             register={register}
                                             error={errors}
+                                            disabled={!isEditable}
+                                            style={disabledStyle}
                                         />
                                         <Input
-                                            inputLabel={user.email}
+                                            defaultValue={user.email}
                                             inputType="text"
                                             inputName="email"
                                             className="input-field"
@@ -96,18 +153,31 @@ function Profile() {
                                             validationRules={{ required: "This field is required" }}
                                             register={register}
                                             error={errors}
+                                            disabled={!isEditable}
+                                            style={disabledStyle}
                                         />
                                         <Input
-                                            inputLabel={user.phoneNumber}
+                                            defaultValue={user.phoneNumber}
                                             inputType="text"
-                                            inputName="phone"
+                                            inputName="phoneNumber"
                                             className="input-field"
-                                            inputId="phone"
+                                            inputId="phoneNumber"
                                             validationRules={{ required: "This field is required" }}
                                             register={register}
                                             error={errors}
+                                            disabled={!isEditable}
+                                            style={disabledStyle}
                                         />
-                                        <textarea placeholder={user.bio} id="bio" className="full-width-textarea" rows="6" cols="80" {...register("bio")} />
+                                        <textarea
+                                            defaultValue={user.bio}
+                                            id="bio"
+                                            className="full-width-textarea"
+                                            rows="6"
+                                            cols="80"
+                                            {...register("bio")}
+                                            disabled={!isEditable}
+                                            style={disabledStyle}
+                                        />
                                     </div>
                                 </div>
                             </form>

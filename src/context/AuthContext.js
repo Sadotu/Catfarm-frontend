@@ -43,7 +43,6 @@ function AuthContextProvider({ children }) {
     async function login(jwt_token, redirect) {
         const decodedToken = jwt_decode(jwt_token);
         localStorage.setItem('token', jwt_token);
-        console.log(jwt_token)
 
         try {
             const response = await axios.get(`http://localhost:8080/users/${decodedToken.sub}`, {
@@ -66,9 +65,9 @@ function AuthContextProvider({ children }) {
         }
     }
 
-    useEffect(() => {
-        console.log(auth.user)
-    }, [auth])
+    // useEffect(() => {
+    //     console.log(auth.user)
+    // }, [auth])
 
     function logout() {
         localStorage.removeItem('token')
