@@ -1,4 +1,6 @@
-import {Navigate, Route, Routes, useParams} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
+import {useContext} from "react";
+import {AuthContext} from "./context/AuthContext";
 import './App.css';
 import './global-variables.css'
 import './global-styles.css'
@@ -19,19 +21,7 @@ import Volunteer from "./pages/Volunteer/Volunteer";
 import Volunteers from "./pages/Volunteers/Volunteers";
 
 function App() {
-    const isAuth = true;
-
-    function eventPage() {
-        const { event_id } = useParams
-    }
-
-    function taskPage() {
-        const { task_id } = useParams
-    }
-
-    function volunteerPage() {
-        const { volunteer_id } = useParams
-    }
+    const { isAuth } = useContext(AuthContext)
 
   return (
     <>
