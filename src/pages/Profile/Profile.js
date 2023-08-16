@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import "./Profile.css"
-import axios from "axios";
 import { useForm } from 'react-hook-form';
+import {AuthContext} from "../../context/AuthContext";
 // Components
 import Navigation from "../../components/Navigation/Navigation";
 import Header from "../../components/Header/Header";
@@ -9,46 +9,20 @@ import Input from "../../components/Input/Input";
 import Footer from "../../components/Footer/Footer";
 
 function Profile() {
-    const currentUser = "emily.davis@example.com"
+    const { user } = useContext(AuthContext)
     const { register, formState: { errors } } = useForm();
-    const [activeUsers, setActiveUsers] = useState([])
-    const [profileInfo, setProfileInfo] = useState(null);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlckB1c2VyLmNvbSIsImlhdCI6MTY5MTU3ODQxMywiZXhwIjoxNjkyNDQyNDEzfQ.LibrEeHM6aq5dYkrzhleRxUo_xN8SgVkHLrmWKPUHdA';
-                const headers = {
-                    Authorization: `Bearer ${token}`,
-                };
-
-                const response = await axios.get('http://localhost:8080/users/enabled', { headers });
-                const users = response.data;
-                setActiveUsers(users);
-
-                // Find the currentUser in users
-                const foundUser = users.find(user => user.email === currentUser);
-                if (foundUser) {
-                    setProfileInfo(foundUser);
-                }
-
-            } catch (error) {
-                console.log('Error retrieving task data:', error);
-            }
-        };
-        fetchData();
-    }, []);
+    const { isEditable, setEditable } = useState(false)
 
     return (
         <>
             <div className="outer-container">
                 <div className="outer-content-container">
                     <Navigation
-                        profileInfo={profileInfo}
+                        profileInfo={user}
                     ></Navigation>
                     <div className="inner-content-container profile-page">
                         <Header
-                            profileInfo={profileInfo}
+                            profileInfo={user}
                         ></Header>
 
                         <main>
@@ -84,6 +58,7 @@ function Profile() {
                                     <div className="form-divider"></div>
                                     <div className="form-inputs">
                                         <Input
+                                            inputLabel={user.fullName}
                                             inputType="text"
                                             inputName="fullName"
                                             className="input-field"
@@ -93,6 +68,7 @@ function Profile() {
                                             error={errors}
                                         />
                                         <Input
+                                            inputLabel={user.age}
                                             inputType="text"
                                             inputName="dob"
                                             className="input-field"
@@ -102,6 +78,7 @@ function Profile() {
                                             error={errors}
                                         />
                                         <Input
+                                            inputLabel={user.pronouns}
                                             inputType="text"
                                             inputName="pronouns"
                                             className="input-field"
@@ -111,6 +88,7 @@ function Profile() {
                                             error={errors}
                                         />
                                         <Input
+                                            inputLabel={user.email}
                                             inputType="text"
                                             inputName="email"
                                             className="input-field"
@@ -120,6 +98,7 @@ function Profile() {
                                             error={errors}
                                         />
                                         <Input
+                                            inputLabel={user.phoneNumber}
                                             inputType="text"
                                             inputName="phone"
                                             className="input-field"
@@ -128,7 +107,7 @@ function Profile() {
                                             register={register}
                                             error={errors}
                                         />
-                                        <textarea id="bio" className="full-width-textarea" rows="6" cols="80" {...register("bio")} />
+                                        <textarea placeholder={user.bio} id="bio" className="full-width-textarea" rows="6" cols="80" {...register("bio")} />
                                     </div>
                                 </div>
                             </form>
