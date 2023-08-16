@@ -24,6 +24,7 @@ function DragAndDrop({ onFileDrop, user, isSaveTriggered  }) {
 
     const uploadFile = () => {
         if (!uploadedFile) return;
+        setUploadedFileName(null)
 
         const token = localStorage.getItem('token');
 
@@ -51,6 +52,7 @@ function DragAndDrop({ onFileDrop, user, isSaveTriggered  }) {
             })
             .then(response => {
                 console.log("Profile picture updated:", response.data);
+                window.location.reload();
             })
             .catch(error => {
                 console.error('Error:', error);
