@@ -1,0 +1,14 @@
+.profile-picture-drag-and-drop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    border: 2px dashed lightgrey;
+    margin-right: 140px;
+    background-color: #ECF0EF;
+    font-family: var(--main-font-roboto);
+    color: var(--task-option-headers);
+}
+.profile-picture-drag-and-drop:hover {
+    transform: translateY(-2px);
+}

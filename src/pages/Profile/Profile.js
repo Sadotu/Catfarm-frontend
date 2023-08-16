@@ -9,11 +9,14 @@ import Header from "../../components/Header/Header";
 import Input from "../../components/Input/Input";
 import Footer from "../../components/Footer/Footer";
 import Button from "../../components/Button/Button";
+import DragAndDrop from "../../components/DragAndDrop/DragAndDrop";
 
 function Profile() {
     const { user } = useContext(AuthContext)
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const [isEditable, setEditable] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [triggerUpload, setTriggerUpload] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -30,8 +33,8 @@ function Profile() {
     const disabledStyle = isEditable ? {} : { backgroundColor: "#e0e0e0" };
 
     const toggleAndSave = async (data) => {
+        setTriggerUpload(true); // Set to trigger file upload in DragAndDrop component
         const token = localStorage.getItem('token');
-        //console.log(data)
 
         if (isEditable) {
             try {
@@ -55,6 +58,21 @@ function Profile() {
         }
 
         setEditable(!isEditable);
+    };
+
+    useEffect(() => {
+        if (triggerUpload) {
+            setTriggerUpload(false);
+        }
+    }, [triggerUpload]);
+
+
+    const handleFileSelect = (file) => {
+        setSelectedFile(file);
+    };
+
+    const handleFileDrop = () => {
+        setEditable(true);
     };
 
     return (
@@ -93,9 +111,12 @@ function Profile() {
                                             clickHandler={isEditable ? handleSubmit(toggleAndSave) : toggleAndSave}
                                         ></Button>
                                     </div>
-                                    <div className="profile-picture-drag-and-drop">
-                                        <p>Drop your profile picture here or click in <b>this</b> area</p>
-                                    </div>
+                                    <DragAndDrop
+                                        onFileUpload={handleFileSelect}
+                                        onFileDrop={handleFileDrop}
+                                        isSaveTriggered={triggerUpload}
+                                        user={user}
+                                    />
                                 </div>
                                 <div className="form-inner-container">
                                     <div className="form-labels">
