@@ -11,7 +11,6 @@ function Login() {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
     const submitHandler = async (data) => {
-        console.log(data)
         try {
             const res = await axios.post(
                 'http://localhost:8080/authenticate', {

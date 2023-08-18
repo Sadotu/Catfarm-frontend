@@ -65,9 +65,12 @@ function AuthContextProvider({ children }) {
         }
     }
 
-    // useEffect(() => {
-    //     console.log(auth.user)
-    // }, [auth])
+    const updateUser = (updatedUser) => {
+        setAuth(prevAuth => ({
+            ...prevAuth,
+            user: updatedUser
+        }));
+    };
 
     function logout() {
         localStorage.removeItem('token')
@@ -86,7 +89,8 @@ function AuthContextProvider({ children }) {
         registerUser,
         login: login,
         logout: logout,
-    }
+        updateUser
+    };
 
     return (
         <AuthContext.Provider value={data}>

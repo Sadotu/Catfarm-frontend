@@ -12,10 +12,9 @@ import Button from "../../components/Button/Button";
 import DragAndDrop from "../../components/DragAndDrop/DragAndDrop";
 
 function Profile() {
-    const { user } = useContext(AuthContext)
+    const { user, updateUser } = useContext(AuthContext)
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const [isEditable, setEditable] = useState(false);
-    const [selectedFile, setSelectedFile] = useState(null);
     const [triggerUpload, setTriggerUpload] = useState(false);
 
     useEffect(() => {
@@ -49,8 +48,7 @@ function Profile() {
                     }
                 );
 
-                // Handle response or set other states if needed
-                console.log(response.data);
+                updateUser(response.data);
 
             } catch (error) {
                 console.error("Failed to update user:", error);
@@ -65,11 +63,6 @@ function Profile() {
             setTriggerUpload(false);
         }
     }, [triggerUpload]);
-
-
-    const handleFileSelect = (file) => {
-        setSelectedFile(file);
-    };
 
     const handleFileDrop = () => {
         setEditable(true);
@@ -112,7 +105,6 @@ function Profile() {
                                         ></Button>
                                     </div>
                                     <DragAndDrop
-                                        onFileUpload={handleFileSelect}
                                         onFileDrop={handleFileDrop}
                                         isSaveTriggered={triggerUpload}
                                         user={user}

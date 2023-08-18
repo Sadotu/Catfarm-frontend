@@ -86,12 +86,7 @@ const filterBasedOnShow = (tasks, showFilter) => {
 };
 
 const filterInProgress = (tasks) => {
-    const currentDate = new Date();
-
-    return tasks.filter(task => {
-        const taskDate = new Date(task.deadline);
-        return taskDate > currentDate;
-    });
+    return tasks.filter(task => !task.completed);
 };
 
 const filterOverdue = (tasks) => {
@@ -106,46 +101,3 @@ const filterOverdue = (tasks) => {
 const filterCompleted = (tasks) => {
     return tasks.filter(task => task.completed === true);
 };
-
-
-// export const filterData = (data, filters) => {
-//     let filteredFromData = [];
-//     let filteredShowData = [];
-//     const currentDate = new Date();
-//     console.log(data)
-//
-//     let allTasks = [];
-//     for (let i = 0; i < data.length; i++) {
-//         if (data[i].tasks && data[i].tasks.length > 0) {
-//             allTasks = allTasks.concat(data[i].tasks);
-//         }
-//     }
-//
-//     if (filters.from === 'All Tasks') {
-//         filteredFromData = allTasks
-//     }
-//     if(filters.from === 'Your Tasks') {
-//         const currentUser = data.find(user => user.email === filters.currentUser);
-//         filteredFromData = currentUser.tasks;
-//     }
-//     if (filters.volunteersChecked) {
-//         const volunteersCheckedTasks = data.reduce((tasks, user) => {
-//             if (filters.volunteersChecked.includes(user.email)) {
-//                 tasks.push(...user.tasks);
-//             }
-//             return tasks;
-//         }, []);
-//
-//         filteredFromData = filteredFromData.concat(volunteersCheckedTasks);
-//     }
-//
-//     if (filters.show === 'All') {
-//         filteredShowData = filteredFromData;
-//     } else if (filters.show === 'In Progress') {
-//         filteredShowData = filteredFromData.filter(task => new Date(task.deadline) > currentDate);
-//     } else if (filters.show === 'Overdue') {
-//         filteredShowData = filteredFromData.filter(task => new Date(task.deadline) < currentDate);
-//     }
-//
-//     return filteredShowData;
-// };

@@ -29,6 +29,7 @@ function App() {
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/signup" element={<SignUp/>}/>
                 <Route path="/forgot_password" element={<ForgotPassword/>}/>
+                <Route path="/logout" element={<Login/>}/>
 
                 {/* Authorized pages */}
                 <Route path="/profile" element={isAuth ? <Profile/> : <Navigate to="login"/>}/>
