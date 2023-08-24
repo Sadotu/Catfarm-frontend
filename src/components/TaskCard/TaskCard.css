@@ -9,6 +9,13 @@
     background-color: #ffffff;
 }
 
+.task-card-container:hover,
+.task-card-container-completed:hover {
+    transform: translateY(-2px);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
 .task-card-container-completed {
     background-color: var(--main-task-card-completed);
 }

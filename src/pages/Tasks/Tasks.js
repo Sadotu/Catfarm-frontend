@@ -17,20 +17,7 @@ function Tasks() {
     const [activeUsers, setActiveUsers] = useState([])
     const [visibleTasks, setVisibleTasks] = useState(4); // Initially show 4 tasks
 
-    console.log(user)
-
-    function handleFilter(newFilters) {
-        const result = filterData(activeUsers, newFilters);
-        if (Array.isArray(result)) {
-            setFilteredTasks(result);
-        } else {
-            console.error("filterData did not return an array:", result);
-        }
-    }
-
-    const handleShowMore = () => {
-        setVisibleTasks(visibleTasks + 4); // Show 4 more tasks
-    };
+    console.log(activeUsers)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -52,9 +39,22 @@ function Tasks() {
         fetchData();
     }, []);
 
+    function handleFilter(newFilters) {
+        const result = filterData(activeUsers, newFilters);
+        if (Array.isArray(result)) {
+            setFilteredTasks(result);
+        } else {
+            console.error("filterData did not return an array:", result);
+        }
+    }
+
     useEffect(() => {
         handleFilter({ currentUser: user.email, show: 'In Progress', from: 'Your Tasks', volunteersChecked: [] });
     },[activeUsers])
+
+    const handleShowMore = () => {
+        setVisibleTasks(visibleTasks + 4); // Show 4 more tasks
+    };
 
     return (
         <>
@@ -78,11 +78,7 @@ function Tasks() {
                                 <div className="main-container-tasks">
                                     {filteredTasks.slice(0, visibleTasks).map(task => (
                                         <TaskCard
-                                            key={task.id}
-                                            cardTitle={task.nameTask}
-                                            deadline={task.deadline}
-                                            tasks={filteredTasks}
-                                            completed={task.completed}
+                                            task={task}
                                             clickHandler={() => {
                                                 // Handle click event
                                             }}

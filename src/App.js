@@ -32,6 +32,7 @@ function App() {
                 <Route path="/logout" element={<Login/>}/>
 
                 {/* Authorized pages */}
+                <Route path="/" element={isAuth ? <Profile/> : <Navigate to="login"/>}/>
                 <Route path="/profile" element={isAuth ? <Profile/> : <Navigate to="login"/>}/>
                 <Route path="/database" element={isAuth ? <Database/> : <Navigate to="login"/>}/>
                 <Route path="/calendar" element={isAuth ? <Calendar/> : <Navigate to="login"/>}/>
