@@ -9,11 +9,11 @@ import { calculateDaysLeftHelper } from "../../helpers/calculateDaysLeftHelper";
 function TaskCard( { task, clickHandler } ) {
     const [daysLeft, setDaysLeft] = useState(null);
     const [isCompleted, setIsCompleted] = useState(null);
-    console.log(task)
 
-    // const tasksCompleted = tasks ? tasks.filter(task => task.completed).length : 0;
-    // const totalTasks = tasks ? tasks.length : 0;
-    // const completedPercentage = totalTasks > 0 ? (tasksCompleted / totalTasks) * 100 : 0;
+    const toDosCompleted = task.toDos ? task.toDos.filter(toDo => toDo.completed).length : 0;
+    console.log(task.toDos)
+    const totalToDos = task.toDos ? task.toDos.length : 0;
+    const completedPercentage = totalToDos > 0 ? (toDosCompleted / totalToDos) * 100 : 0;
 
     useEffect(() => {
         setDaysLeft(calculateDaysLeftHelper(task.deadline, task.completed));
@@ -77,14 +77,14 @@ function TaskCard( { task, clickHandler } ) {
             </div>
 
             <div className="card-bottom">
-                {/*<div className="sub-tasks-container">*/}
-                {/*    <div*/}
-                {/*        className="sub-tasks-completed-bar"*/}
-                {/*        style={{ width: `${completedPercentage}%` }}*/}
-                {/*    >*/}
-                {/*    </div>*/}
-                {/*    <span className="sub-tasks-text">{`${tasksCompleted}/${totalTasks} tasks completed`}</span>*/}
-                {/*</div>*/}
+                <div className="sub-tasks-container">
+                    <div
+                        className="sub-tasks-completed-bar"
+                        style={{ width: `${completedPercentage}%` }}
+                    >
+                    </div>
+                    <span className="sub-tasks-text">{`${toDosCompleted}/${totalToDos} tasks completed`}</span>
+                </div>
                 <div className="card-buttons">
                     <Button
                         buttonText="DEL"

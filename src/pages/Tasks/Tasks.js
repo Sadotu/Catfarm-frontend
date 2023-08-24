@@ -17,8 +17,6 @@ function Tasks() {
     const [activeUsers, setActiveUsers] = useState([])
     const [visibleTasks, setVisibleTasks] = useState(4); // Initially show 4 tasks
 
-    console.log(activeUsers)
-
     useEffect(() => {
         const fetchData = async () => {
             const token = localStorage.getItem('token')
@@ -39,10 +37,24 @@ function Tasks() {
         fetchData();
     }, []);
 
-    function handleFilter(newFilters) {
+    async function handleFilter(newFilters) {
         const result = filterData(activeUsers, newFilters);
+        const token = localStorage.getItem('token');
+        const headers = {
+            Authorization: `Bearer ${token}`,
+        };
+
         if (Array.isArray(result)) {
-            setFilteredTasks(result);
+            try {
+                const tasksResponses = await Promise.all(
+                    result.map(task =>
+                        fetch(`http://localhost:8080/tasks/${task.id}`, { headers })
+                            .then(response => response.json()))
+                );
+                setFilteredTasks(tasksResponses);
+            } catch (error) {
+                console.error("An error occurred while fetching tasks:", error);
+            }
         } else {
             console.error("filterData did not return an array:", result);
         }
@@ -54,7 +66,7 @@ function Tasks() {
 
     const handleShowMore = () => {
         setVisibleTasks(visibleTasks + 4); // Show 4 more tasks
-    };
+    }
 
     return (
         <>
