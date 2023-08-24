@@ -11,7 +11,6 @@ function TaskCard( { task, clickHandler } ) {
     const [isCompleted, setIsCompleted] = useState(null);
 
     const toDosCompleted = task.toDos ? task.toDos.filter(toDo => toDo.completed).length : 0;
-    console.log(task.toDos)
     const totalToDos = task.toDos ? task.toDos.length : 0;
     const completedPercentage = totalToDos > 0 ? (toDosCompleted / totalToDos) * 100 : 0;
 
@@ -22,6 +21,34 @@ function TaskCard( { task, clickHandler } ) {
     useEffect(() => {
         setIsCompleted(task.completed)
     }, [task])
+
+    const deleteTask = async (data) => {
+        const task_id = data.id;
+        console.log(task_id)
+        const token = localStorage.getItem('token');
+
+        const isConfirmed = window.confirm('Are you sure you want to delete this task?');
+
+        if (isConfirmed) {
+            try {
+                const response = await axios.delete(
+                    `http://localhost:8080/tasks/delete/${task_id}`,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }
+                );
+
+                window.confirm('Task deleted successfully');
+                window.location.reload();
+            } catch (error) {
+                window.confirm(`An error occurred while deleting the task, please try again: ${error}`);
+            }
+        } else {
+            window.confirm('Task deletion was canceled, please contact you system administrator');
+        }
+    }
 
     const completeTask = async (data) => {
         const currentDate = new Date();
@@ -37,8 +64,6 @@ function TaskCard( { task, clickHandler } ) {
             description: data.description,
             completed: data.completed
         };
-
-        console.log(payload)
 
         const token = localStorage.getItem('token')
 
@@ -60,7 +85,7 @@ function TaskCard( { task, clickHandler } ) {
             }
 
         } catch (error) {
-            console.error("Failed to update user:", error);
+            window.confirm(`Failed to update user:, ${error}`);
         }
     }
 
@@ -89,7 +114,7 @@ function TaskCard( { task, clickHandler } ) {
                     <Button
                         buttonText="DEL"
                         className="filter-sort-button"
-                        clickHandler={clickHandler}
+                        clickHandler={() => {deleteTask(task)}}
                     />
                     <Button
                         buttonText={isCompleted ? "Completed" : "Done"}

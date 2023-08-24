@@ -48,8 +48,9 @@ function Tasks() {
             try {
                 const tasksResponses = await Promise.all(
                     result.map(task =>
-                        fetch(`http://localhost:8080/tasks/${task.id}`, { headers })
-                            .then(response => response.json()))
+                        axios.get(`http://localhost:8080/tasks/${task.id}`, { headers })
+                            .then(response => response.data)
+                    )
                 );
                 setFilteredTasks(tasksResponses);
             } catch (error) {
