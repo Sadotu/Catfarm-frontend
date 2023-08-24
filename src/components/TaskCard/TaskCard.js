@@ -9,11 +9,10 @@ import { calculateDaysLeftHelper } from "../../helpers/calculateDaysLeftHelper";
 function TaskCard( { task, clickHandler } ) {
     const [daysLeft, setDaysLeft] = useState(null);
     const [isCompleted, setIsCompleted] = useState(null);
-    console.log(task)
 
-    // const tasksCompleted = tasks ? tasks.filter(task => task.completed).length : 0;
-    // const totalTasks = tasks ? tasks.length : 0;
-    // const completedPercentage = totalTasks > 0 ? (tasksCompleted / totalTasks) * 100 : 0;
+    const toDosCompleted = task.toDos ? task.toDos.filter(toDo => toDo.completed).length : 0;
+    const totalToDos = task.toDos ? task.toDos.length : 0;
+    const completedPercentage = totalToDos > 0 ? (toDosCompleted / totalToDos) * 100 : 0;
 
     useEffect(() => {
         setDaysLeft(calculateDaysLeftHelper(task.deadline, task.completed));
@@ -22,6 +21,34 @@ function TaskCard( { task, clickHandler } ) {
     useEffect(() => {
         setIsCompleted(task.completed)
     }, [task])
+
+    const deleteTask = async (data) => {
+        const task_id = data.id;
+        console.log(task_id)
+        const token = localStorage.getItem('token');
+
+        const isConfirmed = window.confirm('Are you sure you want to delete this task?');
+
+        if (isConfirmed) {
+            try {
+                const response = await axios.delete(
+                    `http://localhost:8080/tasks/delete/${task_id}`,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }
+                );
+
+                window.confirm('Task deleted successfully');
+                window.location.reload();
+            } catch (error) {
+                window.confirm(`An error occurred while deleting the task, please try again: ${error}`);
+            }
+        } else {
+            window.confirm('Task deletion was canceled, please contact you system administrator');
+        }
+    }
 
     const completeTask = async (data) => {
         const currentDate = new Date();
@@ -37,8 +64,6 @@ function TaskCard( { task, clickHandler } ) {
             description: data.description,
             completed: data.completed
         };
-
-        console.log(payload)
 
         const token = localStorage.getItem('token')
 
@@ -60,7 +85,7 @@ function TaskCard( { task, clickHandler } ) {
             }
 
         } catch (error) {
-            console.error("Failed to update user:", error);
+            window.confirm(`Failed to update user:, ${error}`);
         }
     }
 
@@ -77,19 +102,19 @@ function TaskCard( { task, clickHandler } ) {
             </div>
 
             <div className="card-bottom">
-                {/*<div className="sub-tasks-container">*/}
-                {/*    <div*/}
-                {/*        className="sub-tasks-completed-bar"*/}
-                {/*        style={{ width: `${completedPercentage}%` }}*/}
-                {/*    >*/}
-                {/*    </div>*/}
-                {/*    <span className="sub-tasks-text">{`${tasksCompleted}/${totalTasks} tasks completed`}</span>*/}
-                {/*</div>*/}
+                <div className="sub-tasks-container">
+                    <div
+                        className="sub-tasks-completed-bar"
+                        style={{ width: `${completedPercentage}%` }}
+                    >
+                    </div>
+                    <span className="sub-tasks-text">{`${toDosCompleted}/${totalToDos} tasks completed`}</span>
+                </div>
                 <div className="card-buttons">
                     <Button
                         buttonText="DEL"
                         className="filter-sort-button"
-                        clickHandler={clickHandler}
+                        clickHandler={() => {deleteTask(task)}}
                     />
                     <Button
                         buttonText={isCompleted ? "Completed" : "Done"}
