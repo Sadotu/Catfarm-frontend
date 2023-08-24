@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import "./Tasks.css"
 import axios from 'axios';
+import {AuthContext} from "../../context/AuthContext";
 // Components
 import Header from "../../components/Header/Header";
 import Navigation from "../../components/Navigation/Navigation";
@@ -11,27 +12,18 @@ import Button from "../../components/Button/Button";
 import {filterData} from "../../helpers/filterDataHelper"
 
 function Tasks() {
+    const { user } = useContext(AuthContext)
     const [filteredTasks, setFilteredTasks] = useState([])
     const [activeUsers, setActiveUsers] = useState([])
     const [visibleTasks, setVisibleTasks] = useState(4); // Initially show 4 tasks
 
-    function handleFilter(newFilters) {
-        const result = filterData(activeUsers, newFilters);
-        if (Array.isArray(result)) {
-            setFilteredTasks(result);
-        } else {
-            console.error("filterData did not return an array:", result);
-        }
-    }
-
-    const handleShowMore = () => {
-        setVisibleTasks(visibleTasks + 4); // Show 4 more tasks
-    };
+    console.log(activeUsers)
 
     useEffect(() => {
         const fetchData = async () => {
+            const token = localStorage.getItem('token')
+
             try {
-                const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlckB1c2VyLmNvbSIsImlhdCI6MTY5MTE3MTcxNiwiZXhwIjoxNjkyMDM1NzE2fQ.dGiyjnFcrykuZ1t34Jx_n-zWx25z366juNzg09Qxixg';
                 const headers = {
                     Authorization: `Bearer ${token}`,
                 };
@@ -47,10 +39,22 @@ function Tasks() {
         fetchData();
     }, []);
 
+    function handleFilter(newFilters) {
+        const result = filterData(activeUsers, newFilters);
+        if (Array.isArray(result)) {
+            setFilteredTasks(result);
+        } else {
+            console.error("filterData did not return an array:", result);
+        }
+    }
+
     useEffect(() => {
-        const currentUser = 'emily.davis@example.com'
-        handleFilter({ currentUser: currentUser, show: 'In Progress', from: 'Your Tasks', volunteersChecked: [] });
+        handleFilter({ currentUser: user.email, show: 'In Progress', from: 'Your Tasks', volunteersChecked: [] });
     },[activeUsers])
+
+    const handleShowMore = () => {
+        setVisibleTasks(visibleTasks + 4); // Show 4 more tasks
+    };
 
     return (
         <>
@@ -74,11 +78,7 @@ function Tasks() {
                                 <div className="main-container-tasks">
                                     {filteredTasks.slice(0, visibleTasks).map(task => (
                                         <TaskCard
-                                            key={task.id}
-                                            cardTitle={task.nameTask}
-                                            deadline={task.deadline}
-                                            tasks={filteredTasks}
-                                            completed={task.completed}
+                                            task={task}
                                             clickHandler={() => {
                                                 // Handle click event
                                             }}

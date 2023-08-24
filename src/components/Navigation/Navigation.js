@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import "./Navigation.css"
 import {NavLink} from "react-router-dom";
 import Logo from "../../assets/images/cropped-catfarm-150x150.png"
+import {AuthContext} from "../../context/AuthContext";
 
-function Navigation( { activeLink, profileInfo } ) {
+function Navigation( { profileInfo } ) {
+    const { logout } = useContext(AuthContext)
 
     return (
         <div className="navigation">
@@ -24,7 +26,7 @@ function Navigation( { activeLink, profileInfo } ) {
                 <li><NavLink to="/calendar" activeClassName="active" className="nav-link not-allowed" onClick={(e) => e.preventDefault()}>Calendar</NavLink></li>
                 <li><NavLink to="/tasks" activeClassName="active" className="nav-link">Tasks</NavLink></li>
                 <li><NavLink to="/volunteers" activeClassName="active" className="nav-link">Volunteers</NavLink></li>
-                <li><NavLink to="/logout" activeClassName="active" className="nav-link">Logout</NavLink></li>
+                <li><NavLink to="/logout" activeClassName="active" className="nav-link" onClick={logout}>Logout</NavLink></li>
             </ul>
         </div>
     );

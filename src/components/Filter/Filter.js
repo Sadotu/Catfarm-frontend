@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import {
     DotFilledIcon,
@@ -6,16 +6,17 @@ import {
     ChevronRightIcon,
 } from '@radix-ui/react-icons';
 import './Filter.css';
+import {AuthContext} from '../../context/AuthContext'
 
 const Filter = ({ volunteers, handleFilter }) => {
+    const { user } = useContext(AuthContext);
     const [from, setFrom] = useState('Your Tasks');
     const [show, setShow] = useState('In Progress');
     const [volunteersChecked, setVolunteersChecked] = useState([]);
 
     useEffect(() => {
-        const currentUser = 'emily.davis@example.com'
-        handleFilter({ currentUser: currentUser, show, from, volunteersChecked });
-    }, [ show, from, volunteersChecked]);
+        handleFilter({ currentUser: user.email, show, from, volunteersChecked });
+    }, [ show, from, volunteersChecked, user.email]);
 
     return (
         <DropdownMenu.Root>

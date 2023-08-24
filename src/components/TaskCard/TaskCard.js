@@ -1,39 +1,90 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import "./TaskCard.css"
+import axios from "axios";
 // Components
 import Button from "../Button/Button";
 // Helpers
 import { calculateDaysLeftHelper } from "../../helpers/calculateDaysLeftHelper";
 
-function TaskCard( { cardTitle, deadline, tasks, completed = false, clickHandler } ) {
-    const tasksCompleted = tasks ? tasks.filter(task => task.completed).length : 0;
-    const totalTasks = tasks ? tasks.length : 0;
-    const completedPercentage = totalTasks > 0 ? (tasksCompleted / totalTasks) * 100 : 0;
-
+function TaskCard( { task, clickHandler } ) {
     const [daysLeft, setDaysLeft] = useState(null);
+    const [isCompleted, setIsCompleted] = useState(null);
+    console.log(task)
+
+    // const tasksCompleted = tasks ? tasks.filter(task => task.completed).length : 0;
+    // const totalTasks = tasks ? tasks.length : 0;
+    // const completedPercentage = totalTasks > 0 ? (tasksCompleted / totalTasks) * 100 : 0;
 
     useEffect(() => {
-        setDaysLeft(calculateDaysLeftHelper(deadline, completed));
-    }, [deadline, completed]);
+        setDaysLeft(calculateDaysLeftHelper(task.deadline, task.completed));
+    }, [task.deadline, task.completed]);
+
+    useEffect(() => {
+        setIsCompleted(task.completed)
+    }, [task])
+
+    const completeTask = async (data) => {
+        const currentDate = new Date();
+        const deadlineDate = new Date(currentDate.getTime() + 48 * 60 * 60 * 1000);
+        const isoString = deadlineDate.toISOString();
+        data.deadline = isoString.replace('Z', '+00:00');
+        data.completed = !data.completed;
+        setIsCompleted(data.completed);
+
+        const payload = {
+            nameTask: data.nameTask,
+            deadline: data.deadline,
+            description: data.description,
+            completed: data.completed
+        };
+
+        console.log(payload)
+
+        const token = localStorage.getItem('token')
+
+        try {
+            const response = await axios.put(
+                `http://localhost:8080/tasks/update/${task.id}`,
+                payload,
+                {
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            );
+
+            if (response && response.data) {
+                task = response.data;
+                setIsCompleted(task.completed);
+            }
+
+        } catch (error) {
+            console.error("Failed to update user:", error);
+        }
+    }
 
     return (
-        <div className={completed ? "task-card-container-completed" : "task-card-container"}>
+        <div className={isCompleted ? "task-card-container-completed" : "task-card-container"}>
             <div className="card-top">
                 <div className="task-card-header">
-                    <h3 className="task-card-title">{cardTitle}</h3>
+                    <h3 className="task-card-title">{task.nameTask}</h3>
                 </div>
-                <h6 className={`${daysLeft && daysLeft.includes("overdue") ? "task-card-deadline-red" : "task-card-deadline"}`}>{daysLeft}</h6>
+                {isCompleted
+                    ? <h6 className="task-card-deadline">Completed</h6>
+                    : <h6 className={`${daysLeft && daysLeft.includes("overdue") ? "task-card-deadline-red" : "task-card-deadline"}`}>{daysLeft}</h6>
+                }
             </div>
 
             <div className="card-bottom">
-                <div className="sub-tasks-container">
-                    <div
-                        className="sub-tasks-completed-bar"
-                        style={{ width: `${completedPercentage}%` }}
-                    >
-                    </div>
-                    <span className="sub-tasks-text">{`${tasksCompleted}/${totalTasks} tasks completed`}</span>
-                </div>
+                {/*<div className="sub-tasks-container">*/}
+                {/*    <div*/}
+                {/*        className="sub-tasks-completed-bar"*/}
+                {/*        style={{ width: `${completedPercentage}%` }}*/}
+                {/*    >*/}
+                {/*    </div>*/}
+                {/*    <span className="sub-tasks-text">{`${tasksCompleted}/${totalTasks} tasks completed`}</span>*/}
+                {/*</div>*/}
                 <div className="card-buttons">
                     <Button
                         buttonText="DEL"
@@ -41,9 +92,9 @@ function TaskCard( { cardTitle, deadline, tasks, completed = false, clickHandler
                         clickHandler={clickHandler}
                     />
                     <Button
-                        buttonText={completed ? "Completed" : "Done"}
-                        className={completed ? "event-task-completion-button" : "event-task-done-button"}
-                        clickHandler={clickHandler}
+                        buttonText={isCompleted ? "Completed" : "Done"}
+                        className={isCompleted ? "event-task-completion-button" : "event-task-done-button"}
+                        clickHandler={() => {completeTask(task)}}
                     />
                 </div>
             </div>

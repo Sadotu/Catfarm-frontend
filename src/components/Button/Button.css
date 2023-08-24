@@ -40,13 +40,17 @@ button:active {
     outline: transparent;
 }
 
-
 .filter-sort-button:hover {
     color: var(--main-text-color-black-on-hover);
 }
 
 /* the 'done' or 'completed' buttons */
 .event-task-done-button {
+    background-color: var(--done-button-color);
+}
+
+.event-task-done-button-editable{
+    width: 100px;
     background-color: var(--done-button-color);
 }
 .event-task-done-button:hover {

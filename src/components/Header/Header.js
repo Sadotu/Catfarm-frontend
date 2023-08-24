@@ -15,8 +15,6 @@ const Header = ({ pageTitle, backButton = false, task = false, search = false, f
         console.log("Search function")
     }
 
-    console.log(profileInfo)
-
     return (
         <header>
 
@@ -69,27 +67,6 @@ const Header = ({ pageTitle, backButton = false, task = false, search = false, f
                         </Button>
                     </div>
                 )}
-
-                {/*{dropdown && (*/}
-                {/*    <DropdownMenu*/}
-                {/*        options={dropdown.options}*/}
-                {/*        defaultOption={dropdown.defaultOption}*/}
-                {/*    />*/}
-                {/*)}*/}
-
-                {/*{calendarPeriod && (*/}
-                {/*    <div className="calendar-nav">*/}
-                {/*        <Button*/}
-                {/*            icon="<"*/}
-                {/*            clickHandler={() => /!* Navigate to previous time period *!/}*/}
-                {/*        />*/}
-                {/*        <span>{calendarPeriod}</span>*/}
-                {/*        <Button*/}
-                {/*            icon=">"*/}
-                {/*            clickHandler={() => /!* Navigate to next time period *!/}*/}
-                {/*        />*/}
-                {/*    </div>*/}
-                {/*)}*/}
             </div>
 
             {profileInfo && (

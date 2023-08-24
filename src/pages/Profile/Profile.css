@@ -11,10 +11,16 @@
     flex-direction: row;
     justify-content: space-between;
     width: 90%;
-    height: 100px;
+    height: 200px;
     position: absolute;
     left: 20px;
     top: 20px;
+}
+.form-top-options-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
 }
 .main-label-newsletter {
     font-family: var(--main-font-roboto);
@@ -39,21 +45,6 @@
     gap: 5px;
 }
 
-.profile-picture-drag-and-drop {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 60%;
-    border: 2px dashed lightgrey;
-    margin-right: 200px;
-    background-color: #ECF0EF;
-    font-family: var(--main-font-roboto);
-    color: var(--task-option-headers);
-}
-.profile-picture-drag-and-drop:hover {
-    transform: translateY(-2px);
-}
-
 .form-inner-container {
     display: flex;
     align-items: flex-start;
@@ -64,8 +55,9 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    margin-top: 155px;
+    margin-top: 280px;
 }
+
 .form-labels {
     margin-left: 50px;
 }
@@ -77,11 +69,11 @@
     font-size: 17px;
     color: var(--task-option-headers);
     margin-right: 10px;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
 }
 
 .form-divider {
-    height: 440px;
+    height: 600px;
     border-left: 1px solid;
     color: lightgrey;
     margin-top: 57px;
@@ -91,7 +83,7 @@
 .form-inputs > .input-field {
     margin-bottom: 20px;
     width: 300px;
-    height: 25px;
+    height: 30px;
     border-radius: 10px;
     border: 1px solid var(--main-theme-dark-green);
 }

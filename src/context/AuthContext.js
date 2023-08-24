@@ -43,7 +43,6 @@ function AuthContextProvider({ children }) {
     async function login(jwt_token, redirect) {
         const decodedToken = jwt_decode(jwt_token);
         localStorage.setItem('token', jwt_token);
-        console.log(jwt_token)
 
         try {
             const response = await axios.get(`http://localhost:8080/users/${decodedToken.sub}`, {
@@ -66,9 +65,12 @@ function AuthContextProvider({ children }) {
         }
     }
 
-    useEffect(() => {
-        console.log(auth.user)
-    }, [auth])
+    const updateUser = (updatedUser) => {
+        setAuth(prevAuth => ({
+            ...prevAuth,
+            user: updatedUser
+        }));
+    };
 
     function logout() {
         localStorage.removeItem('token')
@@ -87,7 +89,8 @@ function AuthContextProvider({ children }) {
         registerUser,
         login: login,
         logout: logout,
-    }
+        updateUser
+    };
 
     return (
         <AuthContext.Provider value={data}>

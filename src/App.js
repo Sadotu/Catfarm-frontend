@@ -29,8 +29,10 @@ function App() {
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/signup" element={<SignUp/>}/>
                 <Route path="/forgot_password" element={<ForgotPassword/>}/>
+                <Route path="/logout" element={<Login/>}/>
 
                 {/* Authorized pages */}
+                <Route path="/" element={isAuth ? <Profile/> : <Navigate to="login"/>}/>
                 <Route path="/profile" element={isAuth ? <Profile/> : <Navigate to="login"/>}/>
                 <Route path="/database" element={isAuth ? <Database/> : <Navigate to="login"/>}/>
                 <Route path="/calendar" element={isAuth ? <Calendar/> : <Navigate to="login"/>}/>

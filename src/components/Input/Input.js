@@ -1,6 +1,17 @@
 import React from 'react';
 
-function Input({ inputType, className, inputName, inputLabel, register, inputId, validationRules, error }) {
+function Input({
+                   inputType,
+                   className,
+                   inputName,
+                   defaultValue,
+                   register,
+                   inputId,
+                   validationRules,
+                   error,
+                   disabled = false,
+                   style = {}
+               }) {
 
     return (
         <>
@@ -8,8 +19,10 @@ function Input({ inputType, className, inputName, inputLabel, register, inputId,
                 type={inputType}
                 className={className}
                 id={inputId}
-                placeholder={inputLabel}
+                defaultValue={defaultValue}
                 {...register(inputName, validationRules)}
+                disabled={disabled}
+                style={style}
             />
             {error[inputName] && <p>{error[inputName].message}</p>}
         </>
