@@ -110,6 +110,32 @@
     justify-content: center;
 }
 
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    position: absolute;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltiptext {
+    padding: 5px 5px 5px 5px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
 /* Notification card */
 .notification-card {
     margin-right: 25px;

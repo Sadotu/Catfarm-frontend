@@ -1,5 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import './NewTask.css'
+import axios from "axios";
+import {AuthContext} from "../../context/AuthContext";
 // Components
 import Footer from "../../components/Footer/Footer";
 import Navigation from "../../components/Navigation/Navigation";
@@ -20,11 +22,9 @@ import Archive from "../../assets/icons/archive-box.svg"
 import Eye from "../../assets/icons/eye.svg"
 // Helpers
 import { editableTitle, editableDescription } from  "../../helpers/editableHelper"
-// Libraries
-import axios from "axios";
 
 function NewTask() {
-    const currentUser = 'emily.davis@example.com';
+    const { user } = useContext(AuthContext)
     const [showUnselected, setShowUnselected] = useState(false);
     const [unselectedVolunteers, setUnselectedVolunteers] = useState([]);
     const [selectedVolunteers, setSelectedVolunteers] = useState([]);
@@ -38,8 +38,9 @@ function NewTask() {
 
     useEffect(() => {
         const fetchData = async () => {
+            const token = localStorage.getItem('token');
+
             try {
-                const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlckB1c2VyLmNvbSIsImlhdCI6MTY5MTE3MTcxNiwiZXhwIjoxNjkyMDM1NzE2fQ.dGiyjnFcrykuZ1t34Jx_n-zWx25z366juNzg09Qxixg';
                 const headers = {
                     Authorization: `Bearer ${token}`,
                 };
@@ -55,7 +56,7 @@ function NewTask() {
         fetchData();
     }, []);
 
-    const currentUserData = activeUsers.find(user => user.email === currentUser);
+    const currentUserData = activeUsers.find(user => user.email);
     const date = new Date();
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const formattedDate = date.toLocaleDateString('en-US', options);
@@ -79,7 +80,7 @@ function NewTask() {
 
             activeUsers.forEach(user => {
                 // If the user is the currentUser and selectedVolunteers is empty, do not add them to unselected
-                if (user.email === currentUser && selectedVolunteers.length === 0) {
+                if (user.email && selectedVolunteers.length === 0) {
                     return;
                 }
 
@@ -135,12 +136,13 @@ function NewTask() {
                                             <h3 className="volunteer-card-header">Volunteers</h3>
                                             <div className="task-profile-flex">
                                                 {selectedVolunteers.map((v) => (
-                                                    <div key={v.email} onClick={showUnselected ? moveToUnselected(v) : null}>
+                                                    <div key={v.email} onClick={showUnselected ? moveToUnselected(v) : null} className="tooltip">
                                                         {v.profilePicture && v.profilePicture.docFile ? (
-                                                            <img className="profile-volunteer" src={`data:image/jpeg;base64,${v.profilePicture.docFile}`} alt={v.name} />
+                                                            <img className="profile-volunteer" src={`data:image/jpeg;base64,${v.profilePicture.docFile}`} alt={v.fullName} />
                                                         ) : (
-                                                            <img src={User}></img>
+                                                            <img src={User} className="profile-volunteer"></img>
                                                         )}
+                                                        <span className="tooltiptext">{v.fullName}</span>
                                                     </div>
                                                 ))}
                                                 <Button
@@ -148,12 +150,13 @@ function NewTask() {
                                                     clickHandler={showUnselectedVolunteers}
                                                 ></Button>
                                                 {showUnselected && unselectedVolunteers.map((v) => (
-                                                    <div key={v.email} onClick={moveToSelected(v)}>
+                                                    <div key={v.email} onClick={moveToSelected(v)} className="tooltip">
                                                         {v.profilePicture && v.profilePicture.docFile ? (
-                                                            <img className="profile-volunteer" src={`data:image/jpeg;base64,${v.profilePicture.docFile}`} alt={v.name} />
+                                                            <img className="profile-volunteer" src={`data:image/jpeg;base64,${v.profilePicture.docFile}`} alt={v.fullName} />
                                                         ) : (
-                                                            <img src={User}></img>
+                                                            <img src={User} className="profile-volunteer"></img>
                                                         )}
+                                                        <span className="tooltiptext">{v.fullName}</span>
                                                     </div>
                                                 ))}
                                             </div>
@@ -246,7 +249,7 @@ function NewTask() {
                                         iconClass="icon-space"
                                     ></Button>
                                     <Button
-                                        className="event-task-menu-button not-allowed"
+                                        className="event-task-menu-button"
                                         buttonText="Checklist"
                                         buttonClass="menu-pane-buttons"
                                         icon={Checklist}
