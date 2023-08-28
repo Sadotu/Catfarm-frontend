@@ -1,12 +1,11 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './NewTask.css'
-import axios from "axios";
-import {AuthContext} from "../../context/AuthContext";
 // Components
 import Footer from "../../components/Footer/Footer";
 import Navigation from "../../components/Navigation/Navigation";
 import Header from "../../components/Header/Header";
 import Button from "../../components/Button/Button";
+import EditableDate from "../../components/EditableDate/EditableDate";
 // Icons
 import User from "../../assets/icons/user.svg"
 import Label from "../../assets/icons/tag-simple.svg"
@@ -21,15 +20,18 @@ import Check from "../../assets/icons/check-fat.svg"
 import Archive from "../../assets/icons/archive-box.svg"
 import Eye from "../../assets/icons/eye.svg"
 // Helpers
-import { editableTitle, editableDescription } from  "../../helpers/editableHelper"
+import { editableTitle, editableDescription } from  "../../helpers/editableHelper";
+import { fetchEnabledUsers } from "../../helpers/fetchHelper";
+import {manageVolunteers} from "../../helpers/selectionHelper";
 
 function NewTask() {
-    const { user } = useContext(AuthContext)
+    const [activeUsers, setActiveUsers] = useState([]);
     const [showUnselected, setShowUnselected] = useState(false);
     const [unselectedVolunteers, setUnselectedVolunteers] = useState([]);
     const [selectedVolunteers, setSelectedVolunteers] = useState([]);
     const [volunteerCardVisible, setVolunteerCardVisible] = useState(false);
-    const [activeUsers, setActiveUsers] = useState([])
+
+    const currentUserData = activeUsers.find(user => user.email);
 
     window.onload = function() {
         editableTitle();
@@ -38,78 +40,31 @@ function NewTask() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const token = localStorage.getItem('token');
-
             try {
-                const headers = {
-                    Authorization: `Bearer ${token}`,
-                };
-
-                const response = await axios.get('http://localhost:8080/users/enabled', { headers });
-                const users = response.data;
+                const users = await fetchEnabledUsers();
                 setActiveUsers(users);
-
             } catch (error) {
-                console.log('Error retrieving task data:', error);
+                console.log(error)
             }
         };
         fetchData();
     }, []);
 
-    const currentUserData = activeUsers.find(user => user.email);
-    const date = new Date();
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = date.toLocaleDateString('en-US', options);
+    function handleVolunteerManagement(action, volunteer = null) {
+        const {
+            updatedSelectedVolunteers,
+            updatedUnselectedVolunteers
+        } = manageVolunteers(selectedVolunteers, unselectedVolunteers, activeUsers, currentUserData, action, volunteer);
+        setSelectedVolunteers(updatedSelectedVolunteers);
+        setUnselectedVolunteers(updatedUnselectedVolunteers)
 
-    function volunteerHandler() {
-        // If selectedVolunteers is empty, add currentUserData
-        setSelectedVolunteers(prevSelected => {
-            if (prevSelected.length === 0 && !unselectedVolunteers.includes(currentUserData)) {
-                return [currentUserData];
-            }
-            return prevSelected;
-        });
+        if (action === 'VOLUNTEER_HANDLER') {
+            setVolunteerCardVisible(prevVisibility => !prevVisibility);
+        }
 
-        setVolunteerCardVisible(prevVisibility => !prevVisibility);
-    }
-
-
-    function showUnselectedVolunteers() {
-        setUnselectedVolunteers(prevUnselected => {
-            let newUnselected = [...prevUnselected];
-
-            activeUsers.forEach(user => {
-                // If the user is the currentUser and selectedVolunteers is empty, do not add them to unselected
-                if (user.email && selectedVolunteers.length === 0) {
-                    return;
-                }
-
-                const isAlreadySelected = selectedVolunteers.some(selected => selected.email === user.email);
-                const isAlreadyUnselected = newUnselected.some(unselected => unselected.email === user.email);
-
-                if (!isAlreadySelected && !isAlreadyUnselected) {
-                    newUnselected.push(user);
-                }
-            });
-
-            return newUnselected;
-        });
-
-        setShowUnselected(prevShow => !prevShow);
-    }
-
-    function moveToSelected(v) {
-        return () => {
-            setSelectedVolunteers(prevSelected => [...prevSelected, v]);
-            setUnselectedVolunteers(prevUnselected => prevUnselected.filter(user => user.email !== v.email));
-        };
-    }
-
-    function moveToUnselected(v) {
-        return () => {
-            setUnselectedVolunteers(prevUnselected => [...prevUnselected, v]);
-            setSelectedVolunteers(prevSelected => prevSelected.filter(user => user.email !== v.email));
-        };
+        if (action === 'SHOW_UNSELECTED') {
+            setShowUnselected(prevShow => !prevShow);
+        }
     }
 
     return (
@@ -127,8 +82,8 @@ function NewTask() {
                             <div className="task-content">
                                 <div id="editable">
                                     <div id="task-header">
-                                        <img className="icon" />
-                                        <h3 id="editable-text" className="task-title">Double click here to edit the task title...</h3>
+                                        <img className="icon"  alt=""/>
+                                        <h3 onClick={() => {editableTitle()}} id="editable-text" className="task-title">Click here to edit the task title...</h3>
                                     </div>
 
                                     <div className="extra-task-options">
@@ -136,25 +91,25 @@ function NewTask() {
                                             <h3 className="volunteer-card-header">Volunteers</h3>
                                             <div className="task-profile-flex">
                                                 {selectedVolunteers.map((v) => (
-                                                    <div key={v.email} onClick={showUnselected ? moveToUnselected(v) : null} className="tooltip">
+                                                    <div key={v.email} onClick={showUnselected ? () => handleVolunteerManagement("MOVE_TO_UNSELECTED", v) : null} className="tooltip">
                                                         {v.profilePicture && v.profilePicture.docFile ? (
                                                             <img className="profile-volunteer" src={`data:image/jpeg;base64,${v.profilePicture.docFile}`} alt={v.fullName} />
                                                         ) : (
-                                                            <img src={User} className="profile-volunteer"></img>
+                                                            <img src={User} className="profile-volunteer profile-icon" alt={v.fullName}></img>
                                                         )}
                                                         <span className="tooltiptext">{v.fullName}</span>
                                                     </div>
                                                 ))}
                                                 <Button
                                                     className={`event-task-menu-button-circle ${showUnselected ? 'event-task-menu-button-circle-is-active' : ''}`}
-                                                    clickHandler={showUnselectedVolunteers}
+                                                    clickHandler={() => handleVolunteerManagement("SHOW_UNSELECTED")}
                                                 ></Button>
                                                 {showUnselected && unselectedVolunteers.map((v) => (
-                                                    <div key={v.email} onClick={moveToSelected(v)} className="tooltip">
+                                                    <div key={v.email} onClick={() => handleVolunteerManagement("MOVE_TO_SELECTED", v)} className="tooltip">
                                                         {v.profilePicture && v.profilePicture.docFile ? (
                                                             <img className="profile-volunteer" src={`data:image/jpeg;base64,${v.profilePicture.docFile}`} alt={v.fullName} />
                                                         ) : (
-                                                            <img src={User} className="profile-volunteer"></img>
+                                                            <img src={User} className="profile-volunteer profile-icon" alt={v.fullName}></img>
                                                         )}
                                                         <span className="tooltiptext">{v.fullName}</span>
                                                     </div>
@@ -172,16 +127,7 @@ function NewTask() {
                                         </div>
                                         <div className="deadline-card">
                                             <h3 className="volunteer-card-header">Due date</h3>
-                                            <div className="deadline-content">
-                                                <Button
-                                                    buttonText={formattedDate}
-                                                    className="event-task-general-button"
-                                                ></Button>
-                                                <Button
-                                                    buttonText="Edit"
-                                                    className="filter-sort-button edit-margin-left"
-                                                ></Button>
-                                            </div>
+                                            <EditableDate/>
                                         </div>
                                         <div className="completion-card">
                                             <h3 className="volunteer-card-header">Close task</h3>
@@ -194,22 +140,31 @@ function NewTask() {
 
                                     <div className="description-card">
                                         <div className="description-header">
-                                            <img className="description-icon" />
+                                            <img className="description-icon" alt="" />
                                             <h3>Description</h3>
                                         </div>
                                         <div id="editable-description" className="description-content">
-                                            <h5 id="editable-text-description">Double click here to edit the description...</h5>
+                                            <h5 onClick={() => {editableDescription()}} id="editable-text-description">Double click here to edit the description...</h5>
                                         </div>
                                     </div>
 
                                     <div className="attachment-card">
                                         <div className="attachment-header">
-                                            <img className="attachment-icon" />
+                                            <img className="attachment-icon" alt="" />
                                             <h3>Attachments</h3>
+                                        </div>
+                                        <div className="attachment-content">
+                                            <span></span>
+                                            <span></span>
+                                            <Button
+                                                buttonText="Delete"
+                                                className="filter-sort-button"
+                                                clickHandler={() => {}}
+                                            ></Button>
                                         </div>
                                         <Button
                                             className="event-task-general-button attachment-button"
-                                            buttonText="Add an attachment"
+                                            buttonText="Add attachments"
                                         ></Button>
                                     </div>
                                 </div>
@@ -230,7 +185,7 @@ function NewTask() {
                                         buttonText="Volunteers"
                                         buttonClass="menu-pane-buttons"
                                         icon={User}
-                                        clickHandler={volunteerHandler}
+                                        clickHandler={() => handleVolunteerManagement("VOLUNTEER_HANDLER")}
 
                                         iconClass="icon-space"
                                     ></Button>
@@ -273,7 +228,7 @@ function NewTask() {
                                         iconClass="icon-space"
                                     ></Button>
                                     <Button
-                                        className="event-task-menu-button"
+                                        className="event-task-menu-button not-allowed"
                                         buttonText="Duplicate"
                                         buttonClass="menu-pane-buttons"
                                         icon={Duplicate}

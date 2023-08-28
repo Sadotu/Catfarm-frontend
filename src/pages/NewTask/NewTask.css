@@ -38,6 +38,10 @@
     color: var(--task-title);
 }
 
+.editable-input-title {
+    width: 300px;
+}
+
 #task-header {
     display: flex;
     flex-direction: row;
@@ -108,6 +112,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.profile-icon {
+    opacity: 0.6;
 }
 
 .tooltip {
