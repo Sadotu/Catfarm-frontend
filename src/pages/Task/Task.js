@@ -25,6 +25,7 @@ import { fetchEnabledUsers } from "../../helpers/fetchHelper";
 import { manageVolunteers } from "../../helpers/selectionHelper";
 import { uploadDateHelper } from "../../helpers/uploadDateHelper"
 import { iconHelper } from "../../helpers/iconHelper"
+import {DescriptionCard} from "../../components/DescriptionCard/DescriptionCard";
 
 function Task() {
     const [activeUsers, setActiveUsers] = useState([]);
@@ -37,11 +38,6 @@ function Task() {
     const [toDos, setToDos] = useState([])
 
     const currentUserData = activeUsers.find(user => user.email);
-
-    window.onload = function() {
-        editableTitle();
-        editableDescription();
-    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -167,15 +163,7 @@ function Task() {
                                         </div>
                                     </div>
 
-                                    <div className="description-card">
-                                        <div className="description-header">
-                                            <img className="description-icon" alt="" />
-                                            <h3>Description</h3>
-                                        </div>
-                                        <div id="editable-description" className="description-content">
-                                            <h5 onClick={() => {editableDescription()}} id="editable-text-description">Click here to edit the description...</h5>
-                                        </div>
-                                    </div>
+                                    <DescriptionCard />
 
                                     <div className={`attachment-card ${attachmentCardVisible ? '' : 'hidden'}`}>
                                         <div className="attachment-header">
@@ -270,7 +258,6 @@ function Task() {
                                         buttonClass="menu-pane-buttons"
                                         icon={User}
                                         clickHandler={() => handleVolunteerManagement("VOLUNTEER_HANDLER")}
-
                                         iconClass="icon-space"
                                     ></Button>
                                     <Button
