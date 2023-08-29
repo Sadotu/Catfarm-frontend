@@ -1,0 +1,300 @@
+/*Individual task specific*/
+.main-container-task {
+    background-color: var(--main-tasks-background-color);
+    border-top: 1px solid var(--main-top-border-black);
+    flex-grow: 1;
+    padding: 50px;
+    display: flex;
+    gap: 30px;
+}
+.hidden {
+    display: none;
+}
+.task-content {
+    width: 100%;
+    max-height: 700px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--main-task-content-background);
+    border-radius: 10px;
+    border: 1px solid var(--main-task-content-border);
+    padding: 20px;
+}
+.extra-task-options {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-left: 47px;
+    margin-top: 30px;
+}
+
+#editable h3 {
+    font-family: var(--main-font-roboto-mono);
+    font-size: 15px;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: var(--task-title);
+}
+
+.editable-input-title {
+    width: 90%;
+}
+
+#task-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.icon {
+    content: url('../../assets/icons/chalkboard.svg');
+    margin-right: 15px;
+    color: var(--task-option-headers);
+}
+
+/* Menu panes */
+.task-menu{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.task-menu-header {
+    font-family: var(--main-font-roboto-mono);
+    font-weight: bolder;
+    font-size: 18px;
+    opacity: 75%;
+}
+.top-task-menu {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-task-content-background);
+    padding: 10px;
+    border: 1px solid var(--main-task-content-border);
+    border-radius: 10px;
+    gap: 10px;
+}
+.bottom-task-menu {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-task-content-background);
+    padding: 10px;
+    border: 1px solid var(--main-task-content-border);
+    border-radius: 10px;
+    gap: 10px;
+}
+
+ /*Volunteer card */
+.task-profile-flex {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.volunteer-card {
+    margin-right: 25px;
+    margin-bottom: 10px;
+}
+.volunteer-card-header {
+    margin-bottom: 10px;
+    color: var(--task-option-headers);
+}
+.profile-volunteer {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 1px solid var(--button-border-black);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-icon {
+    opacity: 0.6;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    position: absolute;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltiptext {
+    padding: 5px 5px 5px 5px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Notification card */
+.notification-card {
+    margin-right: 25px;
+    margin-bottom: 10px;
+}
+
+/* Deadline card */
+.deadline-card {
+    margin-right: 25px;
+}
+.deadline-content {
+    display: flex;
+    flex-direction: row;
+}
+.edit-margin-left {
+    margin-left: -10px;
+}
+
+/* Description card */
+.description-icon {
+    content: url('../../assets/icons/list.svg');
+    margin-right: 15px;
+    color: var(--task-option-headers);
+}
+.description-card {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.description-header {
+    display: flex;
+    flex-direction: row;
+}
+.description-content {
+    margin-left: 47px;
+    font-size: 15px;
+    font-family: var(--main-font-roboto-mono);
+    color: var(--task-option-headers);
+}
+
+/* Attachment card */
+.attachment-icon {
+    content: url('../../assets/icons/paperclip.svg');
+    margin-right: 15px;
+    color: var(--task-option-headers);
+}
+.attachment-card {
+    margin-top: 25px;
+    align-items: flex-start;
+}
+.attachment-header {
+    display: flex;
+    flex-direction: row;
+}
+.attachment-content {
+    margin-left: 47px;
+}
+.attachment-principal {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+.file-icon {
+    color: var(--task-option-headers);
+    margin-right: 10px;
+}
+.attachment-meta {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--main-font-roboto-mono);
+    gap: 2px;
+}
+.file-delete-button {
+    margin-top: -20px;
+}
+.attachment-button {
+    margin-left: 47px;
+}
+
+/* Checklist card */
+.checklist-icon {
+    content: url('../../assets/icons/list-checks.svg');
+    margin-right: 15px;
+    color: var(--task-option-headers);
+}
+.checklist-card {
+    margin-top: 25px;
+    align-items: flex-start;
+}
+.checklist-header {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+.checklist-title-and-delete-button {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+.checklist-delete-button {
+    padding: 8px;
+    margin-right: 20px;
+}
+.checklist-content {
+    margin-left: 47px;
+}
+.checklist-progress-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 85%;
+    height: 10px;
+}
+.progress-percentage {
+    color: var(--task-title);
+}
+.progress-bar {
+    height: 5px;
+    width: 95%;
+    background-color: var(--main-task-content-border);
+}
+.to-do-principal {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    gap: 10px;
+}
+.title-and-cross {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
+    height: 20px;
+}
+.x-delete {
+    content: url('../../assets/icons/x.svg');
+    color: var(--task-option-headers);
+    cursor: pointer;
+}
+
+/* save button */
+.task-save-line {
+    width: 600px;
+    margin: 10px;
+    color: var(--task-option-headers);
+}
+.task-save-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
