@@ -34,7 +34,7 @@ export function editableDescription() {
     let textarea = document.createElement('textarea');
     textarea.rows = 10;
     textarea.cols = 90;
-    textarea.value = "Type your bio here...";
+    textarea.value = "Type your description here...";
 
     divDescription.replaceChild(textarea, h5Description);
 
@@ -48,10 +48,46 @@ export function editableDescription() {
     });
 
     function replaceTextareaWithH5() {
-        if (textarea.value === "" || textarea.value === "Type your bio here...") {
+        if (textarea.value === "" || textarea.value === "Type your description here...") {
             textarea.value = h5Description.textContent;
         }
         h5Description.textContent = textarea.value;
         divDescription.replaceChild(h5Description, textarea);
+    }
+}
+
+export function editableToDoTitle(index) {
+    let divs = document.querySelectorAll('#title-and-cross');
+    let h3s = document.querySelectorAll('#todo');
+
+    console.log(divs)
+    console.log(h3s)
+
+    let div = divs[index];
+    let h3 = h3s[index];
+
+    let input = document.createElement('input');
+    input.type = 'text';
+    input.value = "Replace text with your todo";
+    input.className = "editable-input-title";
+    input.maxLength = 100;
+
+    div.replaceChild(input, h3);
+
+    input.select();
+
+    input.addEventListener('blur', replaceInputWithH3);
+    input.addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            replaceInputWithH3();
+        }
+    });
+
+    function replaceInputWithH3() {
+        if (input.value === "" || input.value === "Replace text with your todo") {
+            input.value = h3.textContent
+        }
+        h3.textContent = input.value;
+        div.replaceChild(h3, input);
     }
 }

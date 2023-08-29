@@ -20,7 +20,7 @@ import Check from "../../assets/icons/check-fat.svg"
 import Archive from "../../assets/icons/archive-box.svg"
 import Eye from "../../assets/icons/eye.svg"
 // Helpers
-import { editableTitle, editableDescription } from  "../../helpers/editableHelper";
+import { editableTitle, editableDescription, editableToDoTitle } from  "../../helpers/editableHelper";
 import { fetchEnabledUsers } from "../../helpers/fetchHelper";
 import { manageVolunteers } from "../../helpers/selectionHelper";
 import { uploadDateHelper } from "../../helpers/uploadDateHelper"
@@ -34,8 +34,7 @@ function NewTask() {
     const [volunteerCardVisible, setVolunteerCardVisible] = useState(false);
     const [attachmentCardVisible, setAttachmentCardVisible] = useState(false);
     const [attachments, setAttachments] = useState([]);
-
-    console.log(attachmentCardVisible);
+    const [toDos, setToDos] = useState([])
 
     const currentUserData = activeUsers.find(user => user.email);
 
@@ -86,6 +85,15 @@ function NewTask() {
         const newAttachments = [...attachments];
         newAttachments.splice(index, 1);
         setAttachments(newAttachments);
+    };
+
+    const addToDo = () => {
+        const newToDo = "Replace with your to do by clicking here";
+        setToDos([...toDos, newToDo]);
+    };
+
+    const removeToDo = (index) => {
+        setToDos(toDos.filter((_, i) => i !== index));
     };
 
     return (
@@ -165,7 +173,7 @@ function NewTask() {
                                             <h3>Description</h3>
                                         </div>
                                         <div id="editable-description" className="description-content">
-                                            <h5 onClick={() => {editableDescription()}} id="editable-text-description">Double click here to edit the description...</h5>
+                                            <h5 onClick={() => {editableDescription()}} id="editable-text-description">Click here to edit the description...</h5>
                                         </div>
                                     </div>
 
@@ -208,6 +216,40 @@ function NewTask() {
                                             clickHandler={() => document.getElementById('hiddenFileInput').click()}
                                         >
                                         </Button>
+                                    </div>
+
+                                    <div className="checklist-card">
+                                        <div className="checklist-header" id="checklist-header">
+                                            <img className="checklist-icon" alt="" />
+                                            <div className="checklist-title-and-delete-button" id="checklist-title-and-delete-button">
+                                                <h3 className="task-title">Checklist</h3>
+                                                <Button
+                                                    buttonText="Delete"
+                                                    className="event-task-general-button checklist-delete-button"
+                                                    clickHandler={() => setToDos([])}
+                                                ></Button>
+                                            </div>
+                                        </div>
+                                        <div className="checklist-content">
+                                            <div className="checklist-progress-bar">
+                                                <h3>0%</h3>
+                                                <div className="progress-bar"></div>
+                                            </div>
+                                            {toDos.map((toDo, index) => (
+                                                <div className="to-do-principal" key={index}>
+                                                    <input type="checkbox" className="checkbox" />
+                                                    <div className="title-and-cross" id="title-and-cross">
+                                                        <h3 id="todo" onClick={() => {editableToDoTitle(index)}}>{toDo}</h3>
+                                                        <div className="x-delete" onClick={() => removeToDo(index)}></div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            <Button
+                                                buttonText="Add to do..."
+                                                className="filter-sort-button"
+                                                clickHandler={() => addToDo()}
+                                            ></Button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="task-save-bar">

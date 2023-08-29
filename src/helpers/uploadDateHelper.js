@@ -24,5 +24,3 @@ export const uploadDateHelper = (uploadTimestamp) => {
     const uploadDate = new Date(uploadTimestamp);
     return uploadDate.toLocaleDateString();
 };
-
-// export default uploadDateHelper;
