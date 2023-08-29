@@ -26,6 +26,7 @@ import { manageVolunteers } from "../../helpers/selectionHelper";
 import { uploadDateHelper } from "../../helpers/uploadDateHelper"
 import { iconHelper } from "../../helpers/iconHelper"
 import {DescriptionCard} from "../../components/DescriptionCard/DescriptionCard";
+import ChecklistCard from "../../components/ChecklistCard/ChecklistCard";
 
 function Task() {
     const [activeUsers, setActiveUsers] = useState([]);
@@ -34,6 +35,7 @@ function Task() {
     const [selectedVolunteers, setSelectedVolunteers] = useState([]);
     const [volunteerCardVisible, setVolunteerCardVisible] = useState(false);
     const [attachmentCardVisible, setAttachmentCardVisible] = useState(false);
+    const [checklistVisibility, setChecklistVisibility] = useState(false)
     const [attachments, setAttachments] = useState([]);
     const [toDos, setToDos] = useState([])
 
@@ -81,15 +83,6 @@ function Task() {
         const newAttachments = [...attachments];
         newAttachments.splice(index, 1);
         setAttachments(newAttachments);
-    };
-
-    const addToDo = () => {
-        const newToDo = "Replace with your to do by clicking here";
-        setToDos([...toDos, newToDo]);
-    };
-
-    const removeToDo = (index) => {
-        setToDos(toDos.filter((_, i) => i !== index));
     };
 
     return (
@@ -206,39 +199,11 @@ function Task() {
                                         </Button>
                                     </div>
 
-                                    <div className="checklist-card">
-                                        <div className="checklist-header" id="checklist-header">
-                                            <img className="checklist-icon" alt="" />
-                                            <div className="checklist-title-and-delete-button" id="checklist-title-and-delete-button">
-                                                <h3 className="task-title">Checklist</h3>
-                                                <Button
-                                                    buttonText="Delete"
-                                                    className="event-task-general-button checklist-delete-button"
-                                                    clickHandler={() => setToDos([])}
-                                                ></Button>
-                                            </div>
-                                        </div>
-                                        <div className="checklist-content">
-                                            <div className="checklist-progress-bar">
-                                                <h3>0%</h3>
-                                                <div className="progress-bar"></div>
-                                            </div>
-                                            {toDos.map((toDo, index) => (
-                                                <div className="to-do-principal" key={index}>
-                                                    <input type="checkbox" className="checkbox" />
-                                                    <div className="title-and-cross" id="title-and-cross">
-                                                        <h3 id="todo" onClick={() => {editableToDoTitle(index)}}>{toDo}</h3>
-                                                        <div className="x-delete" onClick={() => removeToDo(index)}></div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                            <Button
-                                                buttonText="Add to do..."
-                                                className="filter-sort-button"
-                                                clickHandler={() => addToDo()}
-                                            ></Button>
-                                        </div>
-                                    </div>
+                                    <ChecklistCard
+                                        toDos={toDos}
+                                        setToDos={setToDos}
+                                        checklistVisibility={checklistVisibility}
+                                    ></ChecklistCard>
                                 </div>
                                 <div className="task-save-bar">
                                     <hr className="task-save-line" />
@@ -281,6 +246,7 @@ function Task() {
                                         buttonClass="menu-pane-buttons"
                                         icon={Checklist}
                                         iconClass="icon-space"
+                                        clickHandler={() => setChecklistVisibility(prevShow => !prevShow)}
                                     ></Button>
                                     <Button
                                         className="event-task-menu-button not-allowed"
