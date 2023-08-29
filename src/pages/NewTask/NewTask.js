@@ -22,7 +22,9 @@ import Eye from "../../assets/icons/eye.svg"
 // Helpers
 import { editableTitle, editableDescription } from  "../../helpers/editableHelper";
 import { fetchEnabledUsers } from "../../helpers/fetchHelper";
-import {manageVolunteers} from "../../helpers/selectionHelper";
+import { manageVolunteers } from "../../helpers/selectionHelper";
+import { uploadDateHelper } from "../../helpers/uploadDateHelper"
+import { iconHelper } from "../../helpers/iconHelper"
 
 function NewTask() {
     const [activeUsers, setActiveUsers] = useState([]);
@@ -30,6 +32,7 @@ function NewTask() {
     const [unselectedVolunteers, setUnselectedVolunteers] = useState([]);
     const [selectedVolunteers, setSelectedVolunteers] = useState([]);
     const [volunteerCardVisible, setVolunteerCardVisible] = useState(false);
+    const [attachments, setAttachments] = useState([]);
 
     const currentUserData = activeUsers.find(user => user.email);
 
@@ -48,7 +51,7 @@ function NewTask() {
             }
         };
         fetchData();
-    }, []);
+    },[]);
 
     function handleVolunteerManagement(action, volunteer = null) {
         const {
@@ -66,6 +69,17 @@ function NewTask() {
             setShowUnselected(prevShow => !prevShow);
         }
     }
+
+    const addAttachment = (event) => {
+        const files = Array.from(event.target.files);
+        setAttachments([...attachments, ...files]);
+    };
+
+    const deleteAttachment = (index) => {
+        const newAttachments = [...attachments];
+        newAttachments.splice(index, 1);
+        setAttachments(newAttachments);
+    };
 
     return (
         <>
@@ -154,18 +168,39 @@ function NewTask() {
                                             <h3>Attachments</h3>
                                         </div>
                                         <div className="attachment-content">
-                                            <span></span>
-                                            <span></span>
-                                            <Button
-                                                buttonText="Delete"
-                                                className="filter-sort-button"
-                                                clickHandler={() => {}}
-                                            ></Button>
+                                            {attachments.map((attachment, index) => (
+                                                <div key={index} className="attachment-principal">
+                                                    <div className="file-icon">
+                                                        {iconHelper(attachment.name)}
+                                                    </div>
+                                                    <div className="attachment-meta">
+                                                        <span>{attachment.name}</span>
+                                                        <span>{attachment.size / 1000}KB</span>
+                                                    </div>
+                                                    <Button
+                                                        buttonText="Delete"
+                                                        className="filter-sort-button file-delete-button"
+                                                        clickHandler={() => deleteAttachment(index)}
+                                                    >
+                                                    </Button>
+                                                </div>
+                                            ))}
                                         </div>
+
+                                        <input
+                                            type="file"
+                                            multiple
+                                            style={{ display: 'none' }}
+                                            id="hiddenFileInput"
+                                            onChange={addAttachment}
+                                        />
+
                                         <Button
+                                            buttonText="Add Attachments"
                                             className="event-task-general-button attachment-button"
-                                            buttonText="Add attachments"
-                                        ></Button>
+                                            clickHandler={() => document.getElementById('hiddenFileInput').click()}
+                                        >
+                                        </Button>
                                     </div>
                                 </div>
                                 <div className="task-save-bar">

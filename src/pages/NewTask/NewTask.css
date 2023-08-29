@@ -201,6 +201,23 @@
     display: flex;
     flex-direction: row;
 }
+.attachment-content {
+    margin-left: 47px;
+}
+.attachment-principal {
+    display: flex;
+    flex-direction: row;
+}
+.file-icon {
+    color: var(--task-option-headers);
+}
+.attachment-meta {
+    display: flex;
+    flex-direction: column;
+}
+.file-delete-button {
+    margin-top: -20px;
+}
 .attachment-button {
     margin-left: 47px;
 }

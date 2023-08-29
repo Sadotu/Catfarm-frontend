@@ -10,6 +10,7 @@ import TaskCard from "../../components/TaskCard/TaskCard";
 import Button from "../../components/Button/Button";
 // Helpers
 import {filterData} from "../../helpers/filterDataHelper"
+import {fetchEnabledUsers} from "../../helpers/fetchHelper";
 
 function Tasks() {
     const { user } = useContext(AuthContext)
@@ -19,23 +20,15 @@ function Tasks() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const token = localStorage.getItem('token')
-
             try {
-                const headers = {
-                    Authorization: `Bearer ${token}`,
-                };
-
-                const response = await axios.get('http://localhost:8080/users/enabled', { headers });
-                const users = response.data;
+                const users = await fetchEnabledUsers();
                 setActiveUsers(users);
-
             } catch (error) {
-                console.log('Error retrieving task data:', error);
+                console.log(error)
             }
         };
         fetchData();
-    }, []);
+    },[]);
 
     async function handleFilter(newFilters) {
         const result = filterData(activeUsers, newFilters);

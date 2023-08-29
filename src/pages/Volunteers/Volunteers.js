@@ -10,18 +10,14 @@ import {fetchEnabledUsers} from "../../helpers/fetchHelper";
 
 function Volunteers() {
     const [activeUsers, setActiveUsers] = useState([])
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const users = await fetchEnabledUsers();
                 setActiveUsers(users);
-                setLoading(false);
             } catch (error) {
-                setError(error);
-                setLoading(false);
+                console.log(error)
             }
         };
         fetchData();
