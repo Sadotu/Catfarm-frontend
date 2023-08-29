@@ -32,7 +32,10 @@ function NewTask() {
     const [unselectedVolunteers, setUnselectedVolunteers] = useState([]);
     const [selectedVolunteers, setSelectedVolunteers] = useState([]);
     const [volunteerCardVisible, setVolunteerCardVisible] = useState(false);
+    const [attachmentCardVisible, setAttachmentCardVisible] = useState(false);
     const [attachments, setAttachments] = useState([]);
+
+    console.log(attachmentCardVisible);
 
     const currentUserData = activeUsers.find(user => user.email);
 
@@ -68,6 +71,10 @@ function NewTask() {
         if (action === 'SHOW_UNSELECTED') {
             setShowUnselected(prevShow => !prevShow);
         }
+    }
+
+    const handleAttachments = () => {
+        setAttachmentCardVisible(prevShow => !prevShow)
     }
 
     const addAttachment = (event) => {
@@ -162,7 +169,7 @@ function NewTask() {
                                         </div>
                                     </div>
 
-                                    <div className="attachment-card">
+                                    <div className={`attachment-card ${attachmentCardVisible ? '' : 'hidden'}`}>
                                         <div className="attachment-header">
                                             <img className="attachment-icon" alt="" />
                                             <h3>Attachments</h3>
@@ -237,6 +244,7 @@ function NewTask() {
                                         buttonClass="menu-pane-buttons"
                                         icon={Attachment}
                                         iconClass="icon-space"
+                                        clickHandler={() => handleAttachments()}
                                     ></Button>
                                     <Button
                                         className="event-task-menu-button"
