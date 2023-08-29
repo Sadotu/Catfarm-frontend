@@ -27,6 +27,7 @@ import { uploadDateHelper } from "../../helpers/uploadDateHelper"
 import { iconHelper } from "../../helpers/iconHelper"
 import {DescriptionCard} from "../../components/DescriptionCard/DescriptionCard";
 import ChecklistCard from "../../components/ChecklistCard/ChecklistCard";
+import AttachmentCard from "../../components/AttachmentCard/AttachmentCard";
 
 function Task() {
     const [activeUsers, setActiveUsers] = useState([]);
@@ -38,7 +39,6 @@ function Task() {
     const [checklistVisibility, setChecklistVisibility] = useState(false)
     const [attachments, setAttachments] = useState([]);
     const [toDos, setToDos] = useState([])
-
     const currentUserData = activeUsers.find(user => user.email);
 
     useEffect(() => {
@@ -69,21 +69,6 @@ function Task() {
             setShowUnselected(prevShow => !prevShow);
         }
     }
-
-    const handleAttachments = () => {
-        setAttachmentCardVisible(prevShow => !prevShow)
-    }
-
-    const addAttachment = (event) => {
-        const files = Array.from(event.target.files);
-        setAttachments([...attachments, ...files]);
-    };
-
-    const deleteAttachment = (index) => {
-        const newAttachments = [...attachments];
-        newAttachments.splice(index, 1);
-        setAttachments(newAttachments);
-    };
 
     return (
         <>
@@ -158,52 +143,18 @@ function Task() {
 
                                     <DescriptionCard />
 
-                                    <div className={`attachment-card ${attachmentCardVisible ? '' : 'hidden'}`}>
-                                        <div className="attachment-header">
-                                            <img className="attachment-icon" alt="" />
-                                            <h3>Attachments</h3>
-                                        </div>
-                                        <div className="attachment-content">
-                                            {attachments.map((attachment, index) => (
-                                                <div key={index} className="attachment-principal">
-                                                    <div className="file-icon">
-                                                        {iconHelper(attachment.name)}
-                                                    </div>
-                                                    <div className="attachment-meta">
-                                                        <span>{attachment.name}</span>
-                                                        <span>{attachment.size / 1000}KB</span>
-                                                    </div>
-                                                    <Button
-                                                        buttonText="Delete"
-                                                        className="filter-sort-button file-delete-button"
-                                                        clickHandler={() => deleteAttachment(index)}
-                                                    >
-                                                    </Button>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        <input
-                                            type="file"
-                                            multiple
-                                            style={{ display: 'none' }}
-                                            id="hiddenFileInput"
-                                            onChange={addAttachment}
-                                        />
-
-                                        <Button
-                                            buttonText="Add Attachments"
-                                            className="event-task-general-button attachment-button"
-                                            clickHandler={() => document.getElementById('hiddenFileInput').click()}
-                                        >
-                                        </Button>
-                                    </div>
+                                    <AttachmentCard
+                                        attachments={attachments}
+                                        setAttachments={setAttachments}
+                                        attachmentCardVisible={attachmentCardVisible}
+                                    ></AttachmentCard>
 
                                     <ChecklistCard
                                         toDos={toDos}
                                         setToDos={setToDos}
                                         checklistVisibility={checklistVisibility}
                                     ></ChecklistCard>
+
                                 </div>
                                 <div className="task-save-bar">
                                     <hr className="task-save-line" />
@@ -238,7 +189,7 @@ function Task() {
                                         buttonClass="menu-pane-buttons"
                                         icon={Attachment}
                                         iconClass="icon-space"
-                                        clickHandler={() => handleAttachments()}
+                                        clickHandler={() => setAttachmentCardVisible(prevShow => !prevShow)}
                                     ></Button>
                                     <Button
                                         className="event-task-menu-button"

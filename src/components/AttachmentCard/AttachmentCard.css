@@ -1,0 +1,38 @@
+/* Attachment card */
+.attachment-icon {
+    content: url('../../assets/icons/paperclip.svg');
+    margin-right: 15px;
+    color: var(--task-option-headers);
+}
+.attachment-card {
+    margin-top: 25px;
+    align-items: flex-start;
+}
+.attachment-header {
+    display: flex;
+    flex-direction: row;
+}
+.attachment-content {
+    margin-left: 47px;
+}
+.attachment-principal {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+.file-icon {
+    color: var(--task-option-headers);
+    margin-right: 10px;
+}
+.attachment-meta {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--main-font-roboto-mono);
+    gap: 2px;
+}
+.file-delete-button {
+    margin-top: -20px;
+}
+.attachment-button {
+    margin-left: 47px;
+}
