@@ -87,16 +87,16 @@
 }
 
  /*Volunteer card */
-.task-profile-flex {
+.volunteer-option-content {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
 }
-.volunteer-card {
+.volunteer-option {
     margin-right: 25px;
     margin-bottom: 10px;
 }
-.volunteer-card-header {
+.volunteer-option-header {
     margin-bottom: 10px;
     color: var(--task-option-headers);
 }

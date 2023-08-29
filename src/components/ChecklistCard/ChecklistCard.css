@@ -39,14 +39,26 @@
 }
 .progress-bar {
     height: 5px;
-    width: 95%;
+    width: 90%;
     background-color: var(--main-task-content-border);
+}
+.progress-bar-inner {
+    height: 100%;
+    background-color: var(--main-theme-dark-green);
+}
+.outer-principal {
+    margin-top: 10px;
 }
 .to-do-principal {
     display: flex;
     flex-direction: row;
-    margin-top: 20px;
+    margin-top: 10px;
     gap: 10px;
+    transition: background-color 0.3s ease;
+    padding: 5px;
+}
+.to-do-principal:hover {
+    background-color: var(--event-task-menu-button);
 }
 .title-and-cross {
     display: flex;

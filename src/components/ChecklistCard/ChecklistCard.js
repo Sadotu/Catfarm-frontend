@@ -7,13 +7,30 @@ import {editableToDoTitle} from "../../helpers/editableHelper";
 function ChecklistCard({ toDos, setToDos, checklistVisibility }) {
 
     const addToDo = () => {
-        const newToDo = "Replace with your to do by clicking here";
+        const newToDo = { text: "Replace with your to do by clicking here", completed: false };
         setToDos([...toDos, newToDo]);
     };
 
     const removeToDo = (index) => {
+        console.log("Index to remove:", index); // Debugging
+        console.log("Before remove:", toDos); // Debugging
         setToDos(toDos.filter((_, i) => i !== index));
+        console.log("After remove:", toDos); // Debugging
     };
+
+    const toggleToDo = (index) => {
+        const updatedToDos = [...toDos];
+        updatedToDos[index].completed = !updatedToDos[index].completed;
+        setToDos(updatedToDos);
+    };
+
+    const calculateProgress = () => {
+        if (toDos.length === 0) return 0;
+        const completedCount = toDos.filter(toDo => toDo.completed).length;
+        return ((completedCount / toDos.length) * 100).toFixed(2);
+    };
+
+    const progress = calculateProgress();
 
     return (
         <div className={`checklist-card ${checklistVisibility ? '' : 'hidden'}`}>
@@ -30,18 +47,27 @@ function ChecklistCard({ toDos, setToDos, checklistVisibility }) {
             </div>
             <div className="checklist-content">
                 <div className="checklist-progress-bar">
-                    <h3>0%</h3>
-                    <div className="progress-bar"></div>
-                </div>
-                {toDos.map((toDo, index) => (
-                    <div className="to-do-principal" key={index}>
-                        <input type="checkbox" className="checkbox" />
-                        <div className="title-and-cross" id="title-and-cross">
-                            <h3 id="todo" onClick={() => {editableToDoTitle(index)}}>{toDo}</h3>
-                            <div className="x-delete" onClick={() => removeToDo(index)}></div>
-                        </div>
+                    <h3>{toDos.length > 0 ? `${calculateProgress()}%` : "0.00%"}</h3>
+                    <div className="progress-bar">
+                        <div className="progress-bar-inner" style={{ width: `${progress}%` }}></div>
                     </div>
-                ))}
+                </div>
+                <div className="outer-principal">
+                    {toDos.map((toDo, index) => (
+                        <div className="to-do-principal" key={index}>
+                            <input
+                                type="checkbox"
+                                className="checkbox"
+                                checked={toDo.completed}
+                                onChange={() => toggleToDo(index)}
+                            />
+                            <div className="title-and-cross" id="title-and-cross">
+                                <h3 id="todo" onClick={() => { editableToDoTitle(index) }}>{toDo.text}</h3>
+                                <div className="x-delete" onClick={() => removeToDo(index)}></div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
                 <Button
                     buttonText="Add to do..."
                     className="filter-sort-button"

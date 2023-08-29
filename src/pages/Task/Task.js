@@ -6,6 +6,9 @@ import Navigation from "../../components/Navigation/Navigation";
 import Header from "../../components/Header/Header";
 import Button from "../../components/Button/Button";
 import EditableDate from "../../components/EditableDate/EditableDate";
+import {DescriptionCard} from "../../components/DescriptionCard/DescriptionCard";
+import ChecklistCard from "../../components/ChecklistCard/ChecklistCard";
+import AttachmentCard from "../../components/AttachmentCard/AttachmentCard";
 // Icons
 import User from "../../assets/icons/user.svg"
 import Label from "../../assets/icons/tag-simple.svg"
@@ -20,14 +23,9 @@ import Check from "../../assets/icons/check-fat.svg"
 import Archive from "../../assets/icons/archive-box.svg"
 import Eye from "../../assets/icons/eye.svg"
 // Helpers
-import { editableTitle, editableDescription, editableToDoTitle } from  "../../helpers/editableHelper";
+import { editableTitle } from  "../../helpers/editableHelper";
 import { fetchEnabledUsers } from "../../helpers/fetchHelper";
 import { manageVolunteers } from "../../helpers/selectionHelper";
-import { uploadDateHelper } from "../../helpers/uploadDateHelper"
-import { iconHelper } from "../../helpers/iconHelper"
-import {DescriptionCard} from "../../components/DescriptionCard/DescriptionCard";
-import ChecklistCard from "../../components/ChecklistCard/ChecklistCard";
-import AttachmentCard from "../../components/AttachmentCard/AttachmentCard";
 
 function Task() {
     const [activeUsers, setActiveUsers] = useState([]);
@@ -90,9 +88,9 @@ function Task() {
                                     </div>
 
                                     <div className="extra-task-options">
-                                        <div className={`volunteer-card ${volunteerCardVisible ? '' : 'hidden'}`}>
-                                            <h3 className="volunteer-card-header">Volunteers</h3>
-                                            <div className="task-profile-flex">
+                                        <div className={`volunteer-option ${volunteerCardVisible ? '' : 'hidden'}`}>
+                                            <h3 className="volunteer-option-header">Volunteers</h3>
+                                            <div className="volunteer-option-content">
                                                 {selectedVolunteers.map((v) => (
                                                     <div key={v.email} onClick={showUnselected ? () => handleVolunteerManagement("MOVE_TO_UNSELECTED", v) : null} className="tooltip">
                                                         {v.profilePicture && v.profilePicture.docFile ? (
@@ -120,7 +118,7 @@ function Task() {
                                             </div>
                                         </div>
                                         <div className="notification-card">
-                                            <h3 className="volunteer-card-header">Notifications</h3>
+                                            <h3 className="volunteer-option-header">Notifications</h3>
                                             <Button
                                                 buttonText="Watch"
                                                 className="event-task-general-button-icon not-allowed"
@@ -129,11 +127,11 @@ function Task() {
                                             ></Button>
                                         </div>
                                         <div className="deadline-card">
-                                            <h3 className="volunteer-card-header">Due date</h3>
+                                            <h3 className="volunteer-option-header">Due date</h3>
                                             <EditableDate/>
                                         </div>
                                         <div className="completion-card">
-                                            <h3 className="volunteer-card-header">Close task</h3>
+                                            <h3 className="volunteer-option-header">Close task</h3>
                                             <Button
                                                 buttonText="Done"
                                                 className="event-task-done-button"
