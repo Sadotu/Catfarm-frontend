@@ -1,4 +1,4 @@
-export function editableTitle() {
+export function editableTitle(setNameTask) {
     let div = document.getElementById('task-header');
     let h3 = document.getElementById('editable-text');
 
@@ -24,10 +24,12 @@ export function editableTitle() {
         }
         h3.textContent = input.value;
         div.replaceChild(h3, input);
+
+        setNameTask(input.value);
     }
 }
 
-export function editableDescription() {
+export function editableDescription(setDescription) {
     let divDescription = document.getElementById('editable-description');
     let h5Description = document.getElementById('editable-text-description');
 
@@ -53,6 +55,8 @@ export function editableDescription() {
         }
         h5Description.textContent = textarea.value;
         divDescription.replaceChild(h5Description, textarea);
+
+        setDescription(textarea.value);
     }
 }
 

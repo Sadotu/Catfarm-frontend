@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import './Task.css'
+import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 // Components
 import Footer from "../../components/Footer/Footer";
@@ -7,7 +8,6 @@ import Navigation from "../../components/Navigation/Navigation";
 import Header from "../../components/Header/Header";
 import Button from "../../components/Button/Button";
 import EditableDate from "../../components/EditableDate/EditableDate";
-import {DescriptionCard} from "../../components/DescriptionCard/DescriptionCard";
 import ChecklistCard from "../../components/ChecklistCard/ChecklistCard";
 import AttachmentCard from "../../components/AttachmentCard/AttachmentCard";
 import VolunteerOption from "../../components/VolunteerOption/VolunteerOption";
@@ -25,7 +25,7 @@ import Check from "../../assets/icons/check-fat.svg"
 import Archive from "../../assets/icons/archive-box.svg"
 import Eye from "../../assets/icons/eye.svg"
 // Helpers
-import { editableTitle } from  "../../helpers/editableHelper";
+import {editableDescription, editableTitle} from "../../helpers/editableHelper";
 import { fetchEnabledUsers } from "../../helpers/fetchHelper";
 import { manageVolunteers } from "../../helpers/selectionHelper";
 
@@ -34,12 +34,18 @@ function Task() {
     const [activeUsers, setActiveUsers] = useState([]);
     const [showUnselected, setShowUnselected] = useState(false);
     const [unselectedVolunteers, setUnselectedVolunteers] = useState([]);
-    const [selectedVolunteers, setSelectedVolunteers] = useState([]);
     const [volunteerCardVisible, setVolunteerCardVisible] = useState(false);
     const [attachmentCardVisible, setAttachmentCardVisible] = useState(false);
     const [checklistVisibility, setChecklistVisibility] = useState(false)
-    const [attachments, setAttachments] = useState([]);
+    // payload states
+    const [nameTask, setNameTask] = useState(null);
+    const [deadline, setDeadline] = useState('dd/mm/jj');
+    const [description, setDescription] = useState(null);
+    const [completed, setCompleted] = useState(false);
+    const [assignedTo, setAssignedTo] = useState([]);
+    const [files, setFiles] = useState([]);
     const [toDos, setToDos] = useState([])
+
     const currentUserData = user;
 
     useEffect(() => {
@@ -58,8 +64,8 @@ function Task() {
         const {
             updatedSelectedVolunteers,
             updatedUnselectedVolunteers
-        } = manageVolunteers(selectedVolunteers, unselectedVolunteers, activeUsers, currentUserData, action, volunteer);
-        setSelectedVolunteers(updatedSelectedVolunteers);
+        } = manageVolunteers(assignedTo, unselectedVolunteers, activeUsers, currentUserData, action, volunteer);
+        setAssignedTo(updatedSelectedVolunteers);
         setUnselectedVolunteers(updatedUnselectedVolunteers)
 
         if (action === 'VOLUNTEER_HANDLER') {
@@ -71,9 +77,89 @@ function Task() {
         }
     }
 
-    function saveTask()  {
+    async function saveTask() {
+        const token = localStorage.getItem('token');
 
+        const date = new Date(Date.parse(deadline));
+
+        date.setHours(16);
+        date.setMinutes(0);
+        date.setSeconds(0);
+
+        const isoString = date.toISOString();
+        const requiredFormatDeadline = isoString.slice(0, 19);
+
+        const payload = {
+            nameTask,
+            requiredFormatDeadline,
+            description,
+            completed
+        };
+
+        try {
+            const response = await axios.post('http://localhost:8080/tasks/add', payload, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log("Task saved successfully:", response.data);
+            const taskId = response.data.id;
+
+            await axios.put(`http://localhost:8080/users/${user.email}/usercreatestask/${taskId}`, null, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }})
+
+            for (const user of assignedTo) {
+                try {
+                    const updateUserResponse = await axios.put(`http://localhost:8080/users/${user.email}/task/${taskId}`, null, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        }
+                    });
+
+                    console.log(`Assigned task to user ${user.email}:`, updateUserResponse.data);
+
+                } catch (error) {
+                    console.error(`Error assigning task to user ${user.email}:`, error);
+                }
+            }
+
+            const formData = new FormData();
+            // const file = files[0]
+            // console.log(file)
+            // formData.append('file', file);
+            files.forEach((file) => {
+                // console.log(file)
+                formData.append('file', file);
+            });
+
+            // console.log(formData)
+
+            const fileResponse = await axios.post('http://localhost:8080/files/upload', formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+
+            const fileIds = fileResponse.data.map(file => file.id);
+
+            await axios.put(`http://localhost:8080/tasks/assignfiles/${taskId}`, { file_ids: fileIds }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+        } catch (error) {
+            console.error("Error saving task:", error);
+        }
     }
+
 
     return (
         <>
@@ -91,13 +177,13 @@ function Task() {
                                 <div id="editable">
                                     <div id="task-header">
                                         <img className="icon"  alt=""/>
-                                        <h3 onClick={() => {editableTitle()}} id="editable-text" className="task-title">Click here to edit the task title...</h3>
+                                        <h3 onClick={() => {editableTitle(setNameTask)}} id="editable-text" className="task-title">Click here to edit the task title...</h3>
                                     </div>
 
                                     <div className="extra-task-options">
                                         <VolunteerOption
                                             volunteerCardVisible={volunteerCardVisible}
-                                            selectedVolunteers={selectedVolunteers}
+                                            selectedVolunteers={assignedTo}
                                             showUnselected={showUnselected}
                                             unselectedVolunteers={unselectedVolunteers}
                                             handleVolunteerManagement={handleVolunteerManagement}
@@ -114,7 +200,10 @@ function Task() {
                                         </div>
                                         <div className="deadline-card">
                                             <h3 className="volunteer-option-header">Due date</h3>
-                                            <EditableDate/>
+                                            <EditableDate
+                                                deadline={deadline}
+                                                setDeadline={setDeadline}
+                                            ></EditableDate>
                                         </div>
                                         <div className="completion-card">
                                             <h3 className="volunteer-option-header">Close task</h3>
@@ -125,11 +214,19 @@ function Task() {
                                         </div>
                                     </div>
 
-                                    <DescriptionCard/>
+                                    <div className="description-card">
+                                        <div className="description-header">
+                                            <img className="description-icon" alt="" />
+                                            <h3>Description</h3>
+                                        </div>
+                                        <div id="editable-description" className="description-content">
+                                            <h5 onClick={() => {editableDescription(setDescription)}} id="editable-text-description">Click here to edit the description...</h5>
+                                        </div>
+                                    </div>
 
                                     <AttachmentCard
-                                        attachments={attachments}
-                                        setAttachments={setAttachments}
+                                        attachments={files}
+                                        setAttachments={setFiles}
                                         attachmentCardVisible={attachmentCardVisible}
                                     ></AttachmentCard>
 

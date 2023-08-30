@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import Button from '../Button/Button';
 import moment from 'moment';
 
-function EditableDate() {
+function EditableDate({ deadline, setDeadline }) {
     const [isEditing, setIsEditing] = useState(false);
-    const [date, setDate] = useState('dd/mm/jj');
     const [borderColor, setBorderColor] = useState('black');
 
     const formatDate = (inputDate) => {
@@ -18,18 +17,18 @@ function EditableDate() {
     };
 
     const handleChange = (e) => {
-        setDate(e.target.value);
+        setDeadline(e.target.value);
     };
 
     const handleBlur = (e) => {
         const pattern = /^\d{2}\/\d{2}\/\d{2}$/;
         if (pattern.test(e.target.value)) {
             const formattedDate = formatDate(e.target.value);
-            setDate(formattedDate);
+            setDeadline(formattedDate);
             setBorderColor('black');
             setIsEditing(false);
         } else {
-            setDate(e.target.value);
+            setDeadline(e.target.value);
             setBorderColor('red');
         }
     };
@@ -45,7 +44,7 @@ function EditableDate() {
             {isEditing ? (
                 <input
                     type="text"
-                    value={date}
+                    value={deadline}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     onKeyDown={handleKeyDown}
@@ -54,7 +53,7 @@ function EditableDate() {
                 />
             ) : (
                 <Button
-                    buttonText={date}
+                    buttonText={deadline}
                     className="event-task-general-button"
                     id="editable-date"
                 ></Button>

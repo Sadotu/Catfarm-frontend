@@ -104,6 +104,29 @@
     margin-left: -10px;
 }
 
+/* Description card */
+.description-icon {
+    content: url('../../assets/icons/list.svg');
+    margin-right: 15px;
+    color: var(--task-option-headers);
+}
+.description-card {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.description-header {
+    display: flex;
+    flex-direction: row;
+}
+.description-content {
+    margin-left: 47px;
+    font-size: 15px;
+    font-family: var(--main-font-roboto-mono);
+    color: var(--task-option-headers);
+}
+
 /* save button */
 .task-save-line {
     width: 600px;
