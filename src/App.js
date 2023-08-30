@@ -15,7 +15,6 @@ import Task from "./pages/Task/Task";
 import Profile from "./pages/Profile/Profile";
 import SignUp from "./pages/SignUp/SignUp";
 import Tasks from "./pages/Tasks/Tasks";
-import Volunteer from "./pages/Volunteer/Volunteer";
 import Volunteers from "./pages/Volunteers/Volunteers";
 
 function App() {
@@ -40,7 +39,6 @@ function App() {
                 <Route path="/new_task" element={isAuth ? <Task/> : <Navigate to="login"/>}/>
                 <Route path="/task/:task_id" element={isAuth ? <Task/> : <Navigate to="login"/>}/>
                 <Route path="/volunteers" element={isAuth ? <Volunteers/> : <Navigate to="login"/>}/>
-                <Route path="/volunteer/:user_id" element={isAuth ? <Volunteer/> : <Navigate to="login"/>}/>
             </Routes>
     </>
   );
