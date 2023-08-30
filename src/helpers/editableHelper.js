@@ -56,12 +56,9 @@ export function editableDescription() {
     }
 }
 
-export function editableToDoTitle(index) {
+export function editableToDoTitle(index, updateToDo) {
     let divs = document.querySelectorAll('#title-and-cross');
     let h3s = document.querySelectorAll('#todo');
-
-    console.log(divs)
-    console.log(h3s)
 
     let div = divs[index];
     let h3 = h3s[index];
@@ -85,9 +82,11 @@ export function editableToDoTitle(index) {
 
     function replaceInputWithH3() {
         if (input.value === "" || input.value === "Replace text with your todo") {
-            input.value = h3.textContent
+            input.value = h3.textContent;
         }
         h3.textContent = input.value;
         div.replaceChild(h3, input);
+
+        updateToDo(index, input.value);
     }
 }

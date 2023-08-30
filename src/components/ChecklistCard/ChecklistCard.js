@@ -2,7 +2,8 @@ import React from 'react';
 import "./ChecklistCard.css"
 // Components
 import Button from "../Button/Button";
-import {editableToDoTitle} from "../../helpers/editableHelper";
+// Helpers
+import {editableToDoTitle} from "../../helpers/editableHelper"
 
 function ChecklistCard({ toDos, setToDos, checklistVisibility }) {
 
@@ -11,11 +12,16 @@ function ChecklistCard({ toDos, setToDos, checklistVisibility }) {
         setToDos([...toDos, newToDo]);
     };
 
+    function updateToDo(index, newText) {
+        const updatedToDos = [...toDos];
+        updatedToDos[index].text = newText;
+        setToDos(updatedToDos);
+    }
+
     const removeToDo = (index) => {
-        console.log("Index to remove:", index); // Debugging
-        console.log("Before remove:", toDos); // Debugging
-        setToDos(toDos.filter((_, i) => i !== index));
-        console.log("After remove:", toDos); // Debugging
+        const updatedToDos = [...toDos];
+        updatedToDos.splice(index, 1);
+        setToDos(updatedToDos);
     };
 
     const toggleToDo = (index) => {
@@ -62,8 +68,8 @@ function ChecklistCard({ toDos, setToDos, checklistVisibility }) {
                                 onChange={() => toggleToDo(index)}
                             />
                             <div className="title-and-cross" id="title-and-cross">
-                                <h3 id="todo" onClick={() => { editableToDoTitle(index) }}>{toDo.text}</h3>
-                                <div className="x-delete" onClick={() => removeToDo(index)}></div>
+                                <h3 id="todo" onClick={() => { editableToDoTitle(index, updateToDo) }}>{toDo.text}</h3>
+                                <div className="x-delete" onClick={() => removeToDo(index)} ></div>
                             </div>
                         </div>
                     ))}

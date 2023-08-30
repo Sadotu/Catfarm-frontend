@@ -3,7 +3,7 @@ import "./DescriptionCard.css"
 // Components
 import {editableDescription} from "../../helpers/editableHelper";
 
-export function DescriptionCard(props) {
+export function DescriptionCard() {
 
     return (
         <div className="description-card">

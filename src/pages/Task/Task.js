@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import './Task.css'
+import {AuthContext} from "../../context/AuthContext";
 // Components
 import Footer from "../../components/Footer/Footer";
 import Navigation from "../../components/Navigation/Navigation";
@@ -9,6 +10,7 @@ import EditableDate from "../../components/EditableDate/EditableDate";
 import {DescriptionCard} from "../../components/DescriptionCard/DescriptionCard";
 import ChecklistCard from "../../components/ChecklistCard/ChecklistCard";
 import AttachmentCard from "../../components/AttachmentCard/AttachmentCard";
+import VolunteerOption from "../../components/VolunteerOption/VolunteerOption";
 // Icons
 import User from "../../assets/icons/user.svg"
 import Label from "../../assets/icons/tag-simple.svg"
@@ -26,9 +28,9 @@ import Eye from "../../assets/icons/eye.svg"
 import { editableTitle } from  "../../helpers/editableHelper";
 import { fetchEnabledUsers } from "../../helpers/fetchHelper";
 import { manageVolunteers } from "../../helpers/selectionHelper";
-import VolunteerOption from "../../components/VolunteerOption/VolunteerOption";
 
 function Task() {
+    const { user } = useContext(AuthContext)
     const [activeUsers, setActiveUsers] = useState([]);
     const [showUnselected, setShowUnselected] = useState(false);
     const [unselectedVolunteers, setUnselectedVolunteers] = useState([]);
@@ -38,7 +40,7 @@ function Task() {
     const [checklistVisibility, setChecklistVisibility] = useState(false)
     const [attachments, setAttachments] = useState([]);
     const [toDos, setToDos] = useState([])
-    const currentUserData = activeUsers.find(user => user.email);
+    const currentUserData = user;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -123,7 +125,7 @@ function Task() {
                                         </div>
                                     </div>
 
-                                    <DescriptionCard />
+                                    <DescriptionCard/>
 
                                     <AttachmentCard
                                         attachments={attachments}
