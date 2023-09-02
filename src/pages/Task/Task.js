@@ -34,11 +34,10 @@ import {formatDate} from "../../helpers/ISOFormatDate";
 
 function Task() {
     const { user } = useContext(AuthContext);
-    const currentUserData = user;
+    const navigate = useNavigate();
     const { task_id } = useParams();
     const [activeUsers, setActiveUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
+    const currentUserData = user;
     // visibility states
     const [showUnselected, setShowUnselected] = useState(false);
     const [unselectedVolunteers, setUnselectedVolunteers] = useState([]);
@@ -54,7 +53,6 @@ function Task() {
     const [toDos, setToDos] = useState([]);
 
     useEffect(() => {
-        setLoading(true);
         const token = localStorage.getItem('token');
         handleVolunteerManagement("VOLUNTEER_HANDLER")
         const headers = {
@@ -79,12 +77,9 @@ function Task() {
                     setAssignedTo(data.assignedTo);
                     setFiles(data.files);
                     setToDos(data.toDos);
-
-                    setLoading(false);
                 })
                 .catch((error) => {
                     console.log("Error fetching task:", error);
-                    setLoading(false);
                 });
         }
         else {
@@ -95,8 +90,6 @@ function Task() {
             setAssignedTo([]);
             setFiles([]);
             setToDos([]);
-
-            setLoading(false);
         }
     }, [task_id]);
 
@@ -134,7 +127,8 @@ function Task() {
             completed,
             assignedTo,
             files,
-            user
+            user,
+            task_id
         });
 
         navigate('/tasks');

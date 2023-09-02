@@ -7,7 +7,8 @@ export async function saveTaskHelper({
                                          completed,
                                          assignedTo,
                                          files,
-                                         user
+                                         user,
+                                         taskId
                                      }) {
     const token = localStorage.getItem('token');
     const headersConfig = {
@@ -29,27 +30,41 @@ export async function saveTaskHelper({
         completed
     };
 
-    let taskId;
+    if (taskId === null) {
+        // Create a new task
+        try {
+            const response = await axios.post('http://localhost:8080/tasks/add', payload, {
+                headers: headersConfig
+            });
 
-    try {
-        const response = await axios.post('http://localhost:8080/tasks/add', payload, {
-            headers: headersConfig
-        });
+            taskId = response.data.id;
 
-        taskId = response.data.id;
-    } catch (error) {
-        console.error("Task creation error:", error);
-        return;
+        } catch (error) {
+            console.error("Task creation error:", error);
+            return;
+        }
+
+        // Link the user to the newly created task
+        try {
+            await axios.put(`http://localhost:8080/users/${user.email}/usercreatestask/${taskId}`, null, {
+                headers: headersConfig
+            });
+        } catch (error) {
+            console.error("User task creation error:", error);
+            return;
+        }
+    } else {
+        // Update the existing task
+        try {
+            await axios.put(`http://localhost:8080/tasks/update/${taskId}`, payload, {
+                headers: headersConfig
+            });
+        } catch (error) {
+            console.error("Task update error:", error);
+            return;
+        }
     }
 
-    try {
-        await axios.put(`http://localhost:8080/users/${user.email}/usercreatestask/${taskId}`, null, {
-            headers: headersConfig
-        });
-    } catch (error) {
-        console.error("User task creation error:", error);
-        return;
-    }
 
     try {
         for (const user of assignedTo) {

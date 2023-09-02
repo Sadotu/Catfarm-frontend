@@ -12,7 +12,6 @@
 .task-card-container:hover,
 .task-card-container-completed:hover {
     transform: translateY(-2px);
-    cursor: pointer;
     transition: transform 0.3s ease;
 }
 
@@ -45,6 +44,7 @@
     text-decoration: underline;
     font-family: Roboto, sans-serif;
     opacity: 60%;
+    cursor: pointer;
 }
 
 .task-card-deadline {

@@ -24,7 +24,6 @@ function TaskCard( { task, clickHandler } ) {
 
     const deleteTask = async (data) => {
         const task_id = data.id;
-        console.log(task_id)
         const token = localStorage.getItem('token');
 
         const isConfirmed = window.confirm('Are you sure you want to delete this task?');
@@ -90,10 +89,10 @@ function TaskCard( { task, clickHandler } ) {
     }
 
     return (
-        <div className={isCompleted ? "task-card-container-completed" : "task-card-container"} onClick={clickHandler}>
+        <div className={isCompleted ? "task-card-container-completed" : "task-card-container"}>
             <div className="card-top">
                 <div className="task-card-header">
-                    <h3 className="task-card-title">{task.nameTask}</h3>
+                    <h3 className="task-card-title" onClick={clickHandler}>{task.nameTask}</h3>
                 </div>
                 {isCompleted
                     ? <h6 className="task-card-deadline">Completed</h6>
