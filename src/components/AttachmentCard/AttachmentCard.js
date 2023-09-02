@@ -8,7 +8,10 @@ import Button from "../Button/Button";
 function AttachmentCard({ attachments, setAttachments, attachmentCardVisible }) {
 
     const addAttachment = (event) => {
-        const files = Array.from(event.target.files);
+        const files = Array.from(event.target.files).map(file => ({
+            ...file,
+            fileName: file.name
+        }));
         setAttachments([...attachments, ...files]);
     };
 
@@ -28,10 +31,10 @@ function AttachmentCard({ attachments, setAttachments, attachmentCardVisible }) 
                 {attachments.map((attachment, index) => (
                     <div key={index} className="attachment-principal">
                         <div className="file-icon">
-                            {iconHelper(attachment.name)}
+                            {iconHelper(attachment.fileName)}
                         </div>
                         <div className="attachment-meta">
-                            <span>{attachment.name}</span>
+                            <span>{attachment.fileName}</span>
                             <span>{attachment.size / 1000}KB</span>
                         </div>
                         <Button

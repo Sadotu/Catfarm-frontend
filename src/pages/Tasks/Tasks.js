@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import "./Tasks.css"
 import axios from 'axios';
 import {AuthContext} from "../../context/AuthContext";
+import {useNavigate} from "react-router-dom";
 // Components
 import Header from "../../components/Header/Header";
 import Navigation from "../../components/Navigation/Navigation";
@@ -13,6 +14,7 @@ import {filterData} from "../../helpers/filterDataHelper"
 import {fetchEnabledUsers} from "../../helpers/fetchHelper";
 
 function Tasks() {
+    const navigate = useNavigate();
     const { user } = useContext(AuthContext)
     const [filteredTasks, setFilteredTasks] = useState([])
     const [activeUsers, setActiveUsers] = useState([])
@@ -86,7 +88,7 @@ function Tasks() {
                                         <TaskCard
                                             task={task}
                                             clickHandler={() => {
-                                                // Handle click event
+                                                navigate(`/task/${task.id}`)
                                             }}
                                         />
                                     ))}

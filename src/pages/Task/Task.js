@@ -1,7 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 import './Task.css'
-import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
+import {useNavigate, useParams} from "react-router-dom";
+import axios from "axios";
 // Components
 import Footer from "../../components/Footer/Footer";
 import Navigation from "../../components/Navigation/Navigation";
@@ -28,13 +29,19 @@ import Eye from "../../assets/icons/eye.svg"
 import {editableDescription, editableTitle} from "../../helpers/editableHelper";
 import { fetchEnabledUsers } from "../../helpers/fetchHelper";
 import { manageVolunteers } from "../../helpers/selectionHelper";
+import { saveTaskHelper} from "../../helpers/saveTaskHelper";
+import {formatDate} from "../../helpers/ISOFormatDate";
 
 function Task() {
-    const { user } = useContext(AuthContext)
+    const { user } = useContext(AuthContext);
+    const currentUserData = user;
+    const { task_id } = useParams();
     const [activeUsers, setActiveUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    // visibility states
     const [showUnselected, setShowUnselected] = useState(false);
     const [unselectedVolunteers, setUnselectedVolunteers] = useState([]);
-    const [volunteerCardVisible, setVolunteerCardVisible] = useState(false);
     const [attachmentCardVisible, setAttachmentCardVisible] = useState(false);
     const [checklistVisibility, setChecklistVisibility] = useState(false)
     // payload states
@@ -44,15 +51,61 @@ function Task() {
     const [completed, setCompleted] = useState(false);
     const [assignedTo, setAssignedTo] = useState([]);
     const [files, setFiles] = useState([]);
-    const [toDos, setToDos] = useState([])
+    const [toDos, setToDos] = useState([]);
 
-    const currentUserData = user;
+    useEffect(() => {
+        setLoading(true);
+        const token = localStorage.getItem('token');
+        handleVolunteerManagement("VOLUNTEER_HANDLER")
+        const headers = {
+            Authorization: `Bearer ${token}`,
+        };
+
+        if (task_id) {
+            axios.get(`http://localhost:8080/tasks/${task_id}`, { headers })
+                .then((response) => {
+                    const data = response.data;
+
+                    if(data.files.length > 0) { setAttachmentCardVisible(true) }
+                    if (data.toDos.length > 0) { setChecklistVisibility(true) }
+
+                    setNameTask(data.nameTask);
+                    const formattedDeadline = formatDate(data.deadline);
+                    setDeadline(formattedDeadline);
+                    setDescription(data.description);
+                    setCompleted(data.completed);
+                    const unselected = activeUsers.filter(user => !assignedTo.includes(user));
+                    setUnselectedVolunteers(unselected);
+                    setAssignedTo(data.assignedTo);
+                    setFiles(data.files);
+                    setToDos(data.toDos);
+
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.log("Error fetching task:", error);
+                    setLoading(false);
+                });
+        }
+        else {
+            setNameTask(null);
+            setDeadline('dd/mm/jj');
+            setDescription(null);
+            setCompleted(false);
+            setAssignedTo([]);
+            setFiles([]);
+            setToDos([]);
+
+            setLoading(false);
+        }
+    }, [task_id]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const users = await fetchEnabledUsers();
                 setActiveUsers(users);
+                handleVolunteerManagement("VOLUNTEER_HANDLER")
             } catch (error) {
                 console.log(error)
             }
@@ -68,98 +121,25 @@ function Task() {
         setAssignedTo(updatedSelectedVolunteers);
         setUnselectedVolunteers(updatedUnselectedVolunteers)
 
-        if (action === 'VOLUNTEER_HANDLER') {
-            setVolunteerCardVisible(prevVisibility => !prevVisibility);
-        }
-
         if (action === 'SHOW_UNSELECTED') {
             setShowUnselected(prevShow => !prevShow);
         }
     }
 
     async function saveTask() {
-        const token = localStorage.getItem('token');
-
-        const date = new Date(Date.parse(deadline));
-
-        date.setHours(16);
-        date.setMinutes(0);
-        date.setSeconds(0);
-
-        const isoString = date.toISOString();
-        const requiredFormatDeadline = isoString.slice(0, 19);
-
-        const payload = {
+        await saveTaskHelper({
             nameTask,
-            requiredFormatDeadline,
+            deadline,
             description,
-            completed
-        };
+            completed,
+            assignedTo,
+            files,
+            user
+        });
 
-        try {
-            const response = await axios.post('http://localhost:8080/tasks/add', payload, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            console.log("Task saved successfully:", response.data);
-            const taskId = response.data.id;
-
-            await axios.put(`http://localhost:8080/users/${user.email}/usercreatestask/${taskId}`, null, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                }})
-
-            for (const user of assignedTo) {
-                try {
-                    const updateUserResponse = await axios.put(`http://localhost:8080/users/${user.email}/task/${taskId}`, null, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        }
-                    });
-
-                    console.log(`Assigned task to user ${user.email}:`, updateUserResponse.data);
-
-                } catch (error) {
-                    console.error(`Error assigning task to user ${user.email}:`, error);
-                }
-            }
-
-            const formData = new FormData();
-            // const file = files[0]
-            // console.log(file)
-            // formData.append('file', file);
-            files.forEach((file) => {
-                // console.log(file)
-                formData.append('file', file);
-            });
-
-            // console.log(formData)
-
-            const fileResponse = await axios.post('http://localhost:8080/files/upload', formData, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data',
-                }
-            });
-
-            const fileIds = fileResponse.data.map(file => file.id);
-
-            await axios.put(`http://localhost:8080/tasks/assignfiles/${taskId}`, { file_ids: fileIds }, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                }
-            });
-        } catch (error) {
-            console.error("Error saving task:", error);
-        }
+        navigate('/tasks');
+        window.location.reload();
     }
-
 
     return (
         <>
@@ -168,7 +148,7 @@ function Task() {
                     <Navigation/>
                     <div className="inner-content-container">
                         <Header
-                            pageTitle="New Task"
+                            pageTitle={task_id ? `Task: ${task_id}` : "New Task"}
                             backButton={true}
                         ></Header>
 
@@ -177,12 +157,11 @@ function Task() {
                                 <div id="editable">
                                     <div id="task-header">
                                         <img className="icon"  alt=""/>
-                                        <h3 onClick={() => {editableTitle(setNameTask)}} id="editable-text" className="task-title">Click here to edit the task title...</h3>
+                                        <h3 onClick={() => {editableTitle(setNameTask)}} id="editable-text" className="task-title">{nameTask ? nameTask : "Click here to edit the task title..."}</h3>
                                     </div>
 
                                     <div className="extra-task-options">
                                         <VolunteerOption
-                                            volunteerCardVisible={volunteerCardVisible}
                                             selectedVolunteers={assignedTo}
                                             showUnselected={showUnselected}
                                             unselectedVolunteers={unselectedVolunteers}
@@ -220,7 +199,7 @@ function Task() {
                                             <h3>Description</h3>
                                         </div>
                                         <div id="editable-description" className="description-content">
-                                            <h5 onClick={() => {editableDescription(setDescription)}} id="editable-text-description">Click here to edit the description...</h5>
+                                            <h5 onClick={() => {editableDescription(setDescription)}} id="editable-text-description">{description ? description : "Click here to edit the description..."}</h5>
                                         </div>
                                     </div>
 
@@ -251,11 +230,10 @@ function Task() {
                                 <div className="top-task-menu">
                                     <p className="task-menu-header">Add to task</p>
                                     <Button
-                                        className="event-task-menu-button"
+                                        className="event-task-menu-button not-allowed"
                                         buttonText="Volunteers"
                                         buttonClass="menu-pane-buttons"
                                         icon={User}
-                                        clickHandler={() => handleVolunteerManagement("VOLUNTEER_HANDLER")}
                                         iconClass="icon-space"
                                     ></Button>
                                     <Button

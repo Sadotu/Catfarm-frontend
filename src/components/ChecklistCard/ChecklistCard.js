@@ -8,13 +8,13 @@ import {editableToDoTitle} from "../../helpers/editableHelper"
 function ChecklistCard({ toDos, setToDos, checklistVisibility }) {
 
     const addToDo = () => {
-        const newToDo = { text: "Replace with your to do by clicking here", completed: false };
+        const newToDo = { description: "Replace with your to do by clicking here", completed: false };
         setToDos([...toDos, newToDo]);
     };
 
     function updateToDo(index, newText) {
         const updatedToDos = [...toDos];
-        updatedToDos[index].text = newText;
+        updatedToDos[index].description = newText;
         setToDos(updatedToDos);
     }
 
@@ -68,7 +68,7 @@ function ChecklistCard({ toDos, setToDos, checklistVisibility }) {
                                 onChange={() => toggleToDo(index)}
                             />
                             <div className="title-and-cross" id="title-and-cross">
-                                <h3 id="todo" onClick={() => { editableToDoTitle(index, updateToDo) }}>{toDo.text}</h3>
+                                <h3 id="todo" onClick={() => { editableToDoTitle(index, updateToDo) }}>{toDo.description}</h3>
                                 <div className="x-delete" onClick={() => removeToDo(index)} ></div>
                             </div>
                         </div>

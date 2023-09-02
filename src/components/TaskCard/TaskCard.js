@@ -90,7 +90,7 @@ function TaskCard( { task, clickHandler } ) {
     }
 
     return (
-        <div className={isCompleted ? "task-card-container-completed" : "task-card-container"}>
+        <div className={isCompleted ? "task-card-container-completed" : "task-card-container"} onClick={clickHandler}>
             <div className="card-top">
                 <div className="task-card-header">
                     <h3 className="task-card-title">{task.nameTask}</h3>

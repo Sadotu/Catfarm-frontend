@@ -3,10 +3,10 @@ import User from "../../assets/icons/user.svg";
 import "./VolunteerOption.css"
 import Button from "../Button/Button";
 
-function VolunteerOption( {volunteerCardVisible, selectedVolunteers, showUnselected, unselectedVolunteers, handleVolunteerManagement} ) {
+function VolunteerOption( {selectedVolunteers, showUnselected, unselectedVolunteers, handleVolunteerManagement} ) {
 
     return (
-        <div className={`volunteer-option ${volunteerCardVisible ? '' : 'hidden'}`}>
+        <div className="volunteer-option">
             <h3 className="volunteer-option-header">Volunteers</h3>
             <div className="volunteer-option-content">
                 {selectedVolunteers.map((v) => (
