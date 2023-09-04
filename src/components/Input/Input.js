@@ -1,4 +1,5 @@
 import React from 'react';
+import "./Input.css"
 
 function Input({
                    inputType,
@@ -24,7 +25,7 @@ function Input({
                 disabled={disabled}
                 style={style}
             />
-            {error[inputName] && <p>{error[inputName].message}</p>}
+            {error[inputName] && <p className="input-error">{error[inputName].message}</p>}
         </>
     );
 }
