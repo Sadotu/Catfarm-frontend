@@ -19,3 +19,9 @@ textarea {
     margin-top: 5px;
     font-size: 14px;
 }
+
+.input-error {
+    margin-top: -15px;
+    margin-bottom: 10px;
+    color: red;
+}

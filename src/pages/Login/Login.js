@@ -1,14 +1,17 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import "./Login.css"
+import {useNavigate} from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+// Components
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 
 function Login() {
     const { login } = useContext(AuthContext)
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const navigate = useNavigate();
+    const { register, handleSubmit, formState: { errors }, reset, setError } = useForm();
 
     const submitHandler = async (data) => {
         try {
@@ -18,47 +21,66 @@ function Login() {
                     'password': data.password
                 }
             )
-            login(res.data.jwt, "/profile")
+            login(res.data.jwt, "/profile");
         } catch (e) {
-            console.error("Onjuist email and wachtwoord combinatie", e)
-            reset()
+            reset();
+            console.error("Invalid email or password", e);
+            setError("email", {
+                type: "manual",
+                message: "Invalid email or password"
+            });
+            setError("password", {
+                type: "manual",
+                message: "Invalid email or password"
+            });
         }
+
     };
 
     return (
         <>
-            <form onSubmit={handleSubmit(submitHandler)}>
-                <div className="container">
-                    <div className="input-container">
-                        <label className="form-label">Email: </label>
-                        <Input
-                            inputType="text"
-                            inputName="email"
-                            inputId="email"
-                            validationRules={{ required: "Dit veld is verplicht" }}
-                            register={register}
-                            error={errors}
-                        />
+            <div className="login-outer-container">
+                <form onSubmit={handleSubmit(submitHandler)}>
+                    <div className="login-inner-container">
+                        <div className="login-form-inputs">
+                            <label className="form-label">Email: </label>
+                            <Input
+                                className="input-field"
+                                inputType="text"
+                                inputName="email"
+                                inputId="email"
+                                validationRules={{ required: "Dit veld is verplicht" }}
+                                register={register}
+                                error={errors}
+                            />
+                            <label className="form-label">Password: </label>
+                            <Input
+                                className="input-field"
+                                inputType="password"
+                                inputName="password"
+                                inputId="password"
+                                validationRules={{ required: "Dit veld is verplicht" }}
+                                register={register}
+                                error={errors}
+                            />
+                        </div>
+                        <div className="login-form-buttons">
+                            <Button
+                                buttonType="submit"
+                                buttonText="Inloggen"
+                                className="general-button"
+                            ></Button>
+                            <Button
+                                buttonText="Sign up!"
+                                className="filter-sort-button"
+                                clickHandler={() => {navigate("/signup")}}
+                            ></Button>
+                        </div>
                     </div>
-                    <div className="input-container">
-                        <label className="form-label">Password: </label>
-                        <Input
-                            inputType="text"
-                            inputName="password"
-                            inputId="password"
-                            validationRules={{ required: "Dit veld is verplicht" }}
-                            register={register}
-                            error={errors}
-                        />
-                    </div>
-                    <Button
-                        buttonType="submit"
-                        buttonText="Inloggen"
-                    ></Button>
-                </div>
-            </form>
+                </form>
+            </div>
 
-            <Link to="/signup">Sign up!</Link>
+
         </>
     );
 }
