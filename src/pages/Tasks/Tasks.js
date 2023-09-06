@@ -86,6 +86,7 @@ function Tasks() {
                                 <div className="main-container-tasks">
                                     {filteredTasks.slice(0, visibleTasks).map(task => (
                                         <TaskCard
+                                            key={task.id}
                                             task={task}
                                             clickHandler={() => {
                                                 navigate(`/task/${task.id}`)

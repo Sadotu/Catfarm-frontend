@@ -54,6 +54,7 @@ function Login() {
                     <Button
                         buttonType="submit"
                         buttonText="Inloggen"
+                        className="general-button"
                     ></Button>
                 </div>
             </form>

@@ -5,6 +5,7 @@ import axios from "axios";
 import Button from "../Button/Button";
 // Helpers
 import { calculateDaysLeftHelper } from "../../helpers/calculateDaysLeftHelper";
+import { completeTask } from "../../helpers/postHelper";
 
 function TaskCard( { task, clickHandler } ) {
     const [daysLeft, setDaysLeft] = useState(null);
@@ -49,44 +50,9 @@ function TaskCard( { task, clickHandler } ) {
         }
     }
 
-    const completeTask = async (data) => {
-        const currentDate = new Date();
-        const deadlineDate = new Date(currentDate.getTime() + 48 * 60 * 60 * 1000);
-        const isoString = deadlineDate.toISOString();
-        data.deadline = isoString.replace('Z', '+00:00');
-        data.completed = !data.completed;
-        setIsCompleted(data.completed);
-
-        const payload = {
-            nameTask: data.nameTask,
-            deadline: data.deadline,
-            description: data.description,
-            completed: data.completed
-        };
-
-        const token = localStorage.getItem('token')
-
-        try {
-            const response = await axios.put(
-                `http://localhost:8080/tasks/update/${task.id}`,
-                payload,
-                {
-                    headers: {
-                        'Content-type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                }
-            );
-
-            if (response && response.data) {
-                task = response.data;
-                setIsCompleted(task.completed);
-            }
-
-        } catch (error) {
-            window.confirm(`Failed to update user:, ${error}`);
-        }
-    }
+    const completeTaskHandler = () => {
+        completeTask(task, setIsCompleted);
+    };
 
     return (
         <div className={isCompleted ? "task-card-container-completed" : "task-card-container"}>
@@ -118,7 +84,7 @@ function TaskCard( { task, clickHandler } ) {
                     <Button
                         buttonText={isCompleted ? "Completed" : "Done"}
                         className={isCompleted ? "event-task-completion-button" : "event-task-done-button"}
-                        clickHandler={() => {completeTask(task)}}
+                        clickHandler={() => {completeTaskHandler(task, setIsCompleted)}}
                     />
                 </div>
             </div>

@@ -21,12 +21,12 @@ function Navigation( { profileInfo } ) {
                 <hr className="separator" />
             </div>
             <ul className="nav-links">
-                <li><NavLink to="/profile" activeClassName="active" className="nav-link">Your Profile</NavLink></li>
-                <li><NavLink to="/database" activeClassName="active" className="nav-link not-allowed" onClick={(e) => e.preventDefault()}>Database</NavLink></li>
-                <li><NavLink to="/calendar" activeClassName="active" className="nav-link not-allowed" onClick={(e) => e.preventDefault()}>Calendar</NavLink></li>
-                <li><NavLink to="/tasks" activeClassName="active" className="nav-link">Tasks</NavLink></li>
-                <li><NavLink to="/volunteers" activeClassName="active" className="nav-link">Volunteers</NavLink></li>
-                <li><NavLink to="/logout" activeClassName="active" className="nav-link" onClick={logout}>Logout</NavLink></li>
+                <li><NavLink to="/profile" className="nav-link">Your Profile</NavLink></li>
+                <li><NavLink to="/database" className="nav-link not-allowed" onClick={(e) => e.preventDefault()}>Database</NavLink></li>
+                <li><NavLink to="/calendar" className="nav-link not-allowed" onClick={(e) => e.preventDefault()}>Calendar</NavLink></li>
+                <li><NavLink to="/tasks" className="nav-link">Tasks</NavLink></li>
+                <li><NavLink to="/volunteers" className="nav-link">Volunteers</NavLink></li>
+                <li><NavLink to="/logout" className="nav-link" onClick={logout}>Logout</NavLink></li>
             </ul>
         </div>
     );

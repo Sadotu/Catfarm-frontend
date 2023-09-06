@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 import './Task.css'
+import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 import {useNavigate, useParams} from "react-router-dom";
-import axios from "axios";
 // Components
 import Footer from "../../components/Footer/Footer";
 import Navigation from "../../components/Navigation/Navigation";
@@ -27,16 +27,17 @@ import Archive from "../../assets/icons/archive-box.svg"
 import Eye from "../../assets/icons/eye.svg"
 // Helpers
 import {editableDescription, editableTitle} from "../../helpers/editableHelper";
-import { fetchEnabledUsers } from "../../helpers/fetchHelper";
+import {fetchTask, fetchEnabledUsers} from "../../helpers/fetchHelper";
 import { manageVolunteers } from "../../helpers/selectionHelper";
-import { saveTaskHelper} from "../../helpers/saveTaskHelper";
-import {formatDate} from "../../helpers/ISOFormatDate";
+import { completeTask } from "../../helpers/postHelper";
+import {formatToISO} from "../../helpers/ISOFormatDate";
 
 function Task() {
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
     const { task_id } = useParams();
     const [activeUsers, setActiveUsers] = useState([]);
+    const [task, setTask] = useState(null);
     const currentUserData = user;
     // visibility states
     const [showUnselected, setShowUnselected] = useState(false);
@@ -53,43 +54,25 @@ function Task() {
     const [toDos, setToDos] = useState([]);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        handleVolunteerManagement("VOLUNTEER_HANDLER")
-        const headers = {
-            Authorization: `Bearer ${token}`,
-        };
-
-        if (task_id) {
-            axios.get(`http://localhost:8080/tasks/${task_id}`, { headers })
-                .then((response) => {
-                    const data = response.data;
-
-                    if(data.files.length > 0) { setAttachmentCardVisible(true) }
-                    if (data.toDos.length > 0) { setChecklistVisibility(true) }
-
-                    setNameTask(data.nameTask);
-                    const formattedDeadline = formatDate(data.deadline);
-                    setDeadline(formattedDeadline);
-                    setDescription(data.description);
-                    setCompleted(data.completed);
-                    const unselected = activeUsers.filter(user => !assignedTo.includes(user));
-                    setUnselectedVolunteers(unselected);
-                    setAssignedTo(data.assignedTo);
-                    setFiles(data.files);
-                    setToDos(data.toDos);
-                })
-                .catch((error) => {
-                    console.log("Error fetching task:", error);
-                });
-        }
-        else {
-            setNameTask(null);
-            setDeadline('dd/mm/jj');
-            setDescription(null);
-            setCompleted(false);
-            setAssignedTo([]);
-            setFiles([]);
-            setToDos([]);
+        if (task_id === undefined) {
+            handleVolunteerManagement("VOLUNTEER_HANDLER")
+        } else {
+            fetchTask(
+                task_id,
+                setAttachmentCardVisible,
+                setChecklistVisibility,
+                setNameTask,
+                setDeadline,
+                setDescription,
+                setCompleted,
+                setUnselectedVolunteers,
+                setAssignedTo,
+                setFiles,
+                setToDos,
+                setTask,
+                activeUsers,
+                assignedTo
+            )
         }
     }, [task_id]);
 
@@ -98,7 +81,7 @@ function Task() {
             try {
                 const users = await fetchEnabledUsers();
                 setActiveUsers(users);
-                handleVolunteerManagement("VOLUNTEER_HANDLER")
+                console.log("Volgorde: fetchData")
             } catch (error) {
                 console.log(error)
             }
@@ -106,7 +89,10 @@ function Task() {
         fetchData();
     },[]);
 
+    console.log(assignedTo)
+
     function handleVolunteerManagement(action, volunteer = null) {
+        console.log("Volgorde: Volunteer Management")
         const {
             updatedSelectedVolunteers,
             updatedUnselectedVolunteers
@@ -120,20 +106,153 @@ function Task() {
     }
 
     async function saveTask() {
-        await saveTaskHelper({
-            nameTask,
-            deadline,
-            description,
-            completed,
-            assignedTo,
-            files,
-            user,
-            task_id
-        });
+        const token = localStorage.getItem('token');
 
-        navigate('/tasks');
-        window.location.reload();
+        const payload = {
+            nameTask,
+            deadline: formatToISO(deadline),
+            description,
+            completed
+        };
+
+        try {
+            const response = await axios.post('http://localhost:8080/tasks/add', payload, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log("Task saved successfully:", response.data);
+            const taskId = response.data.id;
+
+            await axios.put(`http://localhost:8080/users/${user.email}/usercreatestask/${taskId}`, null, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }})
+
+            for (const user of assignedTo) {
+                try {
+                    const updateUserResponse = await axios.put(`http://localhost:8080/users/${user.email}/task/${taskId}`, null, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        }
+                    });
+
+                    console.log(`Assigned task to user ${user.email}:`, updateUserResponse.data);
+
+                } catch (error) {
+                    console.error(`Error assigning task to user ${user.email}:`, error);
+                }
+            }
+
+            const formData = new FormData();
+            files.forEach((file) => {
+                formData.append('file', file);
+            });
+
+            const fileResponse = await axios.post('http://localhost:8080/files/upload', formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+
+            const fileIds = fileResponse.data.map(file => file.id);
+
+            await axios.put(`http://localhost:8080/tasks/assignfiles/${taskId}`, { file_ids: fileIds }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+        } catch (error) {
+            console.error("Error saving task:", error);
+        } finally {
+            navigate("/tasks")
+        }
     }
+
+    // async function updateTask() {
+    //     const token = localStorage.getItem('token');
+    //
+    //     const payload = {
+    //         nameTask,
+    //         deadline: formatToISO(deadline),
+    //         description,
+    //         completed
+    //     };
+    //
+    //     console.log(payload)
+    //
+    //     try {
+    //         const response = await axios.put(`http://localhost:8080/tasks/update/${task_id}`, payload, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${token}`,
+    //                 'Content-Type': 'application/json',
+    //             }
+    //         });
+    //
+    //         console.log("Task updated successfully:", response.data);
+    //         const task = response.data
+    //
+    //         for (const user of assignedTo) {
+    //             const isUserAlreadyAssigned = task.assignedTo.some(existingUser => existingUser.email === user.email);
+    //
+    //             if (!isUserAlreadyAssigned) {
+    //                 try {
+    //                     const updateUserResponse = await axios.put(`http://localhost:8080/users/${user.email}/task/${task_id}`, null, {
+    //                         headers: {
+    //                             'Authorization': `Bearer ${token}`,
+    //                             'Content-Type': 'application/json',
+    //                         }
+    //                     });
+    //
+    //                     console.log(`Assigned task to user ${user.email}:`, updateUserResponse.data);
+    //
+    //                 } catch (error) {
+    //                     console.error(`Error assigning task to user ${user.email}:`, error);
+    //                 }
+    //             } else {
+    //                 console.log(`User ${user.email} is already assigned to the task.`);
+    //             }
+    //         }
+    //
+    //         const formData = new FormData();
+    //         files.forEach((file) => {
+    //             formData.append('file', file);
+    //         });
+    //
+    //         console.log(files)
+    //         console.log(formData)
+    //
+    //         const fileResponse = await axios.post('http://localhost:8080/files/upload', formData, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${token}`,
+    //                 'Content-Type': 'multipart/form-data',
+    //             }
+    //         });
+    //
+    //         const fileIds = fileResponse.data.map(file => file.id);
+    //
+    //         await axios.put(`http://localhost:8080/tasks/assignfiles/${task_id}`, { file_ids: fileIds }, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${token}`,
+    //                 'Content-Type': 'application/json',
+    //             }
+    //         });
+    //     } catch (error) {
+    //         console.error("Error saving task:", error);
+    //     } finally {
+    //         navigate("/tasks")
+    //     }
+    // }
+
+    const completeTaskHandler = () => {
+        completeTask(task, setCompleted);
+    };
 
     return (
         <>
@@ -178,11 +297,12 @@ function Task() {
                                                 setDeadline={setDeadline}
                                             ></EditableDate>
                                         </div>
-                                        <div className="completion-card">
+                                        <div className={task_id ? "completion-card" : "hidden"}>
                                             <h3 className="volunteer-option-header">Close task</h3>
                                             <Button
                                                 buttonText="Done"
                                                 className="event-task-done-button"
+                                                clickHandler={() => {completeTaskHandler(task, setCompleted)}}
                                             ></Button>
                                         </div>
                                     </div>
@@ -214,7 +334,7 @@ function Task() {
                                     <hr className="task-save-line" />
                                     <Button
                                         className="event-task-done-button"
-                                        buttonText="Save"
+                                        buttonText={task_id ? "Update" : "Save"}
                                         clickHandler={saveTask}
                                     ></Button>
                                 </div>
