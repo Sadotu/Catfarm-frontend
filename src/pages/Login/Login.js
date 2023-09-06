@@ -14,6 +14,7 @@ function Login() {
     const { register, handleSubmit, formState: { errors }, reset, setError } = useForm();
 
     const submitHandler = async (data) => {
+        console.log(data)
         try {
             const res = await axios.post(
                 'http://localhost:8080/authenticate', {
@@ -67,7 +68,7 @@ function Login() {
                         <div className="login-form-buttons">
                             <Button
                                 buttonType="submit"
-                                buttonText="Inloggen"
+                                buttonText="Login"
                                 className="general-button"
                             ></Button>
                             <Button
