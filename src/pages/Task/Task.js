@@ -159,26 +159,28 @@ function Task() {
                 }
             }
 
-            const formData = new FormData();
-            files.forEach((file) => {
-                formData.append('file', file);
-            });
+            if (files.length > 0) {
+                const formData = new FormData();
+                files.forEach((file) => {
+                    formData.append('file', file);
+                });
 
-            const fileResponse = await axios.post('http://localhost:8080/files/upload', formData, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data',
-                }
-            });
+                const fileResponse = await axios.post('http://localhost:8080/files/upload', formData, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
+                    }
+                });
 
-            const fileIds = fileResponse.data.map(file => file.id);
+                const fileIds = fileResponse.data.map(file => file.id);
 
-            await axios.put(`http://localhost:8080/tasks/assignfiles/${taskId}`, { file_ids: fileIds }, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                }
-            });
+                await axios.put(`http://localhost:8080/tasks/assignfiles/${taskId}`, { file_ids: fileIds }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+            }
             console.log(toDos)
             for (const todo of toDos) {
                 try {

@@ -2,8 +2,7 @@ export function validateForm({
     assignedTo,
     deadline,
     description,
-    files,
-    toDos
+    files
                       }) {
     const errors = {};
 
@@ -13,7 +12,7 @@ export function validateForm({
     }
 
     // Validate Deadline
-    const datePattern = /^(\d{2})\/(\d{2})\/(\d{2})$/;
+    const datePattern = /^(\d{2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{4})$/;
     if (!deadline.match(datePattern)) {
         errors.deadline = "You must set a deadline";
     }
