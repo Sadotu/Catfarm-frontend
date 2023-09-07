@@ -36,8 +36,6 @@ export const fetchTask = async (
         Authorization: `Bearer ${token}`,
     };
 
-    console.log("Volgorde: fetchHelper")
-
     try {
         const response = await axios.get(`http://localhost:8080/tasks/${task_id}`, { headers });
         const data = response.data;

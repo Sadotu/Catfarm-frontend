@@ -5,14 +5,9 @@ import {iconHelper} from "../../helpers/iconHelper";
 // Components
 import Button from "../Button/Button";
 
-function AttachmentCard({ attachments, setAttachments, attachmentCardVisible }) {
+function AttachmentCard({ attachments, setAttachments, attachmentCardVisible, error, setError }) {
 
     const addAttachment = (event) => {
-        // const files = Array.from(event.target.files).map(file => ({
-        //     ...file,
-        //     fileName: file.name
-        // }));
-        // console.log(event.target.files)
         setAttachments([...attachments, ...event.target.files]);
     };
 
@@ -20,6 +15,9 @@ function AttachmentCard({ attachments, setAttachments, attachmentCardVisible }) 
         const newAttachments = [...attachments];
         newAttachments.splice(index, 1);
         setAttachments(newAttachments);
+        const newErrors = {...error};
+        newErrors.files = "";
+        setError(newErrors);
     };
 
     return (
@@ -46,6 +44,7 @@ function AttachmentCard({ attachments, setAttachments, attachmentCardVisible }) 
                         </Button>
                     </div>
                 ))}
+                {error.files && <p className="error">{error.files}</p>}
             </div>
 
             <input

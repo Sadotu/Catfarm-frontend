@@ -3,9 +3,13 @@ export function editableTitle(setNameTask) {
     let h3 = document.getElementById('editable-text');
 
     let input = document.createElement('input');
-    input.type = 'text';
-    input.value = "Type your title here";
     input.className = "editable-input-title";
+    input.type = 'text';
+    if (h3.textContent === "" || h3.textContent === "Click here to edit the task title...") {
+        input.value = "Type your title here";
+    } else {
+        input.value = h3.textContent;
+    }
 
     div.replaceChild(input, h3);
 
@@ -36,7 +40,12 @@ export function editableDescription(setDescription) {
     let textarea = document.createElement('textarea');
     textarea.rows = 10;
     textarea.cols = 90;
-    textarea.value = "Type your description here...";
+
+    if (h5Description.textContent === "" || h5Description.textContent === "Click here to edit the task description...") {
+        textarea.value = "Type your description here...";
+    } else {
+        textarea.value = h5Description.textContent;
+    }
 
     divDescription.replaceChild(textarea, h5Description);
 

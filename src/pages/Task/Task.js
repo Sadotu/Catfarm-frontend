@@ -31,6 +31,7 @@ import {fetchTask, fetchEnabledUsers} from "../../helpers/fetchHelper";
 import { manageVolunteers } from "../../helpers/selectionHelper";
 import { completeTask } from "../../helpers/postHelper";
 import {formatToISO} from "../../helpers/ISOFormatDate";
+import {validateForm} from "../../helpers/validateForm";
 
 function Task() {
     const { user } = useContext(AuthContext);
@@ -39,6 +40,7 @@ function Task() {
     const [activeUsers, setActiveUsers] = useState([]);
     const [task, setTask] = useState(null);
     const currentUserData = user;
+    const [formErrors, setFormErrors] = useState({});
     // visibility states
     const [showUnselected, setShowUnselected] = useState(false);
     const [unselectedVolunteers, setUnselectedVolunteers] = useState([]);
@@ -46,7 +48,7 @@ function Task() {
     const [checklistVisibility, setChecklistVisibility] = useState(false)
     // payload states
     const [nameTask, setNameTask] = useState(null);
-    const [deadline, setDeadline] = useState('dd/mm/jj');
+    const [deadline, setDeadline] = useState('dd/mm/yy');
     const [description, setDescription] = useState(null);
     const [completed, setCompleted] = useState(false);
     const [assignedTo, setAssignedTo] = useState([]);
@@ -81,7 +83,6 @@ function Task() {
             try {
                 const users = await fetchEnabledUsers();
                 setActiveUsers(users);
-                console.log("Volgorde: fetchData")
             } catch (error) {
                 console.log(error)
             }
@@ -89,10 +90,7 @@ function Task() {
         fetchData();
     },[]);
 
-    console.log(assignedTo)
-
     function handleVolunteerManagement(action, volunteer = null) {
-        console.log("Volgorde: Volunteer Management")
         const {
             updatedSelectedVolunteers,
             updatedUnselectedVolunteers
@@ -106,6 +104,19 @@ function Task() {
     }
 
     async function saveTask() {
+        const errors = validateForm({
+            assignedTo,
+            deadline,
+            description,
+            files,
+            toDos
+        });
+
+        if (Object.keys(errors).length > 0) {
+            setFormErrors(errors);
+            return;
+        }
+
         const token = localStorage.getItem('token');
 
         const payload = {
@@ -168,6 +179,20 @@ function Task() {
                     'Content-Type': 'application/json',
                 }
             });
+            console.log(toDos)
+            for (const todo of toDos) {
+                try {
+                    const todoResponse = await axios.post(`http://localhost:8080/task/todos/${taskId}/create`, todo, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    console.log(`Todo added to task ${taskId}:`, todoResponse.data);
+                } catch (error) {
+                    console.error(`Error adding todo to task ${taskId}:`, error);
+                }
+            }
         } catch (error) {
             console.error("Error saving task:", error);
         } finally {
@@ -274,12 +299,15 @@ function Task() {
                                     </div>
 
                                     <div className="extra-task-options">
-                                        <VolunteerOption
-                                            selectedVolunteers={assignedTo}
-                                            showUnselected={showUnselected}
-                                            unselectedVolunteers={unselectedVolunteers}
-                                            handleVolunteerManagement={handleVolunteerManagement}
-                                        ></VolunteerOption>
+                                        <div className="volunteer-option-card">
+                                            <VolunteerOption
+                                                selectedVolunteers={assignedTo}
+                                                showUnselected={showUnselected}
+                                                unselectedVolunteers={unselectedVolunteers}
+                                                handleVolunteerManagement={handleVolunteerManagement}
+                                            ></VolunteerOption>
+                                            {formErrors.assignedTo && <p className="error">{formErrors.assignedTo}</p>}
+                                        </div>
 
                                         <div className="notification-card">
                                             <h3 className="volunteer-option-header">Notifications</h3>
@@ -296,6 +324,7 @@ function Task() {
                                                 deadline={deadline}
                                                 setDeadline={setDeadline}
                                             ></EditableDate>
+                                            {formErrors.deadline && <p className="error">{formErrors.deadline}</p>}
                                         </div>
                                         <div className={task_id ? "completion-card" : "hidden"}>
                                             <h3 className="volunteer-option-header">Close task</h3>
@@ -314,6 +343,7 @@ function Task() {
                                         </div>
                                         <div id="editable-description" className="description-content">
                                             <h5 onClick={() => {editableDescription(setDescription)}} id="editable-text-description">{description ? description : "Click here to edit the description..."}</h5>
+                                            {formErrors.description && <p className="error">{formErrors.description}</p>}
                                         </div>
                                     </div>
 
@@ -321,6 +351,8 @@ function Task() {
                                         attachments={files}
                                         setAttachments={setFiles}
                                         attachmentCardVisible={attachmentCardVisible}
+                                        error={formErrors ? formErrors : ""}
+                                        setError={setFormErrors}
                                     ></AttachmentCard>
 
                                     <ChecklistCard
