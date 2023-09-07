@@ -181,19 +181,16 @@ function Task() {
                     }
                 });
             }
-            console.log(toDos)
-            for (const todo of toDos) {
-                try {
-                    const todoResponse = await axios.post(`http://localhost:8080/task/todos/${taskId}/create`, todo, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        }
-                    });
-                    console.log(`Todo added to task ${taskId}:`, todoResponse.data);
-                } catch (error) {
-                    console.error(`Error adding todo to task ${taskId}:`, error);
-                }
+            try {
+                const todoResponse = await axios.post(`http://localhost:8080/task/todos/${taskId}/create`, toDos, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+                console.log(`Todo added to task ${taskId}:`, todoResponse.data);
+            } catch (error) {
+                console.error(`Error adding todo to task ${taskId}:`, error);
             }
         } catch (error) {
             console.error("Error saving task:", error);
