@@ -43,6 +43,7 @@ export function validateTaskForm({
     }
 
     return errors;
+}
 
 export function validateRegisterForm(data, setError) {
     if (!data.email || !/\S+@\S+\.\S+/.test(data.email)) {

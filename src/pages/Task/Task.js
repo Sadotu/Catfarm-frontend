@@ -31,7 +31,7 @@ import {fetchTask, fetchEnabledUsers} from "../../helpers/fetchHelper";
 import { manageVolunteers } from "../../helpers/selectionHelper";
 import { completeTask } from "../../helpers/postHelper";
 import {formatToISO} from "../../helpers/ISOFormatDate";
-import {validateForm} from "../../helpers/validateForm";
+import {validateTaskForm} from "../../helpers/validateForm";
 
 function Task() {
     const { user } = useContext(AuthContext);
@@ -113,7 +113,7 @@ function Task() {
     }
 
     async function saveTask() {
-        const errors = validateForm({
+        const errors = validateTaskForm({
             assignedTo,
             deadline,
             description,
@@ -209,7 +209,7 @@ function Task() {
     }
 
     async function updateTask() {
-        const formErrors = validateForm({
+        const formErrors = validateTaskForm({
             assignedTo,
             deadline,
             description,
