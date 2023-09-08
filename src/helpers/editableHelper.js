@@ -78,9 +78,14 @@ export function editableToDoTitle(index, updateToDo) {
 
     let input = document.createElement('input');
     input.type = 'text';
-    input.value = "Replace text with your todo";
     input.className = "editable-input-title";
     input.maxLength = 100;
+
+    if (h3.textContent === "" || h3.textContent === "Replace with your to do by clicking here") {
+        input.value = "Replace text with your todo";
+    } else {
+        input.value = h3.textContent;
+    }
 
     div.replaceChild(input, h3);
 

@@ -2,7 +2,8 @@ export function validateForm({
     assignedTo,
     deadline,
     description,
-    files
+    files,
+    toDos
                       }) {
     const errors = {};
 
@@ -26,10 +27,17 @@ export function validateForm({
 
     // Validate Attachments
     if (files.length > 0) {
-        for (const file of files) {
-            if (file.size > 5000000) { // 5MB in bytes
-                errors.files = "Each file must be less than 5MB";
-                break;
+        const fileNames = files.map(file => file.name);
+        const uniqueFileNames = new Set(fileNames);
+
+        if (fileNames.length !== uniqueFileNames.size) {
+            errors.files = "Cannot have files with the same name";
+        } else {
+            for (const file of files) {
+                if (file.size > 5000000) { // 5MB in bytes
+                    errors.files = "Each file must be less than 5MB";
+                    break;
+                }
             }
         }
     }
