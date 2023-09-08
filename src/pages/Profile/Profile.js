@@ -111,7 +111,7 @@ function Profile() {
                                     />
                                 </div>
                                 <div className="form-inner-container">
-                                    <div className="form-labels">
+                                    <div className="form-labels profile-margin-labels-input">
                                         <label htmlFor="fullName">Full Name:</label>
                                         <label htmlFor="age">Age:</label>
                                         <label htmlFor="pronouns">Pronouns:</label>
@@ -120,7 +120,7 @@ function Profile() {
                                         <label htmlFor="bio">Bio:</label>
                                     </div>
                                     <div className="form-divider"></div>
-                                    <div className="form-inputs">
+                                    <div className="form-inputs profile-margin-labels-input">
                                         <Input
                                             defaultValue={user.fullName}
                                             inputType="text"
@@ -135,7 +135,7 @@ function Profile() {
                                         />
                                         <Input
                                             defaultValue={user.age}
-                                            inputType="text"
+                                            inputType="number"
                                             inputName="age"
                                             className="input-field"
                                             inputId="age"

@@ -16,7 +16,11 @@ function AuthContextProvider({ children }) {
 
     const registerUser = async (data) => {
         try {
-            await axios.post('http://localhost:8080/create', data);
+            await axios.post('http://localhost:8080/users/create', data, {
+                headers: {
+                    'Content-type': 'application/json'
+                }
+            });
             console.log("Hoera, je hebt een nieuw account aangemaakt!")
             console.log("Probeer ermee in te loggen")
             navigate("/login")

@@ -55,6 +55,8 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+}
+.profile-margin-labels-input {
     margin-top: 280px;
 }
 
