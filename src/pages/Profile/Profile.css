@@ -52,6 +52,10 @@
     margin-bottom: 15px;
 }
 
+.profile-form-wrapper {
+    position: relative;
+}
+
 .form-labels, .form-inputs {
     display: flex;
     flex-direction: column;
@@ -63,6 +67,7 @@
 
 .form-labels {
     margin-left: 50px;
+    margin-top: 290px;
 }
 
 .form-labels label {
@@ -72,7 +77,7 @@
     font-size: 17px;
     color: var(--task-option-headers);
     margin-right: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 34px;
 }
 
 .form-divider {

@@ -10,12 +10,14 @@ import Input from "../../components/Input/Input";
 import Footer from "../../components/Footer/Footer";
 import Button from "../../components/Button/Button";
 import DragAndDrop from "../../components/DragAndDrop/DragAndDrop";
+import SecurityCard from "../../components/SecurityCard/SecurityCard";
 
 function Profile() {
     const { user, updateUser } = useContext(AuthContext)
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm();
+    const { register: profileInfo, handleSubmit: submitProfileInfo, formState: { profileErrors }, setValue } = useForm();
     const [isEditable, setEditable] = useState(false);
     const [triggerUpload, setTriggerUpload] = useState(false);
+    const [passwordCardVisibility, setPasswordCardVisibility] = useState(false)
 
     useEffect(() => {
         if (user) {
@@ -101,7 +103,7 @@ function Profile() {
                                         <Button
                                             buttonText={isEditable ? "Save" : "Edit Profile"}
                                             className={isEditable ? "event-task-done-button-editable" : "event-task-done-button"}
-                                            clickHandler={isEditable ? handleSubmit(toggleAndSave) : toggleAndSave}
+                                            clickHandler={isEditable ? submitProfileInfo(toggleAndSave) : toggleAndSave}
                                         ></Button>
                                     </div>
                                     <DragAndDrop
@@ -120,77 +122,89 @@ function Profile() {
                                         <label htmlFor="bio">Bio:</label>
                                     </div>
                                     <div className="form-divider"></div>
-                                    <div className="form-inputs profile-margin-labels-input">
-                                        <Input
-                                            defaultValue={user.fullName}
-                                            inputType="text"
-                                            inputName="fullName"
-                                            className="input-field"
-                                            inputId="fullName"
-                                            validationRules={{ required: "This field is required" }}
-                                            register={register}
-                                            error={errors}
-                                            disabled={!isEditable}
-                                            style={disabledStyle}
-                                        />
-                                        <Input
-                                            defaultValue={user.age}
-                                            inputType="number"
-                                            inputName="age"
-                                            className="input-field"
-                                            inputId="age"
-                                            validationRules={{ required: "This field is required" }}
-                                            register={register}
-                                            error={errors}
-                                            disabled={!isEditable}
-                                            style={disabledStyle}
-                                        />
-                                        <Input
-                                            defaultValue={user.pronouns}
-                                            inputType="text"
-                                            inputName="pronouns"
-                                            className="input-field"
-                                            inputId="pronouns"
-                                            validationRules={{ required: "This field is required" }}
-                                            register={register}
-                                            error={errors}
-                                            disabled={!isEditable}
-                                            style={disabledStyle}
-                                        />
-                                        <Input
-                                            defaultValue={user.email}
-                                            inputType="text"
-                                            inputName="email"
-                                            className="input-field"
-                                            inputId="email"
-                                            validationRules={{ required: "This field is required" }}
-                                            register={register}
-                                            error={errors}
-                                            disabled={!isEditable}
-                                            style={disabledStyle}
-                                        />
-                                        <Input
-                                            defaultValue={user.phoneNumber}
-                                            inputType="text"
-                                            inputName="phoneNumber"
-                                            className="input-field"
-                                            inputId="phoneNumber"
-                                            validationRules={{ required: "This field is required" }}
-                                            register={register}
-                                            error={errors}
-                                            disabled={!isEditable}
-                                            style={disabledStyle}
-                                        />
-                                        <textarea
-                                            defaultValue={user.bio}
-                                            id="bio"
-                                            className="full-width-textarea"
-                                            rows="6"
-                                            cols="80"
-                                            {...register("bio")}
-                                            disabled={!isEditable}
-                                            style={disabledStyle}
-                                        />
+                                    <div className="profile-form-wrapper">
+                                        <div className="profile-security">
+                                            <div className="security-header">
+                                                <h3>Password</h3>
+                                                <hr />
+                                            </div>
+                                            <SecurityCard
+                                                passwordCardVisibility={passwordCardVisibility}
+                                                setPasswordCardVisibility={setPasswordCardVisibility}
+                                            ></SecurityCard>
+                                        </div>
+                                        <div className="form-inputs profile-margin-labels-input">
+                                            <Input
+                                                defaultValue={user.fullName}
+                                                inputType="text"
+                                                inputName="fullName"
+                                                className="input-field"
+                                                inputId="fullName"
+                                                validationRules={{ required: "This field is required" }}
+                                                register={profileInfo}
+                                                error={profileErrors}
+                                                disabled={!isEditable}
+                                                style={disabledStyle}
+                                            />
+                                            <Input
+                                                defaultValue={user.age}
+                                                inputType="number"
+                                                inputName="age"
+                                                className="input-field"
+                                                inputId="age"
+                                                validationRules={{ required: "This field is required" }}
+                                                register={profileInfo}
+                                                error={profileErrors}
+                                                disabled={!isEditable}
+                                                style={disabledStyle}
+                                            />
+                                            <Input
+                                                defaultValue={user.pronouns}
+                                                inputType="text"
+                                                inputName="pronouns"
+                                                className="input-field"
+                                                inputId="pronouns"
+                                                validationRules={{ required: "This field is required" }}
+                                                register={profileInfo}
+                                                error={profileErrors}
+                                                disabled={!isEditable}
+                                                style={disabledStyle}
+                                            />
+                                            <Input
+                                                defaultValue={user.email}
+                                                inputType="text"
+                                                inputName="email"
+                                                className="input-field"
+                                                inputId="email"
+                                                validationRules={{ required: "This field is required" }}
+                                                register={profileInfo}
+                                                error={profileErrors}
+                                                disabled={!isEditable}
+                                                style={disabledStyle}
+                                            />
+                                            <Input
+                                                defaultValue={user.phoneNumber}
+                                                inputType="text"
+                                                inputName="phoneNumber"
+                                                className="input-field"
+                                                inputId="phoneNumber"
+                                                validationRules={{ required: "This field is required" }}
+                                                register={profileInfo}
+                                                error={profileErrors}
+                                                disabled={!isEditable}
+                                                style={disabledStyle}
+                                            />
+                                            <textarea
+                                                defaultValue={user.bio}
+                                                id="bio"
+                                                className="full-width-textarea"
+                                                rows="6"
+                                                cols="80"
+                                                {...profileInfo("bio")}
+                                                disabled={!isEditable}
+                                                style={disabledStyle}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </form>
