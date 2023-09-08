@@ -31,6 +31,8 @@ function DragAndDrop({ onFileDrop, user, isSaveTriggered  }) {
         const formData = new FormData();
         formData.append('file', uploadedFile);
 
+        console.log(formData)
+
         axios.post('http://localhost:8080/files/upload', formData, {
             headers: {
                 'Authorization': `Bearer ${token}`,

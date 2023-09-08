@@ -102,7 +102,7 @@ const Filter = ({ volunteers, handleFilter }) => {
                                 <DropdownMenu.Separator className="DropdownMenuSeparator" />
                                 {volunteers.map((volunteer) => (
                                     <DropdownMenu.CheckboxItem
-                                        key={volunteer.id}
+                                        key={volunteer.email}
                                         className="DropdownMenuCheckboxItem"
                                         checked={volunteersChecked.includes(volunteer.email)}
                                         onCheckedChange={(checked) => {
@@ -121,7 +121,7 @@ const Filter = ({ volunteers, handleFilter }) => {
                                         </DropdownMenu.ItemIndicator>
                                         {volunteer.fullName}
                                     </DropdownMenu.CheckboxItem>
-                                ))}
+                                    ))}
                             </DropdownMenu.SubContent>
                         </DropdownMenu.Portal>
                     </DropdownMenu.Sub>

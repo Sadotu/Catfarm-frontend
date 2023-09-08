@@ -1,0 +1,161 @@
+/*Individual task specific*/
+.main-container-task {
+    background-color: var(--main-tasks-background-color);
+    border-top: 1px solid var(--main-top-border-black);
+    flex-grow: 1;
+    padding: 50px;
+    display: flex;
+    gap: 30px;
+}
+.hidden {
+    display: none;
+}
+.task-content {
+    width: 100%;
+    max-height: 700px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--main-task-content-background);
+    border-radius: 10px;
+    border: 1px solid var(--main-task-content-border);
+    padding: 20px;
+}
+.error {
+    color: red;
+    width: 200px;
+    font-size: 14px;
+    font-family: var(--main-font-roboto);
+    text-decoration: underline;
+    padding: 5px 0;
+}
+.extra-task-options {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-left: 47px;
+    margin-top: 30px;
+}
+
+#editable h3 {
+    font-family: var(--main-font-roboto-mono);
+    font-size: 15px;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: var(--task-title);
+}
+
+.editable-input-title {
+    width: 90%;
+}
+
+#task-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.icon {
+    content: url('../../assets/icons/chalkboard.svg');
+    margin-right: 15px;
+    color: var(--task-option-headers);
+}
+
+/* Menu panes */
+.task-menu{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.task-menu-header {
+    font-family: var(--main-font-roboto-mono);
+    font-weight: bolder;
+    font-size: 18px;
+    opacity: 75%;
+}
+.top-task-menu {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-task-content-background);
+    padding: 10px;
+    border: 1px solid var(--main-task-content-border);
+    border-radius: 10px;
+    gap: 10px;
+}
+.bottom-task-menu {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-task-content-background);
+    padding: 10px;
+    border: 1px solid var(--main-task-content-border);
+    border-radius: 10px;
+    gap: 10px;
+}
+
+/* Volunteer option card */
+.volunteer-option-card {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Notification card */
+.notification-card {
+    margin-right: 25px;
+    margin-bottom: 10px;
+}
+
+/* Deadline card */
+.deadline-card {
+    margin-right: 25px;
+}
+.deadline-content {
+    display: flex;
+    flex-direction: row;
+}
+.edit-margin-left {
+    margin-left: -10px;
+}
+
+/* Description card */
+.description-icon {
+    content: url('../../assets/icons/list.svg');
+    margin-right: 15px;
+    color: var(--task-option-headers);
+}
+.description-card {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.description-header {
+    display: flex;
+    flex-direction: row;
+}
+.description-content {
+    margin-left: 47px;
+    font-size: 15px;
+    font-family: var(--main-font-roboto-mono);
+    color: var(--task-option-headers);
+}
+
+/* Attachment card */
+.attachment-error-div {
+    display: flex;
+    flex-direction: column;
+}
+
+/* save button */
+.task-save-line {
+    width: 600px;
+    margin: 10px;
+    color: var(--task-option-headers);
+}
+.task-save-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+}

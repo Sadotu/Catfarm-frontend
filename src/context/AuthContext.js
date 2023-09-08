@@ -62,7 +62,6 @@ function AuthContextProvider({ children }) {
                 user: response.data,
                 status: "done"
             });
-            console.log("De gebruiker is ingelogd!");
             if (redirect) {navigate(redirect);}
         } catch (error) {
             console.error("Er is een fout opgetreden bij het ophalen van de gebruikersgegevens", error);

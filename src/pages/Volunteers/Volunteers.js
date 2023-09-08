@@ -1,10 +1,11 @@
 import React, { useEffect, useState} from 'react';
 import "./Volunteers.css"
-import axios from "axios";
 // Components
 import Navigation from "../../components/Navigation/Navigation";
 import Header from "../../components/Header/Header";
 import VolunteerCard from "../../components/VolunteerCard/VolunteerCard";
+// Helpers
+import {fetchEnabledUsers} from "../../helpers/fetchHelper";
 
 
 function Volunteers() {
@@ -12,19 +13,11 @@ function Volunteers() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const token = localStorage.getItem('token');
-
             try {
-                const headers = {
-                    Authorization: `Bearer ${token}`,
-                };
-
-                const response = await axios.get('http://localhost:8080/users/enabled', { headers });
-                const users = response.data;
+                const users = await fetchEnabledUsers();
                 setActiveUsers(users);
-
             } catch (error) {
-                console.log('Error retrieving task data:', error);
+                console.log(error)
             }
         };
         fetchData();

@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import "./Tasks.css"
 import axios from 'axios';
 import {AuthContext} from "../../context/AuthContext";
+import {useNavigate} from "react-router-dom";
 // Components
 import Header from "../../components/Header/Header";
 import Navigation from "../../components/Navigation/Navigation";
@@ -10,8 +11,10 @@ import TaskCard from "../../components/TaskCard/TaskCard";
 import Button from "../../components/Button/Button";
 // Helpers
 import {filterData} from "../../helpers/filterDataHelper"
+import {fetchEnabledUsers} from "../../helpers/fetchHelper";
 
 function Tasks() {
+    const navigate = useNavigate();
     const { user } = useContext(AuthContext)
     const [filteredTasks, setFilteredTasks] = useState([])
     const [activeUsers, setActiveUsers] = useState([])
@@ -19,23 +22,15 @@ function Tasks() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const token = localStorage.getItem('token')
-
             try {
-                const headers = {
-                    Authorization: `Bearer ${token}`,
-                };
-
-                const response = await axios.get('http://localhost:8080/users/enabled', { headers });
-                const users = response.data;
+                const users = await fetchEnabledUsers();
                 setActiveUsers(users);
-
             } catch (error) {
-                console.log('Error retrieving task data:', error);
+                console.log(error)
             }
         };
         fetchData();
-    }, []);
+    },[]);
 
     async function handleFilter(newFilters) {
         const result = filterData(activeUsers, newFilters);
@@ -91,9 +86,10 @@ function Tasks() {
                                 <div className="main-container-tasks">
                                     {filteredTasks.slice(0, visibleTasks).map(task => (
                                         <TaskCard
+                                            key={task.id}
                                             task={task}
                                             clickHandler={() => {
-                                                // Handle click event
+                                                navigate(`/task/${task.id}`)
                                             }}
                                         />
                                     ))}

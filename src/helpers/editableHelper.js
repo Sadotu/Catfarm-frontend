@@ -1,66 +1,110 @@
-export function editableTitle() {
+export function editableTitle(setNameTask) {
     let div = document.getElementById('task-header');
     let h3 = document.getElementById('editable-text');
 
-    h3.addEventListener('dblclick', function() {
-        // Create new input element
-        let input = document.createElement('input');
-        input.type = 'text';
+    let input = document.createElement('input');
+    input.className = "editable-input-title";
+    input.type = 'text';
+    if (h3.textContent === "" || h3.textContent === "Click here to edit the task title...") {
+        input.value = "Type your title here";
+    } else {
         input.value = h3.textContent;
+    }
 
-        // Replace h3 with input on double click
-        div.replaceChild(input, h3);
+    div.replaceChild(input, h3);
 
-        // Select the text in the input
-        input.select();
+    input.select();
 
-        // When the user clicks away or presses enter, replace the input with the h3 again
-        input.addEventListener('blur', replaceInputWithH3);
-        input.addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                replaceInputWithH3();
-            }
-        });
-
-        function replaceInputWithH3() {
-            // Set h3 text to input value
-            h3.textContent = input.value;
-            // Replace input with h3
-            div.replaceChild(h3, input);
+    input.addEventListener('blur', replaceInputWithH3);
+    input.addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            replaceInputWithH3();
         }
     });
+
+    function replaceInputWithH3() {
+        if (input.value === "" || input.value === "Type your title here") {
+            input.value = h3.textContent
+        }
+        h3.textContent = input.value;
+        div.replaceChild(h3, input);
+
+        setNameTask(input.value);
+    }
 }
 
-export function editableDescription() {
+export function editableDescription(setDescription) {
     let divDescription = document.getElementById('editable-description');
     let h5Description = document.getElementById('editable-text-description');
 
-    h5Description.addEventListener('dblclick', function() {
-        // Create new textarea element
-        let textarea = document.createElement('textarea');
-        textarea.rows = 10;
-        textarea.cols = 90;
+    let textarea = document.createElement('textarea');
+    textarea.rows = 10;
+    textarea.cols = 90;
+
+    if (h5Description.textContent === "" || h5Description.textContent === "Click here to edit the task description...") {
+        textarea.value = "Type your description here...";
+    } else {
         textarea.value = h5Description.textContent;
+    }
 
-        // Replace h5 with textarea on double click
-        divDescription.replaceChild(textarea, h5Description);
+    divDescription.replaceChild(textarea, h5Description);
 
-        // Select the text in the textarea
-        textarea.select();
+    textarea.select();
 
-        // When the user clicks away or presses enter, replace the textarea with the h5 again
-        textarea.addEventListener('blur', replaceTextareaWithH5);
-        textarea.addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                replaceTextareaWithH5();
-            }
-        });
-
-        function replaceTextareaWithH5() {
-            // Set h5 text to textarea value
-            h5Description.textContent = textarea.value;
-            // Replace textarea with h5
-            divDescription.replaceChild(h5Description, textarea);
+    textarea.addEventListener('blur', replaceTextareaWithH5);
+    textarea.addEventListener('keyup', function (e) {
+        if (e.key === 'Enter') {
+            replaceTextareaWithH5();
         }
     });
+
+    function replaceTextareaWithH5() {
+        if (textarea.value === "" || textarea.value === "Type your description here...") {
+            textarea.value = h5Description.textContent;
+        }
+        h5Description.textContent = textarea.value;
+        divDescription.replaceChild(h5Description, textarea);
+
+        setDescription(textarea.value);
+    }
+}
+
+export function editableToDoTitle(index, updateToDo) {
+    let divs = document.querySelectorAll('#title-and-cross');
+    let h3s = document.querySelectorAll('#todo');
+
+    let div = divs[index];
+    let h3 = h3s[index];
+
+    let input = document.createElement('input');
+    input.type = 'text';
+    input.className = "editable-input-title";
+    input.maxLength = 100;
+
+    if (h3.textContent === "" || h3.textContent === "Replace with your to do by clicking here") {
+        input.value = "Replace text with your todo";
+    } else {
+        input.value = h3.textContent;
+    }
+
+    div.replaceChild(input, h3);
+
+    input.select();
+
+    input.addEventListener('blur', replaceInputWithH3);
+    input.addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            replaceInputWithH3();
+        }
+    });
+
+    function replaceInputWithH3() {
+        if (input.value === "" || input.value === "Replace text with your todo") {
+            input.value = h3.textContent;
+        }
+        h3.textContent = input.value;
+        div.replaceChild(h3, input);
+
+        updateToDo(index, input.value);
+    }
 }

@@ -78,10 +78,6 @@ function Login() {
                             ></Button>
                         </div>
                     </div>
-                </form>
-            </div>
-
-
         </>
     );
 }
