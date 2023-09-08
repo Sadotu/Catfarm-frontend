@@ -1,11 +1,43 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import "./SecurityCard.css"
+import {useForm} from "react-hook-form";
+import {AuthContext} from "../../context/AuthContext";
+import axios from "axios";
+// Components
 import Input from "../Input/Input";
 import Button from "../Button/Button";
-import {useForm} from "react-hook-form";
 
-function SecurityCard(passwordCardVisibility, setPasswordCardVisibility) {
-    const { register: password, handleSubmit: submitPassword, formState: { passwordErrors } } = useForm();
+function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility }) {
+    const { user } = useContext(AuthContext)
+    const { register: password, handleSubmit: submitPassword, formState: { passwordErrors } } = useForm({
+        onError: (errors, e) => {
+            console.log("Errors:", errors);
+        }
+    });
+
+    async function updatePassword(data) {
+        const token = localStorage.getItem('token');
+
+        console.log(data)
+
+        try {
+            const response = await axios.put(
+                `http://localhost:8080/users/update_password/${user.email}`,
+                data,
+                {
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            );
+
+            setPasswordCardVisibility(false)
+
+        } catch (error) {
+            console.error("Failed to update user:", error);
+        }
+    }
 
     return (
         <div className="security-content">
@@ -31,7 +63,7 @@ function SecurityCard(passwordCardVisibility, setPasswordCardVisibility) {
                                 inputType="password"
                                 inputName="repeatPassword"
                                 className="input-field"
-                                inputId="password"
+                                inputId="repeatPassword"
                                 validationRules={{ required: "This field is required" }}
                                 register={password}
                                 error={passwordErrors}
@@ -51,6 +83,9 @@ function SecurityCard(passwordCardVisibility, setPasswordCardVisibility) {
                             <Button
                                 buttonText="Save password"
                                 className="event-task-general-button"
+                                clickHandler={submitPassword(updatePassword, (errors) => {
+                                    console.log("Failed", errors);
+                                })}
                             ></Button>
                         </div>
                     </div>
