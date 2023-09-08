@@ -556,7 +556,7 @@ function Task() {
                                         iconClass="icon-space"
                                     ></Button>
                                     <Button
-                                        className="event-task-menu-button"
+                                        className="event-task-menu-button not-allowed"
                                         buttonText="Delete"
                                         buttonClass="menu-pane-buttons"
                                         icon={Delete}

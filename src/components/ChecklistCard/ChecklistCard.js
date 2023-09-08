@@ -47,7 +47,11 @@ function ChecklistCard({ toDos, setToDos, checklistVisibility }) {
                     <Button
                         buttonText="Delete"
                         className="event-task-general-button checklist-delete-button"
-                        clickHandler={() => setToDos([])}
+                        clickHandler={() => {
+                            if (window.confirm('Are you sure you want to delete all ToDos?')) {
+                                setToDos([]);
+                            }
+                        }}
                     ></Button>
                 </div>
             </div>
