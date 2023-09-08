@@ -27,9 +27,7 @@ export const fetchTask = async (
     setAssignedTo,
     setFiles,
     setToDos,
-    setTask,
-    activeUsers,
-    assignedTo
+    activeUsers
 ) => {
     const token = localStorage.getItem('token');
     const headers = {
@@ -54,12 +52,6 @@ export const fetchTask = async (
         setFiles(data.files);
         setToDos(data.toDos);
 
-        setTask({
-            nameTask: data.nameTask,
-            deadline: data.deadline,
-            description: data.description,
-            completed: data.completed
-        });
     } catch (error) {
         console.log("Error fetching task:", error);
     }

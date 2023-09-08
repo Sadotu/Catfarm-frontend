@@ -71,7 +71,6 @@ function Task() {
                 setAssignedTo,
                 setFiles,
                 setToDos,
-                setTask,
                 activeUsers,
                 assignedTo
             )
@@ -89,6 +88,16 @@ function Task() {
         };
         fetchData();
     },[]);
+
+    useEffect(() => {
+        setTask({
+            id: task_id,
+            nameTask,
+            deadline,
+            description,
+            completed
+        });
+    }, [nameTask])
 
     function handleVolunteerManagement(action, volunteer = null) {
         const {
@@ -297,15 +306,10 @@ function Task() {
             const existingFileNames = new Set(task.files.map(file => file.name));
             const uniqueNewFileNames = files.filter(file => !existingFileNames.has(file.name));
 
-            // console.log("Bestaande: ", existingFileNames)
-            // console.log("Unieke: ", uniqueNewFileNames)
-
             const formData = new FormData();
             uniqueNewFileNames.forEach((file) => {
                 formData.append('file', file);
             });
-
-            // console.log("formdata: ", formData)
 
             if (uniqueNewFileNames.length > 0) {
 
@@ -315,7 +319,6 @@ function Task() {
                         'Content-Type': 'multipart/form-data',
                     }
                 });
-                // console.log(fileResponse)
                 const fileIds = fileResponse.data.map(file => file.id);
 
                 await axios.put(`http://localhost:8080/tasks/assignfiles/${task.id}`, {file_ids: fileIds}, {
@@ -325,28 +328,37 @@ function Task() {
                     }
                 });
             }
-            const existingDescriptions = new Set(task.toDos.map(todo => todo.description));
-            const uniqueNewToDos = toDos.filter(todo => !existingDescriptions.has(todo.description));
 
-            try {
-            const todoResponse = await axios.post(`http://localhost:8080/task/todos/${task.id}/create`, uniqueNewToDos, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
+            const existingToDoMap = new Map(task.toDos.map(todo => [todo.id, todo]));
+            const newToDos = [], updatedToDos = [], todoIdsToDelete = [];
+
+            toDos.forEach(todo => {
+                if (existingToDoMap.has(todo.id)) {
+                    updatedToDos.push(todo);
+                    existingToDoMap.delete(todo.id);
+                } else {
+                    newToDos.push(todo);
                 }
             });
-            console.log(`Todos added to task ${task.id}:`, todoResponse.data);
-        } catch (error) {
-            console.error(`Error adding todos to task ${task.id}:`, error);
-        }
-            const newToDoIds = new Set(toDos.map(todo => todo.id));
-            const toDosToDelete = task.toDos.filter(todo => !newToDoIds.has(todo.id));
 
-            const todoIdsToDelete = toDosToDelete.map(todo => todo.id);
-            console.log(todoIdsToDelete)
+            todoIdsToDelete.push(...existingToDoMap.keys());
 
-            try {
-                if (todoIdsToDelete.length > 0) {
+            if (newToDos.length > 0) {
+                try {
+                    const todoResponse = await axios.post(`http://localhost:8080/task/todos/${task.id}/create`, newToDos, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    console.log(`ToDos added to task ${task.id}:`, todoResponse.data);
+                } catch (error) {
+                    console.error(`Error adding ToDos to task ${task.id}:`, error);
+                }
+            }
+
+            if (todoIdsToDelete.length > 0) {
+                try {
                     await axios.delete(`http://localhost:8080/task/todos/${task.id}/delete`, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -355,11 +367,26 @@ function Task() {
                         data: todoIdsToDelete
                     });
                     console.log(`ToDos deleted from task ${task.id}.`);
+                } catch (error) {
+                    console.error(`Error deleting ToDo from task ${task.id}:`, error);
                 }
-            } catch (error) {
-                console.error(`Error deleting ToDo from task ${task.id}:`, error);
             }
-    } catch (error) {
+
+            if (updatedToDos.length > 0) {
+                try {
+                    await axios.put(`http://localhost:8080/task/todos/${task.id}/update`, updatedToDos, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    console.log(`ToDos updated in task ${task.id}.`);
+                } catch (error) {
+                    console.error(`Error updating ToDos in task ${task.id}:`, error);
+                }
+            }
+
+        } catch (error) {
         console.error("Error saving task:", error);
     } finally {
             navigate("/tasks")
@@ -367,6 +394,7 @@ function Task() {
     }
 
     const completeTaskHandler = () => {
+        console.log(task)
         completeTask(task, setCompleted);
     };
 
@@ -418,10 +446,10 @@ function Task() {
                                             {formErrors.deadline && <p className="error">{formErrors.deadline}</p>}
                                         </div>
                                         <div className={task_id ? "completion-card" : "hidden"}>
-                                            <h3 className="volunteer-option-header">Close task</h3>
+                                            <h3 className="volunteer-option-header">{completed ? "Open task" : "Close task"}</h3>
                                             <Button
-                                                buttonText="Done"
-                                                className="event-task-done-button"
+                                                buttonText={completed ? "Completed" : "Done"}
+                                                className={completed ? "event-task-completion-button" : "event-task-done-button"}
                                                 clickHandler={() => {completeTaskHandler(task, setCompleted)}}
                                             ></Button>
                                         </div>
@@ -536,10 +564,11 @@ function Task() {
                                     ></Button>
                                     <Button
                                         className="event-task-menu-button"
-                                        buttonText="Mark As Done"
+                                        buttonText={completed ? "Mark Undone" : "Mark As Done"}
                                         buttonClass="menu-pane-buttons"
                                         icon={Check}
                                         iconClass="icon-space"
+                                        clickHandler={() => {completeTaskHandler(task, setCompleted)}}
                                     ></Button>
                                     <Button
                                         className="event-task-menu-button not-allowed"
