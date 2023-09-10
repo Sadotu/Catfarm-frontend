@@ -1,3 +1,39 @@
+export const validatePassword = (password, repeatPassword) => {
+    let statusMessages = {};
+
+    // Check for length
+    if (!(password.length >= 8)) {
+        statusMessages.length = "Password must be at least 8 characters long.";
+    }
+
+    // Check for at least one uppercase letter
+    if (!(/[A-Z]/.test(password))) {
+        statusMessages.uppercase = "Password must contain at least one uppercase letter.";
+    }
+
+    // Check for at least one lowercase letter
+    if (!(/[a-z]/.test(password))) {
+        statusMessages.lowercase = "Password must contain at least one lowercase letter.";
+    }
+
+    // Check for at least one number
+    if (!(/[0-9]/.test(password))) {
+        statusMessages.number = "Password must contain at least one number.";
+    }
+
+    // Check for at least one special character
+    if (!(/[!@#$%^&*]/.test(password))) {
+        statusMessages.specialChar = "Password must contain at least one special character (e.g., !@#$%^&*).";
+    }
+
+    // Check if password and repeatPassword are the same
+    if (!(password === repeatPassword)) {
+        statusMessages.repeatPassword = "Repeat password does not match.";
+    }
+
+    return statusMessages;
+};
+
 export function validateTaskForm({
     assignedTo,
     deadline,

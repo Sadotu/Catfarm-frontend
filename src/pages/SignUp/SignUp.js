@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 // Helpers
-import { validateRegisterForm } from "../../helpers/validateForm"
+import { validateRegisterForm } from "../../helpers/validationHelper"
 
 function SignUp() {
     const navigate = useNavigate();

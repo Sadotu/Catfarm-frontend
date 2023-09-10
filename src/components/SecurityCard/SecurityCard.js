@@ -8,10 +8,11 @@ import Input from "../Input/Input";
 import Button from "../Button/Button";
 // Helpers
 import {fetchEnabledUsers} from "../../helpers/fetchHelper";
+import {validatePassword} from "../../helpers/validationHelper";
 
 function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility, activeSecurityHeader }) {
     const {user} = useContext(AuthContext);
-    const [errors, setErrors] = useState([]);
+    const [statusMessages, setStatusMessages] = useState([]);
     const [activeUsers, setActiveUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState('');
     const [selectedRole, setSelectedRole] = useState('');
@@ -32,6 +33,8 @@ function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility, activ
     }, [selectedUser]);
 
     async function updatePassword(data) {
+        const messages = validatePassword(data)
+
         const token = localStorage.getItem('token');
 
         try {
@@ -47,6 +50,7 @@ function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility, activ
             );
 
             setPasswordCardVisibility(false)
+            setStatusMessages()
 
         } catch (error) {
             console.error("Failed to update user:", error);
