@@ -18,6 +18,7 @@ function Profile() {
     const [isEditable, setEditable] = useState(false);
     const [triggerUpload, setTriggerUpload] = useState(false);
     const [passwordCardVisibility, setPasswordCardVisibility] = useState(false)
+    const [activeSecurityHeader, setActiveSecurityHeader] = useState('Password');
 
     useEffect(() => {
         if (user) {
@@ -124,15 +125,44 @@ function Profile() {
                                     <div className="form-divider"></div>
                                     <div className="profile-form-wrapper">
                                         <div className="profile-security">
-                                            <div className="security-header">
-                                                <h3>Password</h3>
-                                                <hr />
-                                            </div>
-                                            <SecurityCard
-                                                passwordCardVisibility={passwordCardVisibility}
-                                                setPasswordCardVisibility={setPasswordCardVisibility}
-                                            ></SecurityCard>
+                                            {user.authorities.some(auth => auth.authority === "ROLE_LION") ? (
+                                                <>
+                                                    <div className="security-header">
+                                                        <div className="h3-headers security-h3-authority">
+                                                            <h3 onClick={() => setActiveSecurityHeader('Password')}>
+                                                                {activeSecurityHeader === 'Password' && '>'} Password
+                                                            </h3>
+                                                            <h3 onClick={() => {
+                                                                setActiveSecurityHeader('Roles')
+                                                                setPasswordCardVisibility(false)
+                                                            }}>
+                                                                {activeSecurityHeader === 'Roles' && '>'} Roles
+                                                            </h3>
+                                                        </div>
+                                                        <hr />
+                                                    </div>
+                                                    <SecurityCard
+                                                        passwordCardVisibility={passwordCardVisibility}
+                                                        setPasswordCardVisibility={setPasswordCardVisibility}
+                                                        activeSecurityHeader={activeSecurityHeader}
+                                                    />
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <div className="security-header">
+                                                        <div className="h3-headers">
+                                                            <h3>Password</h3>
+                                                        </div>
+                                                        <hr />
+                                                    </div>
+                                                    <SecurityCard
+                                                        passwordCardVisibility={passwordCardVisibility}
+                                                        setPasswordCardVisibility={setPasswordCardVisibility}
+                                                    />
+                                                </>
+                                            )}
                                         </div>
+
                                         <div className="form-inputs profile-margin-labels-input">
                                             <Input
                                                 defaultValue={user.fullName}

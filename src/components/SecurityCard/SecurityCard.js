@@ -1,27 +1,38 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import "./SecurityCard.css"
-import {useForm} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import {AuthContext} from "../../context/AuthContext";
 import axios from "axios";
 // Components
 import Input from "../Input/Input";
 import Button from "../Button/Button";
+// Helpers
+import {fetchEnabledUsers} from "../../helpers/fetchHelper";
 
-function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility }) {
-    const { user } = useContext(AuthContext)
-    const { register: password, handleSubmit: submitPassword, formState: { passwordErrors } } = useForm({
-        onError: (errors, e) => {
-            console.log("Errors:", errors);
-        }
-    });
+function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility, activeSecurityHeader }) {
+    const { user } = useContext(AuthContext);
+    const [activeUsers, setActiveUsers] = useState([]);
+    const roles = ['ROLE_KITTEN', 'ROLE_CAT', 'ROLE_LION'];
+    const { register: password, handleSubmit: submitPassword, formState: { passwordErrors } } = useForm();
+    const { control, handleSubmit: submitRole } = useForm();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const users = await fetchEnabledUsers();
+                setActiveUsers(users);
+            } catch (error) {
+                console.log(error)
+            }
+        };
+        fetchData();
+    },[]);
 
     async function updatePassword(data) {
         const token = localStorage.getItem('token');
 
-        console.log(data)
-
         try {
-            const response = await axios.put(
+            await axios.put(
                 `http://localhost:8080/users/update_password/${user.email}`,
                 data,
                 {
@@ -39,10 +50,14 @@ function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility }) {
         }
     }
 
+    const updateRole = () => {
+        // Your role updating logic here
+    };
+
     return (
         <div className="security-content">
             {passwordCardVisibility
-                ?
+                ? (
                 <div className="password-outer-container">
                     <div className="password-inner-container">
                         <label htmlFor="password">Password: </label>
@@ -90,12 +105,51 @@ function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility }) {
                         </div>
                     </div>
                 </div>
-                :
-                <Button
-                    buttonText="Change password..."
-                    className="filter-sort-button"
-                    clickHandler={() => {setPasswordCardVisibility(true)}}
-                ></Button>
+                ) : (
+            activeSecurityHeader === "Password" && (
+            <Button
+                buttonText="Change password..."
+                className="filter-sort-button"
+                clickHandler={() => {
+                    setPasswordCardVisibility(true);
+                }}
+            ></Button>
+            )
+            )}
+            {activeSecurityHeader === "Roles" && passwordCardVisibility === false &&
+                <>
+                    <Controller
+                        name="user"
+                        control={control}
+                        render={({ field }) => (
+                            <select {...field}>
+                                {activeUsers.map((user, index) => (
+                                    <option key={index} value={user.fullName}>{user.fullName}</option>
+                                ))}
+                            </select>
+                        )}
+                    />
+
+                    <Controller
+                        name="role"
+                        control={control}
+                        render={({ field }) => (
+                            <select {...field}>
+                                {roles.map((role, index) => (
+                                    <option key={index} value={role}>{role}</option>
+                                ))}
+                            </select>
+                        )}
+                    />
+
+                    <Button
+                        buttonText="Save role"
+                        className="event-task-general-button"
+                        clickHandler={submitRole(updateRole, (errors) => {
+                            console.log("Failed", errors);
+                        })}
+                    ></Button>
+                </>
             }
         </div>
     );

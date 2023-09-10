@@ -102,3 +102,20 @@
     border-radius: 10px;
     border: 1px solid var(--main-theme-dark-green);
 }
+
+/* Security card*/
+.security-header {
+    color: var(--task-title);
+    font-family: 'Roboto Mono', monospace;
+}
+
+.h3-headers {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 150px;
+}
+.security-h3-authority h3:hover {
+    transform: translateY(-2px);
+    cursor: pointer;
+}

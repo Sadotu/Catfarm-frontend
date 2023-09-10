@@ -16,6 +16,7 @@ function DragAndDrop({ onFileDrop, user, isSaveTriggered  }) {
         onDrop: (acceptedFiles) => {
             if (acceptedFiles.length === 0) return;
 
+            console.log("hoi")
             onFileDrop(acceptedFiles[0]); // Notify the parent component about the file drop
             setUploadedFile(acceptedFiles[0]); // Update the state with the file name
             setUploadedFileName(acceptedFiles[0].name);
