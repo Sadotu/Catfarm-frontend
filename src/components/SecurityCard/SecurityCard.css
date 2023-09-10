@@ -30,3 +30,9 @@
     width: 150px;
     align-self: flex-end;
 }
+
+.role-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

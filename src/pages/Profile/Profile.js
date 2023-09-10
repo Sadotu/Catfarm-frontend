@@ -141,11 +141,6 @@ function Profile() {
                                                         </div>
                                                         <hr />
                                                     </div>
-                                                    <SecurityCard
-                                                        passwordCardVisibility={passwordCardVisibility}
-                                                        setPasswordCardVisibility={setPasswordCardVisibility}
-                                                        activeSecurityHeader={activeSecurityHeader}
-                                                    />
                                                 </>
                                             ) : (
                                                 <>
@@ -155,12 +150,14 @@ function Profile() {
                                                         </div>
                                                         <hr />
                                                     </div>
-                                                    <SecurityCard
-                                                        passwordCardVisibility={passwordCardVisibility}
-                                                        setPasswordCardVisibility={setPasswordCardVisibility}
-                                                    />
+
                                                 </>
                                             )}
+                                            <SecurityCard
+                                                passwordCardVisibility={passwordCardVisibility}
+                                                setPasswordCardVisibility={setPasswordCardVisibility}
+                                                activeSecurityHeader={activeSecurityHeader}
+                                            />
                                         </div>
 
                                         <div className="form-inputs profile-margin-labels-input">

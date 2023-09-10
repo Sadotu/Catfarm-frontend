@@ -2,8 +2,7 @@ export function validateTaskForm({
     assignedTo,
     deadline,
     description,
-    files,
-    toDos
+    files
                       }) {
     const errors = {};
 

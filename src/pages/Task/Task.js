@@ -118,7 +118,6 @@ function Task() {
             deadline,
             description,
             files,
-            toDos
         });
 
         if (Object.keys(errors).length > 0) {
@@ -213,8 +212,7 @@ function Task() {
             assignedTo,
             deadline,
             description,
-            files,
-            toDos
+            files
         });
 
         if (Object.keys(formErrors).length > 0) {

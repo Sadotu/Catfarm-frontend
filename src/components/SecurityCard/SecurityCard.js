@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import "./SecurityCard.css"
-import {Controller, useForm} from "react-hook-form";
+import {useForm} from "react-hook-form";
 import {AuthContext} from "../../context/AuthContext";
 import axios from "axios";
 // Components
@@ -10,11 +10,14 @@ import Button from "../Button/Button";
 import {fetchEnabledUsers} from "../../helpers/fetchHelper";
 
 function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility, activeSecurityHeader }) {
-    const { user } = useContext(AuthContext);
+    const {user} = useContext(AuthContext);
+    const [errors, setErrors] = useState([]);
     const [activeUsers, setActiveUsers] = useState([]);
+    const [selectedUser, setSelectedUser] = useState('');
+    const [selectedRole, setSelectedRole] = useState('');
     const roles = ['ROLE_KITTEN', 'ROLE_CAT', 'ROLE_LION'];
-    const { register: password, handleSubmit: submitPassword, formState: { passwordErrors } } = useForm();
-    const { control, handleSubmit: submitRole } = useForm();
+    const {register: password, handleSubmit: submitPassword, formState: {passwordErrors}} = useForm();
+    const {handleSubmit: submitRole} = useForm();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -26,7 +29,7 @@ function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility, activ
             }
         };
         fetchData();
-    },[]);
+    }, [selectedUser]);
 
     async function updatePassword(data) {
         const token = localStorage.getItem('token');
@@ -37,8 +40,8 @@ function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility, activ
                 data,
                 {
                     headers: {
-                        'Content-type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${token}`,
+                        'Content-type': 'application/json'
                     }
                 }
             );
@@ -50,107 +53,153 @@ function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility, activ
         }
     }
 
-    const updateRole = () => {
-        // Your role updating logic here
+    const updateRole = async (selectedUserEmail, selectedRole) => {
+        const token = localStorage.getItem('token');
+
+        const selectedUser = activeUsers.find(user => user.email === selectedUserEmail);
+
+        if (selectedUser.authorities.some(auth => auth.authority === selectedRole)) {
+            console.log("Role is already assigned to the user.");
+            return;
+        }
+
+        // Remove current role
+        if (selectedUser.authorities.length > 0) {
+            try {
+                await axios.delete(
+                    `http://localhost:8080/users/remove_authorities/${selectedUserEmail}/${selectedUser.authorities[0].authority}`,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }
+                );
+            } catch (error) {
+                console.error("Failed to remove current role:", error);
+                return;
+            }
+        }
+
+        // Add new role
+        try {
+            await axios.post(
+                `http://localhost:8080/users/add_authorities/${selectedUserEmail}`,
+                {
+                    authority: selectedRole
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-type': 'application/json'
+                    }
+                }
+            );
+            setSelectedRole('')
+            setSelectedUser('')
+        } catch (error) {
+            console.error("Failed to add new role:", error);
+        }
     };
+
 
     return (
         <div className="security-content">
             {passwordCardVisibility
                 ? (
-                <div className="password-outer-container">
-                    <div className="password-inner-container">
-                        <label htmlFor="password">Password: </label>
-                        <Input
-                            inputType="password"
-                            inputName="password"
-                            className="input-field"
-                            inputId="password"
-                            validationRules={{ required: "This field is required" }}
-                            register={password}
-                            error={passwordErrors}
-                        />
-                    </div>
-                    <div className="password-inner-container">
-                        <label htmlFor="password">Repeat Password: </label>
-                        <div className="input-container">
+                    <div className="password-outer-container">
+                        <div className="password-inner-container">
+                            <label htmlFor="password">Password: </label>
                             <Input
                                 inputType="password"
-                                inputName="repeatPassword"
+                                inputName="password"
                                 className="input-field"
-                                inputId="repeatPassword"
-                                validationRules={{ required: "This field is required" }}
+                                inputId="password"
+                                validationRules={{required: "This field is required"}}
                                 register={password}
                                 error={passwordErrors}
                             />
                         </div>
+                        <div className="password-inner-container">
+                            <label htmlFor="password">Repeat Password: </label>
+                            <div className="input-container">
+                                <Input
+                                    inputType="password"
+                                    inputName="repeatPassword"
+                                    className="input-field"
+                                    inputId="repeatPassword"
+                                    validationRules={{required: "This field is required"}}
+                                    register={password}
+                                    error={passwordErrors}
+                                />
+                            </div>
+                        </div>
+                        <div className="requirements-and-button">
+                            <div className="password-requirements">
+                                <p>Password must be at least 8 characters long</p>
+                                <p>Password must contain at least one uppercase letter</p>
+                                <p>Password must contain at least one lowercase letter</p>
+                                <p>Password must contain at least one number</p>
+                                <p>Password must contain at least one special character</p>
+                                <p>(such as !@#$%^&*)</p>
+                            </div>
+                            <div className="save-password">
+                                <Button
+                                    buttonText="Save password"
+                                    className="event-task-general-button"
+                                    clickHandler={submitPassword(updatePassword, (errors) => {
+                                        console.log("Failed", errors);
+                                    })}
+                                ></Button>
+                            </div>
+                        </div>
                     </div>
-                    <div className="requirements-and-button">
-                        <div className="password-requirements">
-                            <p>Password must be at least 8 characters long</p>
-                            <p>Password must contain at least one uppercase letter</p>
-                            <p>Password must contain at least one lowercase letter</p>
-                            <p>Password must contain at least one number</p>
-                            <p>Password must contain at least one special character</p>
-                            <p>(such as !@#$%^&*)</p>
-                        </div>
-                        <div className="save-password">
-                            <Button
-                                buttonText="Save password"
-                                className="event-task-general-button"
-                                clickHandler={submitPassword(updatePassword, (errors) => {
-                                    console.log("Failed", errors);
-                                })}
-                            ></Button>
-                        </div>
+                ) : (
+                    activeSecurityHeader === "Password" && (
+                        <Button
+                            buttonText="Change password..."
+                            className="filter-sort-button"
+                            clickHandler={() => {
+                                setPasswordCardVisibility(true);
+                            }}
+                        ></Button>
+                    )
+                )}
+            {activeSecurityHeader === "Roles" && passwordCardVisibility === false && (
+                <div className="role-card">
+                    <select onChange={(e) => setSelectedUser(e.target.value)} value={selectedUser}>
+                        <option value="" disabled>
+                            Choose user
+                        </option>
+                        {activeUsers.map((user, index) => (
+                            <option key={index} value={user.email}>
+                                {user.email}
+                            </option>
+                        ))}
+                    </select>
+
+                    <select onChange={(e) => setSelectedRole(e.target.value)} value={selectedRole}>
+                        <option value="" disabled>
+                            Choose role
+                        </option>
+                        {roles.map((role, index) => (
+                            <option key={index} value={role}>
+                                {role}
+                            </option>
+                        ))}
+                    </select>
+                    <div className="save-password">
+                        <Button
+                            buttonText="Update role"
+                            className="event-task-general-button"
+                            clickHandler={submitRole(() => {
+                                updateRole(selectedUser, selectedRole);
+                            }, (errors) => {
+                                console.log("Failed", errors);
+                            })}
+                        />
                     </div>
                 </div>
-                ) : (
-            activeSecurityHeader === "Password" && (
-            <Button
-                buttonText="Change password..."
-                className="filter-sort-button"
-                clickHandler={() => {
-                    setPasswordCardVisibility(true);
-                }}
-            ></Button>
-            )
             )}
-            {activeSecurityHeader === "Roles" && passwordCardVisibility === false &&
-                <>
-                    <Controller
-                        name="user"
-                        control={control}
-                        render={({ field }) => (
-                            <select {...field}>
-                                {activeUsers.map((user, index) => (
-                                    <option key={index} value={user.fullName}>{user.fullName}</option>
-                                ))}
-                            </select>
-                        )}
-                    />
-
-                    <Controller
-                        name="role"
-                        control={control}
-                        render={({ field }) => (
-                            <select {...field}>
-                                {roles.map((role, index) => (
-                                    <option key={index} value={role}>{role}</option>
-                                ))}
-                            </select>
-                        )}
-                    />
-
-                    <Button
-                        buttonText="Save role"
-                        className="event-task-general-button"
-                        clickHandler={submitRole(updateRole, (errors) => {
-                            console.log("Failed", errors);
-                        })}
-                    ></Button>
-                </>
-            }
         </div>
     );
 }
