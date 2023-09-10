@@ -12,16 +12,7 @@ import { validateRegisterForm } from "../../helpers/validateForm"
 function SignUp() {
     const navigate = useNavigate();
     const { registerUser } = useContext(AuthContext);
-    const { register, handleSubmit, formState: { errors }, setError, setValue } = useForm();
-
-    // useEffect(() => {
-    //     setValue("fullName", "Beppie");
-    //     setValue("age", 30);
-    //     setValue("pronouns", "he/him");
-    //     setValue("email", "beppie@example.com");
-    //     setValue("phoneNumber", "+1-234-567-8910");
-    //     setValue("bio", "Hello, I am Beppie, a software engineer specializing in AI and machine learning.");
-    // }, []);
+    const { register, handleSubmit, formState: { errors }, setError } = useForm();
 
     const submitHandler = (data) => {
         validateRegisterForm(data, setError);

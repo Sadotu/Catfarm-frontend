@@ -25,7 +25,7 @@ function Input({
                 disabled={disabled}
                 style={style}
             />
-            {error[inputName] && <p className="input-error">{error[inputName].message}</p>}
+            {error && error[inputName] && <p className="input-error">{error[inputName].message}</p>}
         </>
     );
 }

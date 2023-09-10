@@ -7,6 +7,7 @@
     background-color: #ECF0EF;
     font-family: var(--main-font-roboto);
     color: var(--task-option-headers);
+    z-index: 1;
 }
 .profile-picture-drag-and-drop:hover {
     transform: translateY(-2px);
