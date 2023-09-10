@@ -36,3 +36,7 @@
     flex-direction: column;
     gap: 10px;
 }
+
+.password-error {
+    border-color: red !important;
+}

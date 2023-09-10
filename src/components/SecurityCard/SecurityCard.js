@@ -33,7 +33,12 @@ function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility, activ
     }, [selectedUser]);
 
     async function updatePassword(data) {
-        const messages = validatePassword(data)
+        const messages = validatePassword(data.password, data.repeatPassword)
+
+        if (Object.keys(messages).length > 0) {
+            setStatusMessages(messages);
+            return;
+        }
 
         const token = localStorage.getItem('token');
 
@@ -116,8 +121,8 @@ function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility, activ
                             <Input
                                 inputType="password"
                                 inputName="password"
-                                className="input-field"
                                 inputId="password"
+                                className={`input-field ${Object.values(statusMessages).some(Boolean) ? 'password-error' : ''}`}
                                 validationRules={{required: "This field is required"}}
                                 register={password}
                                 error={passwordErrors}
@@ -129,23 +134,37 @@ function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility, activ
                                 <Input
                                     inputType="password"
                                     inputName="repeatPassword"
-                                    className="input-field"
+                                    className={`input-field ${Object.values(statusMessages).some(Boolean) ? 'password-error' : ''}`}
                                     inputId="repeatPassword"
                                     validationRules={{required: "This field is required"}}
                                     register={password}
                                     error={passwordErrors}
                                 />
+                                {statusMessages.repeatPassword && <p className="error">{statusMessages.repeatPassword}</p>}
                             </div>
                         </div>
                         <div className="requirements-and-button">
                             <div className="password-requirements">
-                                <p>Password must be at least 8 characters long</p>
-                                <p>Password must contain at least one uppercase letter</p>
-                                <p>Password must contain at least one lowercase letter</p>
-                                <p>Password must contain at least one number</p>
-                                <p>Password must contain at least one special character</p>
-                                <p>(such as !@#$%^&*)</p>
+                                <p style={{ color: statusMessages.length ? 'red' : 'black' }}>
+                                    Password must be at least 8 characters long
+                                </p>
+                                <p style={{ color: statusMessages.uppercase ? 'red' : 'black' }}>
+                                    Password must contain at least one uppercase letter
+                                </p>
+                                <p style={{ color: statusMessages.lowercase ? 'red' : 'black' }}>
+                                    Password must contain at least one lowercase letter
+                                </p>
+                                <p style={{ color: statusMessages.number ? 'red' : 'black' }}>
+                                    Password must contain at least one number
+                                </p>
+                                <p style={{ color: statusMessages.specialChar ? 'red' : 'black' }}>
+                                    Password must contain at least one special character
+                                </p>
+                                <p style={{ color: statusMessages.specialChar ? 'red' : 'black' }}>
+                                    (such as !@#$%^&*)
+                                </p>
                             </div>
+
                             <div className="save-password">
                                 <Button
                                     buttonText="Save password"
