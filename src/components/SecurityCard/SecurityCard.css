@@ -19,6 +19,11 @@
     align-items: center;
 }
 
+.password-content {
+    display: flex;
+    flex-direction: column;
+}
+
 .requirements-and-button {
     display: flex;
     flex-direction: row;
@@ -39,4 +44,9 @@
 
 .password-error {
     border-color: red !important;
+}
+
+.success-message-password {
+    color: green;
+    padding-left: 30px;
 }

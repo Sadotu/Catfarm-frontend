@@ -55,7 +55,7 @@ function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility, activ
             );
 
             setPasswordCardVisibility(false)
-            setStatusMessages()
+            setStatusMessages([{successPasswordChange: "Password updated successfully!"}]);
 
         } catch (error) {
             console.error("Failed to update user:", error);
@@ -178,13 +178,18 @@ function SecurityCard({ passwordCardVisibility, setPasswordCardVisibility, activ
                     </div>
                 ) : (
                     activeSecurityHeader === "Password" && (
-                        <Button
-                            buttonText="Change password..."
-                            className="filter-sort-button"
-                            clickHandler={() => {
-                                setPasswordCardVisibility(true);
-                            }}
-                        ></Button>
+                        <div className="password-content">
+                            <Button
+                                buttonText="Change password..."
+                                className="filter-sort-button"
+                                clickHandler={() => {
+                                    setPasswordCardVisibility(true);
+                                }}
+                            ></Button>
+                            {statusMessages[0]?.successPasswordChange && (
+                                <p className="success-message-password">{statusMessages[0].successPasswordChange}</p>
+                            )}
+                        </div>
                     )
                 )}
             {activeSecurityHeader === "Roles" && passwordCardVisibility === false && (

@@ -11,10 +11,11 @@ import Footer from "../../components/Footer/Footer";
 import Button from "../../components/Button/Button";
 import DragAndDrop from "../../components/DragAndDrop/DragAndDrop";
 import SecurityCard from "../../components/SecurityCard/SecurityCard";
+import {validateProfile} from "../../helpers/validationHelper";
 
 function Profile() {
     const { user, updateUser } = useContext(AuthContext)
-    const { register: profileInfo, handleSubmit: submitProfileInfo, formState: { profileErrors }, setValue } = useForm();
+    const { register: profileInfo, handleSubmit: submitProfileInfo, formState: { errors }, setError, setValue } = useForm();
     const [isEditable, setEditable] = useState(false);
     const [triggerUpload, setTriggerUpload] = useState(false);
     const [passwordCardVisibility, setPasswordCardVisibility] = useState(false)
@@ -39,6 +40,12 @@ function Profile() {
         const token = localStorage.getItem('token');
 
         if (isEditable) {
+            validateProfile(data, setError);
+
+            if (Object.keys(errors).length > 0) {
+                console.error("Form has errors:", errors);
+                return;
+            }
             try {
                 const response = await axios.put(
                     `http://localhost:8080/users/update/${user.email}`,
@@ -169,7 +176,7 @@ function Profile() {
                                                 inputId="fullName"
                                                 validationRules={{ required: "This field is required" }}
                                                 register={profileInfo}
-                                                error={profileErrors}
+                                                error={errors}
                                                 disabled={!isEditable}
                                                 style={disabledStyle}
                                             />
@@ -181,7 +188,7 @@ function Profile() {
                                                 inputId="age"
                                                 validationRules={{ required: "This field is required" }}
                                                 register={profileInfo}
-                                                error={profileErrors}
+                                                error={errors}
                                                 disabled={!isEditable}
                                                 style={disabledStyle}
                                             />
@@ -193,7 +200,7 @@ function Profile() {
                                                 inputId="pronouns"
                                                 validationRules={{ required: "This field is required" }}
                                                 register={profileInfo}
-                                                error={profileErrors}
+                                                error={errors}
                                                 disabled={!isEditable}
                                                 style={disabledStyle}
                                             />
@@ -205,7 +212,7 @@ function Profile() {
                                                 inputId="email"
                                                 validationRules={{ required: "This field is required" }}
                                                 register={profileInfo}
-                                                error={profileErrors}
+                                                error={errors}
                                                 disabled={!isEditable}
                                                 style={disabledStyle}
                                             />
@@ -217,7 +224,7 @@ function Profile() {
                                                 inputId="phoneNumber"
                                                 validationRules={{ required: "This field is required" }}
                                                 register={profileInfo}
-                                                error={profileErrors}
+                                                error={errors}
                                                 disabled={!isEditable}
                                                 style={disabledStyle}
                                             />
