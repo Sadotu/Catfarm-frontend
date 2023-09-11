@@ -1,10 +1,10 @@
 /* Security */
 .profile-security {
-    position: absolute;
     top: 280px;
     right: 0;
-    width: 480px;
-    height: 260px;
+    width: 100%;
+    height: 300px;
+    padding: 20px 0 20px 230px;
 }
 
 .password-outer-container {
@@ -15,7 +15,7 @@
 
 .password-inner-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
 }
 
@@ -29,6 +29,9 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+}
+.password-card-label {
+    width: 30%;
 }
 
 .save-password {

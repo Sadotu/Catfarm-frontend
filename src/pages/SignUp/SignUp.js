@@ -56,6 +56,7 @@ function SignUp() {
                         <div className="form-inputs">
                             <label htmlFor="fullName">Full Name:</label>
                             <Input
+                                signup="true"
                                 inputType="text"
                                 inputName="fullName"
                                 className="input-field"
@@ -70,6 +71,7 @@ function SignUp() {
 
                             <label htmlFor="age">Age:</label>
                             <Input
+                                signup="true"
                                 inputType="number"
                                 inputName="age"
                                 className="input-field"
@@ -85,6 +87,7 @@ function SignUp() {
 
                             <label htmlFor="pronouns">Pronouns:</label>
                             <Input
+                                signup="true"
                                 inputType="text"
                                 inputName="pronouns"
                                 className="input-field"
@@ -98,6 +101,7 @@ function SignUp() {
 
                             <label htmlFor="email">Email:</label>
                             <Input
+                                signup="true"
                                 inputType="text"
                                 inputName="email"
                                 className="input-field"
@@ -115,6 +119,7 @@ function SignUp() {
 
                             <label htmlFor="phoneNumber">Phone:</label>
                             <Input
+                                signup="true"
                                 inputType="text"
                                 inputName="phoneNumber"
                                 className="input-field"
@@ -144,6 +149,7 @@ function SignUp() {
                         <div className="form-inputs">
                             <label htmlFor="password">Password:</label>
                             <Input
+                                signup="true"
                                 inputType="password"
                                 inputName="password"
                                 className="input-field"
@@ -161,6 +167,7 @@ function SignUp() {
                             />
                             <label htmlFor="password">Repeat Password:</label>
                             <Input
+                                signup="true"
                                 inputType="password"
                                 inputName="repeatPassword"
                                 className="input-field"

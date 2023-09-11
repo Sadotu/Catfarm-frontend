@@ -11,11 +11,10 @@ import Footer from "../../components/Footer/Footer";
 import Button from "../../components/Button/Button";
 import DragAndDrop from "../../components/DragAndDrop/DragAndDrop";
 import SecurityCard from "../../components/SecurityCard/SecurityCard";
-import {validateProfile} from "../../helpers/validationHelper";
 
 function Profile() {
     const { user, updateUser } = useContext(AuthContext)
-    const { register: profileInfo, handleSubmit: submitProfileInfo, formState: { errors }, setError, setValue } = useForm();
+    const { register: profileInfo, handleSubmit: submitProfileInfo, formState: { errors }, setValue } = useForm();
     const [isEditable, setEditable] = useState(false);
     const [triggerUpload, setTriggerUpload] = useState(false);
     const [passwordCardVisibility, setPasswordCardVisibility] = useState(false)
@@ -40,12 +39,6 @@ function Profile() {
         const token = localStorage.getItem('token');
 
         if (isEditable) {
-            validateProfile(data, setError);
-
-            if (Object.keys(errors).length > 0) {
-                console.error("Form has errors:", errors);
-                return;
-            }
             try {
                 const response = await axios.put(
                     `http://localhost:8080/users/update/${user.email}`,
@@ -121,16 +114,137 @@ function Profile() {
                                     />
                                 </div>
                                 <div className="form-inner-container">
-                                    <div className="form-labels profile-margin-labels-input">
-                                        <label htmlFor="fullName">Full Name:</label>
-                                        <label htmlFor="age">Age:</label>
-                                        <label htmlFor="pronouns">Pronouns:</label>
-                                        <label htmlFor="email">Email:</label>
-                                        <label htmlFor="phoneNumber">Phone:</label>
-                                        <label htmlFor="bio">Bio:</label>
-                                    </div>
-                                    <div className="form-divider"></div>
                                     <div className="profile-form-wrapper">
+
+                                        <div className="form-inputs profile-top-margin">
+                                            <div className="profile-input">
+                                                <div className="profile-label">
+                                                    <label htmlFor="fullName">Full Name:</label>
+                                                </div>
+                                                <Input
+                                                    defaultValue={user.fullName}
+                                                    inputType="text"
+                                                    inputName="fullName"
+                                                    className="input-field"
+                                                    inputId="fullName"
+                                                    validationRules={{
+                                                        required: "This field is required",
+                                                        maxLength: { value: 75, message: "Full name cannot be more than 75 characters long" }
+                                                    }}
+                                                    register={profileInfo}
+                                                    error={errors}
+                                                    disabled={!isEditable}
+                                                    style={disabledStyle}
+                                                />
+                                            </div>
+                                            <div className="profile-input">
+                                                <div className="profile-label">
+                                                    <label htmlFor="age">Age:</label>
+                                                </div>
+                                                <Input
+                                                    defaultValue={user.age}
+                                                    inputType="number"
+                                                    inputName="age"
+                                                    className="input-field"
+                                                    inputId="age"
+                                                    validationRules={{
+                                                        required: "Please enter your age",
+                                                        min: { value: 0, message: "Age must be between 0 and 120" },
+                                                        max: { value: 120, message: "Age must be between 0 and 120" }
+                                                    }}
+                                                    register={profileInfo}
+                                                    error={errors}
+                                                    disabled={!isEditable}
+                                                    style={disabledStyle}
+                                                />
+                                            </div>
+                                            <div className="profile-input">
+                                                <div className="profile-label">
+                                                    <label htmlFor="pronouns">Pronouns:</label>
+                                                </div>
+                                                <Input
+                                                    defaultValue={user.pronouns}
+                                                    inputType="text"
+                                                    inputName="pronouns"
+                                                    className="input-field"
+                                                    inputId="pronouns"
+                                                    validationRules={{
+                                                        required: "This field is required",
+                                                        maxLength: { value: 10, message: "Pronouns cannot be more" +
+                                                                " than 10" +
+                                                                " characters"}
+                                                    }}
+                                                    register={profileInfo}
+                                                    error={errors}
+                                                    disabled={!isEditable}
+                                                    style={disabledStyle}
+                                                />
+                                            </div>
+                                            <div className="profile-input">
+                                                <div className="profile-label">
+                                                    <label htmlFor="email">Email:</label>
+                                                </div>
+                                                <Input
+                                                    defaultValue={user.email}
+                                                    inputType="text"
+                                                    inputName="email"
+                                                    className="input-field"
+                                                    inputId="email"
+                                                    validationRules={{
+                                                        required: "This field is required",
+                                                        pattern: {
+                                                            value: /\S+@\S+\.\S+/,
+                                                            message: "Valid email is required"
+                                                        }
+                                                    }}
+                                                    register={profileInfo}
+                                                    error={errors}
+                                                    disabled={!isEditable}
+                                                    style={disabledStyle}
+                                                />
+                                            </div>
+                                            <div className="profile-input">
+                                                <div className="profile-label">
+                                                    <label htmlFor="phoneNumber">Phone:</label>
+                                                </div>
+                                                <Input
+                                                    defaultValue={user.phoneNumber}
+                                                    inputType="text"
+                                                    inputName="phoneNumber"
+                                                    className="input-field"
+                                                    inputId="phoneNumber"
+                                                    validationRules={{
+                                                        required: "This field is required",
+                                                        pattern: {
+                                                            value: /^\+?[0-9-]+$/,
+                                                            message: "Invalid phone number"
+                                                        }
+                                                    }}
+                                                    register={profileInfo}
+                                                    error={errors}
+                                                    disabled={!isEditable}
+                                                    style={disabledStyle}
+                                                />
+                                            </div>
+                                            <div className="profile-input">
+                                                <div className="profile-label">
+                                                    <label htmlFor="bio">Bio:</label>
+                                                </div>
+                                                <textarea
+                                                    defaultValue={user.bio}
+                                                    id="bio"
+                                                    className="full-width-textarea"
+                                                    rows="6"
+                                                    cols="80"
+                                                    {...profileInfo("bio", {
+                                                        maxLength: { value: 5000, message: "Bio cannot be more than 5000 characters" }
+                                                    })}
+                                                    disabled={!isEditable}
+                                                    style={disabledStyle}
+                                                />
+                                            </div>
+                                        </div>
+
                                         <div className="profile-security">
                                             {user.authorities.some(auth => auth.authority === "ROLE_LION") ? (
                                                 <>
@@ -146,7 +260,7 @@ function Profile() {
                                                                 {activeSecurityHeader === 'Roles' && '>'} Roles
                                                             </h3>
                                                         </div>
-                                                        <hr />
+                                                        <hr className="password-line" />
                                                     </div>
                                                 </>
                                             ) : (
@@ -164,79 +278,6 @@ function Profile() {
                                                 passwordCardVisibility={passwordCardVisibility}
                                                 setPasswordCardVisibility={setPasswordCardVisibility}
                                                 activeSecurityHeader={activeSecurityHeader}
-                                            />
-                                        </div>
-
-                                        <div className="form-inputs profile-margin-labels-input">
-                                            <Input
-                                                defaultValue={user.fullName}
-                                                inputType="text"
-                                                inputName="fullName"
-                                                className="input-field"
-                                                inputId="fullName"
-                                                validationRules={{ required: "This field is required" }}
-                                                register={profileInfo}
-                                                error={errors}
-                                                disabled={!isEditable}
-                                                style={disabledStyle}
-                                            />
-                                            <Input
-                                                defaultValue={user.age}
-                                                inputType="number"
-                                                inputName="age"
-                                                className="input-field"
-                                                inputId="age"
-                                                validationRules={{ required: "This field is required" }}
-                                                register={profileInfo}
-                                                error={errors}
-                                                disabled={!isEditable}
-                                                style={disabledStyle}
-                                            />
-                                            <Input
-                                                defaultValue={user.pronouns}
-                                                inputType="text"
-                                                inputName="pronouns"
-                                                className="input-field"
-                                                inputId="pronouns"
-                                                validationRules={{ required: "This field is required" }}
-                                                register={profileInfo}
-                                                error={errors}
-                                                disabled={!isEditable}
-                                                style={disabledStyle}
-                                            />
-                                            <Input
-                                                defaultValue={user.email}
-                                                inputType="text"
-                                                inputName="email"
-                                                className="input-field"
-                                                inputId="email"
-                                                validationRules={{ required: "This field is required" }}
-                                                register={profileInfo}
-                                                error={errors}
-                                                disabled={!isEditable}
-                                                style={disabledStyle}
-                                            />
-                                            <Input
-                                                defaultValue={user.phoneNumber}
-                                                inputType="text"
-                                                inputName="phoneNumber"
-                                                className="input-field"
-                                                inputId="phoneNumber"
-                                                validationRules={{ required: "This field is required" }}
-                                                register={profileInfo}
-                                                error={errors}
-                                                disabled={!isEditable}
-                                                style={disabledStyle}
-                                            />
-                                            <textarea
-                                                defaultValue={user.bio}
-                                                id="bio"
-                                                className="full-width-textarea"
-                                                rows="6"
-                                                cols="80"
-                                                {...profileInfo("bio")}
-                                                disabled={!isEditable}
-                                                style={disabledStyle}
                                             />
                                         </div>
                                     </div>
