@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import './Task.css'
-import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
 import {useNavigate, useParams} from "react-router-dom";
 // Components
@@ -28,10 +27,9 @@ import Eye from "../../assets/icons/eye.svg"
 // Helpers
 import {editableDescription, editableTitle} from "../../helpers/editableHelper";
 import {fetchTask, fetchEnabledUsers, createTask, assignTaskToUsers, uploadFiles, addTodos, updateTaskData,
-    assignAndRemoveUsers, addFiles, removeFiles, manageToDos} from "../../helpers/CRUDTaskHelper";
+    assignAndRemoveUsers, addFiles, removeFiles, manageToDos, completeTask} from "../../helpers/CRUDTaskHelper";
 import { manageVolunteers } from "../../helpers/selectionHelper";
-import { completeTask } from "../../helpers/postHelper";
-import {formatToISO} from "../../helpers/ISOFormatDate";
+import {formatToISO} from "../../helpers/DateHelper";
 import {validateTaskForm} from "../../helpers/validationHelper";
 
 function Task() {

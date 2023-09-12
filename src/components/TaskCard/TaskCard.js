@@ -4,8 +4,8 @@ import axios from "axios";
 // Components
 import Button from "../Button/Button";
 // Helpers
-import { calculateDaysLeftHelper } from "../../helpers/calculateDaysLeftHelper";
-import { completeTask } from "../../helpers/postHelper";
+import { calculateDaysLeftHelper } from "../../helpers/DateHelper";
+import { completeTask } from "../../helpers/CRUDTaskHelper";
 
 function TaskCard( { task, clickHandler } ) {
     const [daysLeft, setDaysLeft] = useState(null);

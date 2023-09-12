@@ -5,7 +5,7 @@ import {DownloadSimple} from "@phosphor-icons/react";
 import {iconHelper} from "../../helpers/iconHelper";
 // Components
 import Button from "../Button/Button";
-import {uploadDateHelper} from "../../helpers/uploadDateHelper";
+import {uploadDateHelper} from "../../helpers/DateHelper";
 
 
 function AttachmentCard({ attachments, setAttachments, attachmentCardVisible, error, setError }) {
