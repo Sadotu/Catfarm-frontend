@@ -31,7 +31,7 @@ import {fetchTask, fetchEnabledUsers} from "../../helpers/fetchHelper";
 import { manageVolunteers } from "../../helpers/selectionHelper";
 import { completeTask } from "../../helpers/postHelper";
 import {formatToISO} from "../../helpers/ISOFormatDate";
-import {validateTaskForm} from "../../helpers/validateForm";
+import {validateTaskForm} from "../../helpers/validationHelper";
 
 function Task() {
     const { user } = useContext(AuthContext);
@@ -440,6 +440,7 @@ function Task() {
                                             <EditableDate
                                                 deadline={deadline}
                                                 setDeadline={setDeadline}
+                                                setFormErrors={setFormErrors}
                                             ></EditableDate>
                                             {formErrors.deadline && <p className="error">{formErrors.deadline}</p>}
                                         </div>

@@ -1,0 +1,10 @@
+.deadline-input {
+    display: flex;
+    flex-direction: column;
+}
+
+.deadline-reminder {
+    font-family: var(--main-font-roboto-mono);
+    color: var(--task-option-headers);
+    font-size: 12px;
+}

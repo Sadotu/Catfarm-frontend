@@ -2,6 +2,7 @@ import React from 'react';
 import "./Input.css"
 
 function Input({
+                   signup = false,
                    inputType,
                    className,
                    inputName,
@@ -11,7 +12,7 @@ function Input({
                    validationRules,
                    error,
                    disabled = false,
-                   style = {}
+                   style = {},
                }) {
 
     return (
@@ -25,7 +26,8 @@ function Input({
                 disabled={disabled}
                 style={style}
             />
-            {error && error[inputName] && <p className="input-error">{error[inputName].message}</p>}
+            {error && error[inputName] && <p className={signup ? 'input-error-signup' : 'input-error'}>{error[inputName].message}</p>}
+
         </>
     );
 }
