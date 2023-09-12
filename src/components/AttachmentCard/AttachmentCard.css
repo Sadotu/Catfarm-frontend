@@ -18,7 +18,6 @@
 .attachment-principal {
     display: flex;
     flex-direction: row;
-    margin-bottom: 10px;
 }
 .file-icon {
     color: var(--task-option-headers);
@@ -30,9 +29,29 @@
     font-family: var(--main-font-roboto-mono);
     gap: 2px;
 }
+.attachment-sub-meta {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    font-size: 14px;
+}
 .file-delete-button {
-    margin-top: -20px;
+    margin-top: -18px;
+    margin-left: -25px;
 }
 .attachment-button {
     margin-left: 47px;
+}
+.download-icon-container {
+    align-self: center;
+    margin-left: 100px;
+}
+.download-icon {
+    color: var(--task-title);
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+.download-icon:hover {
+    color: var(--task-option-headers);
+    transform: translateY(-2px);
 }
