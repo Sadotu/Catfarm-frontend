@@ -5,7 +5,7 @@ import Navigation from "../../components/Navigation/Navigation";
 import Header from "../../components/Header/Header";
 import VolunteerCard from "../../components/VolunteerCard/VolunteerCard";
 // Helpers
-import {fetchEnabledUsers} from "../../helpers/fetchHelper";
+import {fetchEnabledUsers} from "../../helpers/CRUDTaskHelper";
 
 
 function Volunteers() {

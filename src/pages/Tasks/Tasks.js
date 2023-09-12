@@ -11,7 +11,7 @@ import TaskCard from "../../components/TaskCard/TaskCard";
 import Button from "../../components/Button/Button";
 // Helpers
 import {filterData} from "../../helpers/filterDataHelper"
-import {fetchEnabledUsers} from "../../helpers/fetchHelper";
+import {fetchEnabledUsers} from "../../helpers/CRUDTaskHelper";
 
 function Tasks() {
     const navigate = useNavigate();
