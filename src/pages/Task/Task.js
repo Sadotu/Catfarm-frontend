@@ -333,171 +333,190 @@ function Task() {
 
         const token = localStorage.getItem('token');
 
-        const payload = {
-            nameTask,
-            deadline: formatToISO(deadline),
-            description,
-            completed
-        };
-
         try {
-            const response = await axios.put(`http://localhost:8080/tasks/update/${task_id}`, payload, {
+            const task = await updateTaskData(task_id, {
+                nameTask,
+                deadline: formatToISO(deadline),
+                description,
+                completed
+            }, token);
+
+            await assignAndRemoveUsers(task, assignedTo, token);
+            await addAndRemoveFiles(task, files, token);
+            await manageToDos(task, toDos, token);
+
+        } catch (error) {
+            console.error("Error saving task:", error);
+        } finally {
+            navigate("/tasks")
+        }
+    }
+
+    async function updateTaskData(task_id, payload, token) {
+        const response = await axios.put(`http://localhost:8080/tasks/update/${task_id}`, payload, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        console.log("Task updated successfully:", response.data);
+        return response.data;
+    }
+
+    async function assignAndRemoveUsers(task, assignedTo, token) {
+        const newAssignedEmails = new Set(assignedTo.map(user => user.email));
+        const oldAssignedEmails = new Set(task.assignedTo.map(user => user.email));
+
+        // Remove users
+        for (const oldEmail of oldAssignedEmails) {
+            if (!newAssignedEmails.has(oldEmail)) {
+                await removeFromTask(oldEmail, task_id, token);
+            }
+        }
+
+        // Add users
+        for (const user of assignedTo) {
+            const isUserAlreadyAssigned = task.assignedTo.some(existingUser => existingUser.email === user.email);
+            if (!isUserAlreadyAssigned) {
+                await assignToTask(user.email, task.id, token);
+            }
+        }
+    }
+
+    async function removeFromTask(email, taskId, token) {
+        try {
+            await axios.put(`http://localhost:8080/users/${email}/remove/task/${taskId}`, null, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 }
             });
+            console.log(`Successfully removed user ${email} from task.`);
+        } catch (error) {
+            console.error(`Error removing user ${email} from task:`, error);
+        }
+    }
 
-            console.log("Task updated successfully:", response.data);
-            const task = response.data
+    async function assignToTask(email, taskId, token) {
+        try {
+            const updateUserResponse = await axios.put(`http://localhost:8080/users/${email}/task/${taskId}`, null, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+            console.log(`Assigned task to user ${email}:`, updateUserResponse.data);
+        } catch (error) {
+            console.error(`Error assigning task to user ${email}:`, error);
+        }
+    }
 
-            const newAssignedEmails = new Set(assignedTo.map(user => user.email));
-            const oldAssignedEmails = new Set(task.assignedTo.map(user => user.email));
+    async function addAndRemoveFiles(task, files, token) {
+        const newFileIds = new Set(files.map(file => file.id));
+        const oldFileIds = new Set(task.files.map(file => file.id));
 
-            for (const oldEmail of oldAssignedEmails) {
-                if (!newAssignedEmails.has(oldEmail)) {
-                    try {
-                        await axios.put(`http://localhost:8080/users/${oldEmail}/remove/task/${task_id}`, null, {
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json',
-                            }
-                        });
-                        console.log(`Successfully removed user ${oldEmail} from task.`);
-                    } catch (error) {
-                        console.error(`Error removing user ${oldEmail} from task:`, error);
-                    }
+        // Remove files
+        for (const oldFileId of oldFileIds) {
+            if (!newFileIds.has(oldFileId)) {
+                try {
+                    await axios.delete(`http://localhost:8080/files/delete/${oldFileId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    console.log(`File with ID ${oldFileId} deleted successfully.`);
+                } catch (error) {
+                    console.error(`Error deleting file with ID ${oldFileId}:`, error);
                 }
             }
+        }
 
-            for (const user of assignedTo) {
-                const isUserAlreadyAssigned = task.assignedTo.some(existingUser => existingUser.email === user.email);
+        // Add new files
+        const existingFileNames = new Set(task.files.map(file => file.name));
+        const uniqueNewFileNames = files.filter(file => !existingFileNames.has(file.name));
 
-                if (!isUserAlreadyAssigned) {
-                    try {
-                        const updateUserResponse = await axios.put(`http://localhost:8080/users/${user.email}/task/${task.id}`, null, {
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json',
-                            }
-                        });
-
-                        console.log(`Assigned task to user ${user.email}:`, updateUserResponse.data);
-
-                    } catch (error) {
-                        console.error(`Error assigning task to user ${user.email}:`, error);
-                    }
-                } else {
-                    console.log(`User ${user.email} is already assigned to the task.`);
-                }
-            }
-
-            const newFileIds = new Set(files.map(file => file.id));
-            const oldFileIds = new Set(task.files.map(file => file.id));
-
-            for (const oldFileId of oldFileIds) {
-                if (!newFileIds.has(oldFileId)) {
-                    try {
-                        await axios.delete(`http://localhost:8080/files/delete/${oldFileId}`, {
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json',
-                            }
-                        });
-                        console.log(`File with ID ${oldFileId} deleted successfully.`);
-                    } catch (error) {
-                        console.error(`Error deleting file with ID ${oldFileId}:`, error);
-                    }
-                }
-            }
-
-            const existingFileNames = new Set(task.files.map(file => file.name));
-            const uniqueNewFileNames = files.filter(file => !existingFileNames.has(file.name));
-
+        if (uniqueNewFileNames.length > 0) {
             const formData = new FormData();
             uniqueNewFileNames.forEach((file) => {
                 formData.append('file', file);
             });
+            const fileResponse = await axios.post('http://localhost:8080/files/upload', formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+            const fileIds = fileResponse.data.map(file => file.id);
 
-            if (uniqueNewFileNames.length > 0) {
+            await axios.put(`http://localhost:8080/tasks/assignfiles/${task.id}`, {file_ids: fileIds}, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+        }
+    }
 
-                const fileResponse = await axios.post('http://localhost:8080/files/upload', formData, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'multipart/form-data',
-                    }
-                });
-                const fileIds = fileResponse.data.map(file => file.id);
+    async function manageToDos(task, toDos, token) {
+        const existingToDoMap = new Map(task.toDos.map(todo => [todo.id, todo]));
+        const newToDos = [], updatedToDos = [], todoIdsToDelete = [];
 
-                await axios.put(`http://localhost:8080/tasks/assignfiles/${task.id}`, {file_ids: fileIds}, {
+        toDos.forEach(todo => {
+            if (existingToDoMap.has(todo.id)) {
+                updatedToDos.push(todo);
+                existingToDoMap.delete(todo.id);
+            } else {
+                newToDos.push(todo);
+            }
+        });
+
+        todoIdsToDelete.push(...existingToDoMap.keys());
+
+        // Add new ToDos
+        if (newToDos.length > 0) {
+            try {
+                const todoResponse = await axios.post(`http://localhost:8080/task/todos/${task.id}/create`, newToDos, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     }
                 });
+                console.log(`ToDos added to task ${task.id}:`, todoResponse.data);
+            } catch (error) {
+                console.error(`Error adding ToDos to task ${task.id}:`, error);
             }
+        }
 
-            const existingToDoMap = new Map(task.toDos.map(todo => [todo.id, todo]));
-            const newToDos = [], updatedToDos = [], todoIdsToDelete = [];
-
-            toDos.forEach(todo => {
-                if (existingToDoMap.has(todo.id)) {
-                    updatedToDos.push(todo);
-                    existingToDoMap.delete(todo.id);
-                } else {
-                    newToDos.push(todo);
-                }
-            });
-
-            todoIdsToDelete.push(...existingToDoMap.keys());
-
-            if (newToDos.length > 0) {
-                try {
-                    const todoResponse = await axios.post(`http://localhost:8080/task/todos/${task.id}/create`, newToDos, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        }
-                    });
-                    console.log(`ToDos added to task ${task.id}:`, todoResponse.data);
-                } catch (error) {
-                    console.error(`Error adding ToDos to task ${task.id}:`, error);
-                }
+        // Delete ToDos
+        if (todoIdsToDelete.length > 0) {
+            try {
+                await axios.delete(`http://localhost:8080/task/todos/${task.id}/delete`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    data: todoIdsToDelete
+                });
+                console.log(`ToDos deleted from task ${task.id}.`);
+            } catch (error) {
+                console.error(`Error deleting ToDo from task ${task.id}:`, error);
             }
+        }
 
-            if (todoIdsToDelete.length > 0) {
-                try {
-                    await axios.delete(`http://localhost:8080/task/todos/${task.id}/delete`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                        data: todoIdsToDelete
-                    });
-                    console.log(`ToDos deleted from task ${task.id}.`);
-                } catch (error) {
-                    console.error(`Error deleting ToDo from task ${task.id}:`, error);
-                }
+        // Update existing ToDos
+        if (updatedToDos.length > 0) {
+            try {
+                await axios.put(`http://localhost:8080/task/todos/${task.id}/update`, updatedToDos, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+                console.log(`ToDos updated in task ${task.id}.`);
+            } catch (error) {
+                console.error(`Error updating ToDos in task ${task.id}:`, error);
             }
-
-            if (updatedToDos.length > 0) {
-                try {
-                    await axios.put(`http://localhost:8080/task/todos/${task.id}/update`, updatedToDos, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        }
-                    });
-                    console.log(`ToDos updated in task ${task.id}.`);
-                } catch (error) {
-                    console.error(`Error updating ToDos in task ${task.id}:`, error);
-                }
-            }
-
-        } catch (error) {
-        console.error("Error saving task:", error);
-    } finally {
-            navigate("/tasks")
         }
     }
 
