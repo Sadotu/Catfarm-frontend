@@ -92,7 +92,6 @@ function Task() {
     },[]);
 
     useEffect(() => {
-        console.log(activeUsers)
         if (task_id === undefined) {
             handleVolunteerManagement("VOLUNTEER_HANDLER")
         } else {
@@ -137,21 +136,158 @@ function Task() {
         }
     }
 
-    async function saveTask() {
-        const errors = validateTaskForm({
-            assignedTo,
-            deadline,
-            description,
-            files,
-        });
+    // async function saveTask() {
+    //     const errors = validateTaskForm({
+    //         assignedTo,
+    //         deadline,
+    //         description,
+    //         files,
+    //     });
+    //
+    //     if (Object.keys(errors).length > 0) {
+    //         setFormErrors(errors);
+    //         return;
+    //     }
+    //
+    //     const token = localStorage.getItem('token');
+    //
+    //     const payload = {
+    //         nameTask,
+    //         deadline: formatToISO(deadline),
+    //         description,
+    //         completed
+    //     };
+    //
+    //     try {
+    //         const response = await axios.post('http://localhost:8080/tasks/add', payload, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${token}`,
+    //                 'Content-Type': 'application/json',
+    //             }
+    //         });
+    //
+    //         console.log("Task saved successfully:", response.data);
+    //         const taskId = response.data.id;
+    //
+    //         await axios.put(`http://localhost:8080/users/${user.email}/usercreatestask/${taskId}`, null, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${token}`,
+    //                 'Content-Type': 'application/json',
+    //             }})
+    //
+    //         for (const user of assignedTo) {
+    //             try {
+    //                 const updateUserResponse = await axios.put(`http://localhost:8080/users/${user.email}/task/${taskId}`, null, {
+    //                     headers: {
+    //                         'Authorization': `Bearer ${token}`,
+    //                         'Content-Type': 'application/json',
+    //                     }
+    //                 });
+    //
+    //                 console.log(`Assigned task to user ${user.email}:`, updateUserResponse.data);
+    //
+    //             } catch (error) {
+    //                 console.error(`Error assigning task to user ${user.email}:`, error);
+    //             }
+    //         }
+    //
+    //         if (files.length > 0) {
+    //             const formData = new FormData();
+    //             files.forEach((file) => {
+    //                 formData.append('file', file);
+    //             });
+    //
+    //             const fileResponse = await axios.post('http://localhost:8080/files/upload', formData, {
+    //                 headers: {
+    //                     'Authorization': `Bearer ${token}`,
+    //                     'Content-Type': 'multipart/form-data',
+    //                 }
+    //             });
+    //
+    //             const fileIds = fileResponse.data.map(file => file.id);
+    //
+    //             await axios.put(`http://localhost:8080/tasks/assignfiles/${taskId}`, { file_ids: fileIds }, {
+    //                 headers: {
+    //                     'Authorization': `Bearer ${token}`,
+    //                     'Content-Type': 'application/json',
+    //                 }
+    //             });
+    //         }
+    //         try {
+    //             const todoResponse = await axios.post(`http://localhost:8080/task/todos/${taskId}/create`, toDos, {
+    //                 headers: {
+    //                     'Authorization': `Bearer ${token}`,
+    //                     'Content-Type': 'application/json',
+    //                 }
+    //             });
+    //             console.log(`Todo added to task ${taskId}:`, todoResponse.data);
+    //         } catch (error) {
+    //             console.error(`Error adding todo to task ${taskId}:`, error);
+    //         }
+    //     } catch (error) {
+    //         console.error("Error saving task:", error);
+    //     } finally {
+    //         navigate("/tasks")
+    //     }
+    // }
 
+    const headersWithAuth = (token) => ({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+    });
+
+    const createTask = async (payload, token) => {
+        return await axios.post('http://localhost:8080/tasks/add', payload, {
+            headers: headersWithAuth(token)
+        });
+    };
+
+    const assignTaskToUsers = async (users, taskId, token) => {
+        for (const user of users) {
+            try {
+                await axios.put(`http://localhost:8080/users/${user.email}/task/${taskId}`, null, {
+                    headers: headersWithAuth(token)
+                });
+                console.log(`Assigned task to user ${user.email}`);
+            } catch (error) {
+                console.error(`Error assigning task to user ${user.email}:`, error);
+            }
+        }
+    };
+
+    const uploadFiles = async (files, taskId, token) => {
+        const formData = new FormData();
+        files.forEach((file) => {
+            formData.append('file', file);
+        });
+        const fileResponse = await axios.post('http://localhost:8080/files/upload', formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data',
+            }
+        });
+        const fileIds = fileResponse.data.map(file => file.id);
+        await axios.put(`http://localhost:8080/tasks/assignfiles/${taskId}`, { file_ids: fileIds }, {
+            headers: headersWithAuth(token)
+        });
+    };
+
+    const addTodos = async (toDos, taskId, token) => {
+        await axios.post(`http://localhost:8080/task/todos/${taskId}/create`, toDos, {
+            headers: headersWithAuth(token)
+        });
+        console.log(`Todo added to task ${taskId}`);
+    };
+
+// Main function
+    async function saveTask() {
+        const errors = validateTaskForm({ assignedTo, deadline, description, files });
         if (Object.keys(errors).length > 0) {
             setFormErrors(errors);
             return;
         }
 
         const token = localStorage.getItem('token');
-
         const payload = {
             nameTask,
             deadline: formatToISO(deadline),
@@ -160,75 +296,24 @@ function Task() {
         };
 
         try {
-            const response = await axios.post('http://localhost:8080/tasks/add', payload, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            console.log("Task saved successfully:", response.data);
+            const response = await createTask(payload, token);
             const taskId = response.data.id;
 
-            await axios.put(`http://localhost:8080/users/${user.email}/usercreatestask/${taskId}`, null, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                }})
-
-            for (const user of assignedTo) {
-                try {
-                    const updateUserResponse = await axios.put(`http://localhost:8080/users/${user.email}/task/${taskId}`, null, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        }
-                    });
-
-                    console.log(`Assigned task to user ${user.email}:`, updateUserResponse.data);
-
-                } catch (error) {
-                    console.error(`Error assigning task to user ${user.email}:`, error);
-                }
-            }
+            await assignTaskToUsers(assignedTo, taskId, token);
 
             if (files.length > 0) {
-                const formData = new FormData();
-                files.forEach((file) => {
-                    formData.append('file', file);
-                });
-
-                const fileResponse = await axios.post('http://localhost:8080/files/upload', formData, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'multipart/form-data',
-                    }
-                });
-
-                const fileIds = fileResponse.data.map(file => file.id);
-
-                await axios.put(`http://localhost:8080/tasks/assignfiles/${taskId}`, { file_ids: fileIds }, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    }
-                });
+                await uploadFiles(files, taskId, token);
             }
+
             try {
-                const todoResponse = await axios.post(`http://localhost:8080/task/todos/${taskId}/create`, toDos, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    }
-                });
-                console.log(`Todo added to task ${taskId}:`, todoResponse.data);
+                await addTodos(toDos, taskId, token);
             } catch (error) {
                 console.error(`Error adding todo to task ${taskId}:`, error);
             }
         } catch (error) {
             console.error("Error saving task:", error);
         } finally {
-            navigate("/tasks")
+            navigate("/tasks");
         }
     }
 
