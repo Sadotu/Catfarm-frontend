@@ -14,7 +14,7 @@ export function validateTaskForm({
     // Validate Deadline
     const datePattern = /^(\d{2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{4})$/;
     if (!deadline.match(datePattern)) {
-        errors.deadline = "You must set a deadline";
+        errors.deadline = "You must set a deadline in format dd/mm/yy";
     }
 
     // Validate Description

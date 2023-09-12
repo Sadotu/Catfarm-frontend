@@ -440,6 +440,7 @@ function Task() {
                                             <EditableDate
                                                 deadline={deadline}
                                                 setDeadline={setDeadline}
+                                                setFormErrors={setFormErrors}
                                             ></EditableDate>
                                             {formErrors.deadline && <p className="error">{formErrors.deadline}</p>}
                                         </div>

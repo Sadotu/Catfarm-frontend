@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import "./EditableDate.css"
 import Button from '../Button/Button';
 import moment from 'moment';
 
-function EditableDate({ deadline, setDeadline }) {
+function EditableDate({ deadline, setDeadline, setFormErrors }) {
     const [isEditing, setIsEditing] = useState(false);
     const [borderColor, setBorderColor] = useState('black');
 
@@ -42,21 +43,27 @@ function EditableDate({ deadline, setDeadline }) {
     return (
         <div className="deadline-content">
             {isEditing ? (
-                <input
-                    type="text"
-                    value={deadline}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    onKeyDown={handleKeyDown}
-                    autoFocus
-                    style={{ borderColor: borderColor }}
-                />
+                <div className="deadline-input">
+                    <input
+                        type="text"
+                        value={deadline}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        onKeyDown={handleKeyDown}
+                        autoFocus
+                        style={{ borderColor: borderColor }}
+                    />
+                    { isEditing ?
+                            <p className="deadline-reminder">(dd/mm/yy)</p>
+                            : ""
+                    }
+                </div>
             ) : (
-                <Button
-                    buttonText={deadline}
-                    className="event-task-general-button"
-                    id="editable-date"
-                ></Button>
+                    <Button
+                        buttonText={deadline}
+                        className="event-task-general-button"
+                        id="editable-date"
+                    ></Button>
             )}
             <Button
                 buttonText={isEditing ? "Save" : "Edit"}
