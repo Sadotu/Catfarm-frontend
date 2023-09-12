@@ -46,9 +46,9 @@ export const fetchTask = async (
         setDeadline(formattedDeadline);
         setDescription(data.description);
         setCompleted(data.completed);
-        setAssignedTo(data.assignedTo);
-        const unselected = activeUsers.filter(user => !data.assignedTo.includes(user));
-        setUnselectedVolunteers(unselected);
+        const userEmails = new Set(data.assignedTo.map(user => user.email));
+        const selected = activeUsers.filter(activeUser => userEmails.has(activeUser.email));
+        setAssignedTo(selected);
         setFiles(data.files);
         setToDos(data.toDos);
 

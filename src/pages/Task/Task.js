@@ -56,6 +56,43 @@ function Task() {
     const [toDos, setToDos] = useState([]);
 
     useEffect(() => {
+        if (!activeUsers || activeUsers.length === 0) {
+            return;
+        }
+        if (task_id === undefined) {
+            handleVolunteerManagement("VOLUNTEER_HANDLER")
+        } else {
+            fetchTask(
+                task_id,
+                setAttachmentCardVisible,
+                setChecklistVisibility,
+                setNameTask,
+                setDeadline,
+                setDescription,
+                setCompleted,
+                setUnselectedVolunteers,
+                setAssignedTo,
+                setFiles,
+                setToDos,
+                activeUsers
+            )
+        }
+    }, [task_id, activeUsers]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const users = await fetchEnabledUsers();
+                setActiveUsers(users);
+            } catch (error) {
+                console.log(error)
+            }
+        };
+        fetchData();
+    },[]);
+
+    useEffect(() => {
+        console.log(activeUsers)
         if (task_id === undefined) {
             handleVolunteerManagement("VOLUNTEER_HANDLER")
         } else {
@@ -76,18 +113,6 @@ function Task() {
             )
         }
     }, [task_id]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const users = await fetchEnabledUsers();
-                setActiveUsers(users);
-            } catch (error) {
-                console.log(error)
-            }
-        };
-        fetchData();
-    },[]);
 
     useEffect(() => {
         setTask({
